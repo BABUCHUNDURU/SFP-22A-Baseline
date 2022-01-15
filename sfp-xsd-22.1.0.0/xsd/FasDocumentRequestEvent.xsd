@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+COPYRIGHT (C) 2013 VOCADO, LLC.  ALL RIGHTS RESERVED.  THIS SOFTWARE CONTAINS
+TRADE SECRETS AND/OR CONFIDENTIAL INFORMATION PROPRIETARY TO VOCADO, LLC
+AND/OR ITS LICENSORS. ACCESS TO AND USE OF THIS INFORMATION IS STRICTLY
+LIMITED AND CONTROLLED BY VOCADO, LLC.  THIS SOFTWARE MAY NOT BE COPIED,
+MODIFIED, DISTRIBUTED, DISPLAYED, DISCLOSED OR USED IN ANY WAY NOT EXPRESSLY
+AUTHORIZED BY VOCADO, LLC IN WRITING.
+
+-->
+<xs:schema xmlns="http://www.vocado.com/vm/fas"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:vc="http://www.vocado.com/vm/common"
+           targetNamespace="http://www.vocado.com/vm/fas"
+           elementFormDefault="qualified">
+
+    <xs:include schemaLocation="common/FasCommon.xsd"/>
+    <xs:import namespace="http://www.vocado.com/vm/common" schemaLocation="common/VocadoCommon.xsd"/>
+
+    <xs:element name="FasDocumentRequestEvent">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:element name="ExternalStudentId" type="vc:ExternalIdentifierType"/>
+                        <xs:element name="Process" type="ProcessInformationType" minOccurs="0"/>
+                        <xs:element name="AtWillRequestComments" type="xs:string" minOccurs="0"/>
+                        <xs:element name="DocumentRequests" minOccurs="0">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                                        <xs:element name="Document" type="FasDocumentRequestEvent_Document"/>
+                                        <xs:element name="OneOf" type="FasDocumentRequestEvent_OneOf"/>
+                                    </xs:choice>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="FasDocumentRequestEvent_OneOf">
+        <xs:sequence>
+            <xs:element name="Document"
+                        type="FasDocumentRequestEvent_Document"
+                        maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="FasDocumentRequestEvent_Document">
+        <xs:sequence>
+            <xs:element name="AwardYear" type="AwardYearType" minOccurs="0"/>
+            <xs:element name="DocumentCode" type="xs:string"/>
+            <xs:element name="DocumentName" type="xs:string"/>
+            <xs:element name="DocumentOwnerType" type="DocumentOwnerTypeEnum" minOccurs="0"/>
+            <xs:element name="DocumentRequestDate" type="xs:dateTime"/>
+            <xs:element name="ExternalDocumentId" type="vc:ExternalIdentifierType" minOccurs="0"/>
+            <xs:element name="DocumentStatus" type="DocumentStatusEnum"/>
+            <xs:element name="DocumentReceiptDate" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="ReminderDocumentRequestDate" type="xs:dateTime"/>
+            <xs:element name="DocumentRationale" type="DocumentRationaleEnum"/>
+            <xs:element name="DaysSinceOriginalDocumentRequest" type="xs:integer" minOccurs="0"/>
+            <xs:element name="Message" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

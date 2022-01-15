@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~
+  ~ COPYRIGHT (c) 2017 VOCADO, LLC.  ALL RIGHTS RESERVED.  THIS SOFTWARE CONTAINS
+  ~ TRADE SECRETS AND/OR CONFIDENTIAL INFORMATION PROPRIETARY TO VOCADO, LLC AND/OR
+  ~ ITS LICENSORS. ACCESS TO AND USE OF THIS INFORMATION IS STRICTLY LIMITED AND
+  ~ CONTROLLED BY VOCADO, LLC.  THIS SOFTWARE MAY NOT BE COPIED, MODIFIED, DISTRIBUTED,
+  ~ DISPLAYED, DISCLOSED OR USED IN ANY WAY NOT EXPRESSLY AUTHORIZED BY VOCADO, LLC IN WRITING.
+  -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.vocado.com/vm/fas"
+           targetNamespace="http://www.vocado.com/vm/fas"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+    <xs:include schemaLocation="FasCommon.xsd"/>
+    <xs:include schemaLocation="FasStudentAcademicsCommon.xsd"/>
+    <xs:include schemaLocation="FasDisbursementCommon.xsd"/>
+    <xs:import namespace="http://www.vocado.com/vm/common" schemaLocation="VocadoCommon.xsd"/>
+
+    <xs:complexType name="DiPaymentPeriodType">
+        <xs:complexContent>
+            <xs:extension base="FasBasePaymentPeriodType">
+                <xs:sequence>
+                    <xs:element name="Disbursements">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="Disbursement" type="DiDisbursementType" minOccurs="1"
+                                            maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="DiLoanPaymentPeriodType">
+        <xs:complexContent>
+            <xs:extension base="FasBaseLoanPaymentPeriodType">
+                <xs:sequence>
+                    <xs:element name="Disbursements">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="Disbursement" type="DiDisbursementType" minOccurs="1"
+                                            maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="DiNfrPeriodType">
+        <xs:complexContent>
+            <xs:extension base="FasBaseNfrPeriodType">
+                <xs:sequence>
+                    <xs:element name="Disbursements">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="Disbursement" type="DiDisbursementType" minOccurs="1" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="DiDisbursementType">
+        <xs:sequence>
+            <xs:element name="DisbursementNumber" type="FasDisbursementNumberType"/>
+            <xs:element name="AwardYear" type="AwardYearType" minOccurs="0"/>
+            <xs:element name="TotalDisbursementAmount" minOccurs="1">
+                <xs:simpleType>
+                    <xs:restriction base="xs:double">
+                        <xs:minInclusive value="0"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="DisbursementFeeAmount" minOccurs="0">
+                <xs:simpleType>
+                    <xs:restriction base="xs:int">
+                        <xs:minInclusive value="0"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="InterestRebateAmount" minOccurs="0">
+                <xs:simpleType>
+                    <xs:restriction base="xs:int">
+                        <xs:minInclusive value="0"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="TotalNetDisbursementAmount" minOccurs="0">
+                <xs:simpleType>
+                    <xs:restriction base="xs:int">
+                        <xs:minInclusive value="0"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="Payments">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Payment" type="DiPaymentType" minOccurs="1" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="DiPaymentType">
+        <xs:sequence>
+            <xs:element name="PaymentId" type="xs:string" minOccurs="0"/>
+            <xs:element name="ReturnToLenderId" type="xs:string" minOccurs="0"/>
+            <xs:element name="SequenceNumber" minOccurs="1">
+                <xs:simpleType>
+                    <xs:restriction base="xs:int">
+                        <xs:minInclusive value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="DisbursementStatus" type="FasDisbursementStatusEnum"/>
+            <xs:element name="CancellationReason" type="FasDisbursementCancellationReasonEnum" minOccurs="0"/>
+            <xs:element name="LateDisbursementIndicator" type="xs:boolean"/>
+            <xs:element name="PwdIndicator" type="xs:boolean"/>
+            <xs:element name="DisbursementAcceptanceStatus" type="FasDisbursementAcceptanceStatus" minOccurs="0"/>
+            <xs:element name="AnticipatedDisbursementDate" type="xs:date" minOccurs="0"/>
+            <xs:element name="DisbursementDate" type="xs:date" minOccurs="0"/>
+            <xs:element name="ReturnDate" type="xs:date" minOccurs="0"/>
+            <xs:element name="IncrementalDisbursementAmount" type="xs:double"/>
+            <xs:element name="IncrementalNetDisbursementAmount" minOccurs="0" type="xs:double"/>
+            <xs:element name="RightToCancelDeadline" type="xs:date" minOccurs="0"/>
+            <xs:element name="DisbursementCriterias" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="DisbursementCriteria" type="DiDisbursementCriteriaType" minOccurs="0"
+                                    maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="DiDisbursementCriteriaType">
+        <xs:sequence>
+            <xs:element name="DisbursementCriteria" type="xs:string"/>
+            <xs:element name="DisbursementCriteriaStatus" type="DiDisbursementCriteriaStatusEnum"/>
+            <xs:element name="DisbursementCriteriaOverrideIndicator" type="xs:boolean"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="DiDisbursementCriteriaStatusEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Met"/>
+            <xs:enumeration value="Not Met"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

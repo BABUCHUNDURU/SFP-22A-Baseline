@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Student Financial Planning : QC Hold Examples</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Student Financial Planning</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="SFP-Reporting_3051320857.html">SFP Reporting</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Reporting-Subjects_2275470684.html">Reporting Subjects</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Example-Queries_2326721850.html">Example Queries</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Student Financial Planning : QC Hold Examples
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Hutchinson</span>, last modified by <span class='editor'> Michael Weiss</span> on Oct 26, 2020
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p style="">These are examples of queries that reference views in the <a href="QC-Hold_2311044644.html">QC Hold</a><span> </span>subject.</p><p style="">The code convention <span style="color: rgb(0,0,0);"><em>$P{INPUT_PARAMETER}</em><span> </span>is single value input parameter and<span> </span><em>$X{IN, COLUMN_NAME, INPUT_PARAMETER}</em> is the equivalent of a SQL Language &quot;IN ()&quot; statement. Both of these conventions are used specifically in Jasper Server and map to the input criteria defined within a report definition.</span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>QC Hold Report</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: sql; gutter: true; theme: Confluence" data-theme="Confluence">SELECT INITCAP(a.first_name||&#39; &#39;||a.last_name)       as student_name
+     , a.school_student_id
+     , INITCAP(REPLACE(a.qc_hold_type, &#39;_&#39;, &#39; &#39;))    as qc_hold_type
+     , a.hold_id
+     , a.qc_hold_status
+     , a.hold_date
+     , a.descriptive_enrollment_status
+     , NULL                                          as enrollment_status_subtype
+     , a.award_year
+     , a.fund_code
+     , NULL                                          as cancellation_reason
+     , NULL                                          as r2t4_status
+     , NULL                                          as disbursement_date
+FROM FASRPT.QC_HOLD_AWARD_VW a
+WHERE $X{IN, a.qc_hold_type, Hold_Type}
+AND   $X{IN, a.qc_hold_status, Hold_Status}
+AND   a.hold_date BETWEEN $P{Start_Date} AND $P{End_Date}  
+UNION ALL
+SELECT INITCAP(a.first_name||&#39; &#39;||a.last_name)       as student_name
+     , a.school_student_id
+     , INITCAP(REPLACE(a.qc_hold_type, &#39;_&#39;, &#39; &#39;))    as qc_hold_type
+     , a.hold_id
+     , a.qc_hold_status
+     , a.hold_date
+     , a.descriptive_enrollment_status
+     , NULL                                          as enrollment_status_subtype
+     , NULL                                          as award_year
+     , NULL                                          as fund_code
+     , NULL                                          as cancellation_reason
+     , NULL                                          as r2t4_status
+     , NULL                                          as disbursement_date
+FROM FASRPT.QC_HOLD_CREDIT_BALANCE_VW a
+WHERE $X{IN, a.qc_hold_type, Hold_Type}
+AND   $X{IN, a.qc_hold_status, Hold_Status}
+AND   a.hold_date BETWEEN $P{Start_Date} AND $P{End_Date}  
+UNION ALL
+SELECT INITCAP(a.first_name||&#39; &#39;||a.last_name)       as student_name
+     , a.school_student_id
+     , INITCAP(REPLACE(a.qc_hold_type, &#39;_&#39;, &#39; &#39;))    as qc_hold_type
+     , a.hold_id
+     , a.qc_hold_status
+     , a.hold_date
+     , a.descriptive_enrollment_status
+     , NULL                                          as enrollment_status_subtype
+     , NULL                                          as award_year
+     , a.fund_code                                   as fund_code
+     , NULL                                          as cancellation_reason
+     , NULL                                          as r2t4_status
+     , NULL                                          as disbursement_date
+FROM FASRPT.QC_HOLD_GOP_VW a
+WHERE $X{IN, a.qc_hold_type, Hold_Type}
+AND   $X{IN, a.qc_hold_status, Hold_Status}
+AND   a.hold_date BETWEEN $P{Start_Date} AND $P{End_Date}  
+UNION ALL
+SELECT INITCAP(a.first_name||&#39; &#39;||a.last_name)       as student_name
+     , a.school_student_id
+     , INITCAP(REPLACE(a.qc_hold_type, &#39;_&#39;, &#39; &#39;))    as qc_hold_type
+     , a.hold_id
+     , a.qc_hold_status
+     , a.hold_date
+     , a.descriptive_enrollment_status
+     , NULL                                          as enrollment_status_subtype
+     , a.award_year                                  as award_year
+     , a.fund_code                                   as fund_code
+     , a.cancellation_reason                         as cancellation_reason
+     , NULL                                          as r2t4_status
+     , NULL                                          as disbursement_date
+FROM FASRPT.QC_HOLD_LATE_DISBURSEMENT_VW a
+WHERE $X{IN, a.qc_hold_type, Hold_Type}
+AND   $X{IN, a.qc_hold_status, Hold_Status}
+AND   a.hold_date BETWEEN $P{Start_Date} AND $P{End_Date} 
+UNION ALL
+SELECT INITCAP(a.first_name||&#39; &#39;||a.last_name)       as student_name
+     , a.school_student_id
+     , INITCAP(REPLACE(a.qc_hold_type, &#39;_&#39;, &#39; &#39;))    as qc_hold_type
+     , a.hold_id
+     , a.qc_hold_status
+     , a.hold_date
+     , a.descriptive_enrollment_status
+     , NULL                                          as enrollment_status_subtype
+     , a.award_year                                  as award_year
+     , a.fund_code                                   as fund_code
+     , a.cancellation_reason                         as cancellation_reason
+     , NULL                                          as r2t4_status
+     , NULL                                          as disbursement_date
+FROM FASRPT.QC_HOLD_PWD_VW a
+WHERE $X{IN, a.qc_hold_type, Hold_Type}
+AND   $X{IN, a.qc_hold_status, Hold_Status}
+AND   a.hold_date BETWEEN $P{Start_Date} AND $P{End_Date}
+UNION ALL
+SELECT INITCAP(a.first_name||&#39; &#39;||a.last_name)       as student_name
+     , a.school_student_id
+     , INITCAP(REPLACE(a.qc_hold_type, &#39;_&#39;, &#39; &#39;))    as qc_hold_type
+     , a.hold_id
+     , a.qc_hold_status
+     , a.hold_date
+     , CASE WHEN a.enrollment_status_during_r2t4 = &#39;AM&#39; THEN &#39;Admitted/Not Started&#39;
+            WHEN a.enrollment_status_during_r2t4 = &#39;AC&#39; THEN &#39;Academic Complete&#39;
+            WHEN a.enrollment_status_during_r2t4 = &#39;F&#39;  THEN &#39;Full Time&#39;
+            WHEN a.enrollment_status_during_r2t4 = &#39;H&#39;  THEN &#39;Half-time or more, but less than full-time&#39;
+            WHEN a.enrollment_status_during_r2t4 = &#39;L&#39;  THEN &#39;Less than half- time&#39;
+            WHEN a.enrollment_status_during_r2t4 = &#39;A&#39;  THEN &#39;Approved Leave of Absence&#39;
+            WHEN a.enrollment_status_during_r2t4 = &#39;X&#39;  THEN &#39;Never Attended&#39;
+            WHEN a.enrollment_status_during_r2t4 = &#39;C&#39;  THEN &#39;Cancel&#39;
+            WHEN a.enrollment_status_during_r2t4 = &#39;G&#39;  THEN &#39;Graduated&#39;
+            WHEN a.enrollment_status_during_r2t4 = &#39;D&#39;  THEN &#39;Deceased&#39;
+            WHEN a.enrollment_status_during_r2t4 = &#39;W&#39;  THEN &#39;Withdrawn&#39;
+            ELSE a.enrollment_status_during_r2t4
+       END                                           as descriptive_enrollment_status
+     , a.enrollment_status_sub_type                  as enrollment_status_subtype
+     , NULL                                          as award_year
+     , NULL                                          as fund_code
+     , NULL                                          as cancellation_reason
+     , b.r2t4_process_status                         as r2t4_status
+     , NULL                                          as disbursement_date
+FROM FASRPT.QC_HOLD_R2T4_VW   a
+     JOIN FASRPT.R2T4_PROCESS_VW b ON a.r2t4_process_id = b.r2t4_process_id
+WHERE $X{IN, a.qc_hold_type, Hold_Type}
+AND   $X{IN, a.qc_hold_status, Hold_Status}
+AND   a.hold_date BETWEEN $P{Start_Date} AND $P{End_Date} 
+UNION ALL
+SELECT INITCAP(a.first_name||&#39; &#39;||a.last_name)       as student_name
+     , a.school_student_id
+     , INITCAP(REPLACE(a.qc_hold_type, &#39;_&#39;, &#39; &#39;))    as qc_hold_type
+     , a.hold_id
+     , a.qc_hold_status
+     , a.hold_date
+     , a.descriptive_enrollment_status
+     , NULL                                          as enrollment_status_subtype
+     , a.award_year                                  as award_year
+     , a.fund_code                                   as fund_code
+     , NULL                                          as cancellation_reason
+     , NULL                                          as r2t4_status
+     , b.disbursement_date                           as disbursement_date
+FROM FASRPT.QC_HOLD_DISBURSEMENT_VW   a
+     JOIN FASRPT.DISBURSEMENT_ONLY_VW b ON  a.enrollment_id = b.enrollment_id
+                                        AND a.award_year = b.award_year
+                                        AND a.fund_code  = b.fund_code
+                                        AND a.academic_year_number = b.academic_year_number
+                                        AND NVL(a.loan_period_number, -1) = NVL(b.loan_period_number, -1)
+                                        AND a.payment_period_number = b.payment_period_number
+                                        AND a.disbursement_number = b.disbursement_number
+                                        AND a.sequence_number = b.sequence_number
+WHERE $X{IN, a.qc_hold_type, Hold_Type}
+AND   $X{IN, a.qc_hold_status, Hold_Status}
+AND   a.hold_date BETWEEN $P{Start_Date} AND $P{End_Date} 
+
+</pre>
+</div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>QC Holds Summary Report</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: sql; gutter: true; theme: Confluence" data-theme="Confluence">-- On Hold By Type Query
+
+SELECT coreqry.qc_hold_type_name, coreqry.qc_hold_type
+     , (SELECT count(1)
+        FROM FASRPT.QC_HOLD_VW  a1
+        WHERE a1.qc_hold_type = coreqry.qc_hold_type
+        AND   a1.hold_status = &#39;ON_HOLD&#39;
+        AND   a1.hold_date BETWEEN $P{Start_Date} AND $P{End_Date} 
+        AND   CASE WHEN $P{EXCLUDE_STUDENTS_ON_HOLD} = &#39;True&#39; AND NVL(a1.held, &#39;False&#39;) = &#39;False&#39;
+                   THEN 1
+                   ELSE 1
+              END = 1 
+       )                   qc_hold_count
+     , (SELECT count(1)
+        FROM FASRPT.QC_HOLD_VW  a1
+        WHERE a1.qc_hold_type = coreqry.qc_hold_type
+        AND   a1.hold_status = &#39;RELEASED&#39;
+        AND   a1.release_date BETWEEN $P{Start_Date} AND $P{End_Date} 
+        AND   CASE WHEN $P{EXCLUDE_STUDENTS_ON_HOLD}  = &#39;True&#39; AND NVL(a1.held, &#39;False&#39;) = &#39;False&#39;
+                   THEN 1
+                   ELSE 1
+              END = 1 
+       )                   qc_hold_released  
+FROM (SELECT a.hold_type_name     as qc_hold_type_name
+           , a.qc_hold_type
+      FROM FASRPT.QC_HOLD_VW  a 
+      GROUP BY a.hold_type_name 
+             , a.qc_hold_type
+     )   coreqry 
+     
+  ORDER BY 1;
+
+-- Total Released Query
+
+SELECT a.hold_type_name     as qc_hold_type_name
+     , a.qc_hold_type
+     , CASE
+		WHEN a.qc_hold_type = &#39;AWARD_AMOUNTS_DETERMINED&#39;  THEN &#39;Award&#39;
+		WHEN a.qc_hold_type = &#39;CREDIT_BALANCE_AMOUNT_DETERMINED&#39;  THEN &#39;Credit Balance&#39;
+		WHEN a.qc_hold_type = &#39;GRANT_OVERPAYMENT_DETERMINED&#39;  THEN &#39;Grant Over Payment&#39;
+		WHEN a.qc_hold_type = &#39;LATE_DISBURSEMENT_ACCEPTANCE_FOR_GRANT_DETERMINED&#39;  THEN &#39;LD Grant&#39;
+		WHEN a.qc_hold_type = &#39;LATE_DISBURSEMENT_REQUEST_FOR_ACCEPTANCE_FOR_LOAN_DETERMINED&#39;  THEN &#39;LD Loan&#39;
+		WHEN a.qc_hold_type = &#39;PWD_ACCEPTANCE_FOR_GRANT_DETERMINED&#39;  THEN &#39;PWD Grant&#39;
+		WHEN a.qc_hold_type = &#39;PWD_REQUEST_FOR_ACCEPTANCE_FOR_LOAN_DETERMINED&#39; THEN &#39;PWD Loan&#39;
+        WHEN a.qc_hold_type = &#39;R_2_T_4_CALCULATION_COMPLETE&#39; THEN &#39;R2T4&#39;
+		WHEN a.qc_hold_type = &#39;READY_TO_BE_CANCELED&#39; THEN &#39;Disb Canceled&#39;
+		WHEN a.qc_hold_type = &#39;READY_TO_BE_DISBURSED&#39; THEN &#39;Disb Disbursed&#39;
+		WHEN a.qc_hold_type = &#39;READY_TO_BE_RETURNED&#39; THEN &#39;Disb Returned&#39;
+        ELSE a.qc_hold_type
+	END AS QC_HOLD_TYPE_ABV
+     , TO_CHAR(CAST(a.release_date AS DATE),&#39;YYYY-MM-DD&#39;)       as release_date
+	 , TO_CHAR(CAST(a.release_date AS DATE) +  (1 - TO_CHAR(CAST(a.release_date AS DATE),&#39;d&#39;)),&#39;YYYY-MM-DD&#39;)  as  release_week
+	 , TO_CHAR(CAST(a.release_date AS DATE),&#39;YYYY-MM&#39;)          as release_month
+	 , COUNT(1)    as qc_hold_released_count
+FROM FASRPT.QC_HOLD_VW  a 
+WHERE a.hold_status = &#39;RELEASED&#39;
+AND   a.release_date BETWEEN $P{Start_Date} AND $P{End_Date} 
+AND   CASE WHEN $P{EXCLUDE_STUDENTS_ON_HOLD}  = &#39;True&#39; AND NVL(a.held, &#39;False&#39;) = &#39;False&#39;
+           THEN 1
+           ELSE 1
+      END = 1
+GROUP BY a.hold_type_name 
+     , a.qc_hold_type
+     , CASE
+		WHEN a.qc_hold_type = &#39;AWARD_AMOUNTS_DETERMINED&#39;  THEN &#39;Award&#39;
+		WHEN a.qc_hold_type = &#39;CREDIT_BALANCE_AMOUNT_DETERMINED&#39;  THEN &#39;Credit Balance&#39;
+		WHEN a.qc_hold_type = &#39;GRANT_OVERPAYMENT_DETERMINED&#39;  THEN &#39;Grant Over Payment&#39;
+		WHEN a.qc_hold_type = &#39;LATE_DISBURSEMENT_ACCEPTANCE_FOR_GRANT_DETERMINED&#39;  THEN &#39;LD Grant&#39;
+		WHEN a.qc_hold_type = &#39;LATE_DISBURSEMENT_REQUEST_FOR_ACCEPTANCE_FOR_LOAN_DETERMINED&#39;  THEN &#39;LD Loan&#39;
+		WHEN a.qc_hold_type = &#39;PWD_ACCEPTANCE_FOR_GRANT_DETERMINED&#39;  THEN &#39;PWD Grant&#39;
+		WHEN a.qc_hold_type = &#39;PWD_REQUEST_FOR_ACCEPTANCE_FOR_LOAN_DETERMINED&#39; THEN &#39;PWD Loan&#39;
+        WHEN a.qc_hold_type = &#39;R_2_T_4_CALCULATION_COMPLETE&#39; THEN &#39;R2T4&#39;
+		WHEN a.qc_hold_type = &#39;READY_TO_BE_CANCELED&#39; THEN &#39;Disb Canceled&#39;
+		WHEN a.qc_hold_type = &#39;READY_TO_BE_DISBURSED&#39; THEN &#39;Disb Disbursed&#39;
+		WHEN a.qc_hold_type = &#39;READY_TO_BE_RETURNED&#39; THEN &#39;Disb Returned&#39;
+        ELSE a.qc_hold_type
+	END
+     , TO_CHAR(CAST(a.release_date AS DATE),&#39;YYYY-MM-DD&#39;)  
+	 , TO_CHAR(CAST(a.release_date AS DATE) +  (1 - TO_CHAR(CAST(a.release_date AS DATE),&#39;d&#39;)),&#39;YYYY-MM-DD&#39;)
+	 , TO_CHAR(CAST(a.release_date AS DATE),&#39;YYYY-MM&#39;);
+
+-- Automatic Released Query
+
+SELECT a.hold_type_name     as qc_hold_type_name
+     , a.qc_hold_type
+     , CASE
+		WHEN a.qc_hold_type = &#39;AWARD_AMOUNTS_DETERMINED&#39;  THEN &#39;Award&#39;
+		WHEN a.qc_hold_type = &#39;CREDIT_BALANCE_AMOUNT_DETERMINED&#39;  THEN &#39;Credit Balance&#39;
+		WHEN a.qc_hold_type = &#39;GRANT_OVERPAYMENT_DETERMINED&#39;  THEN &#39;Grant Over Payment&#39;
+		WHEN a.qc_hold_type = &#39;LATE_DISBURSEMENT_ACCEPTANCE_FOR_GRANT_DETERMINED&#39;  THEN &#39;LD Grant&#39;
+		WHEN a.qc_hold_type = &#39;LATE_DISBURSEMENT_REQUEST_FOR_ACCEPTANCE_FOR_LOAN_DETERMINED&#39;  THEN &#39;LD Loan&#39;
+		WHEN a.qc_hold_type = &#39;PWD_ACCEPTANCE_FOR_GRANT_DETERMINED&#39;  THEN &#39;PWD Grant&#39;
+		WHEN a.qc_hold_type = &#39;PWD_REQUEST_FOR_ACCEPTANCE_FOR_LOAN_DETERMINED&#39; THEN &#39;PWD Loan&#39;
+        WHEN a.qc_hold_type = &#39;R_2_T_4_CALCULATION_COMPLETE&#39; THEN &#39;R2T4&#39;
+		WHEN a.qc_hold_type = &#39;READY_TO_BE_CANCELED&#39; THEN &#39;Disb Canceled&#39;
+		WHEN a.qc_hold_type = &#39;READY_TO_BE_DISBURSED&#39; THEN &#39;Disb Disbursed&#39;
+		WHEN a.qc_hold_type = &#39;READY_TO_BE_RETURNED&#39; THEN &#39;Disb Returned&#39;
+        ELSE a.qc_hold_type
+	END AS QC_HOLD_TYPE_ABV
+     , TO_CHAR(CAST(a.release_date AS DATE),&#39;YYYY-MM-DD&#39;)       as release_date
+	 , TO_CHAR(CAST(a.release_date AS DATE) +  (1 - TO_CHAR(CAST(a.release_date AS DATE),&#39;d&#39;)),&#39;YYYY-MM-DD&#39;)  as  release_week
+	 , TO_CHAR(CAST(a.release_date AS DATE),&#39;YYYY-MM&#39;)          as release_month
+	 , COUNT(1)    as qc_hold_released_count
+FROM FASRPT.QC_HOLD_VW  a 
+WHERE a.hold_status = &#39;RELEASED&#39;
+AND   a.release_date BETWEEN $P{Start_Date} AND $P{End_Date} 
+AND   a.released_by = &#39;system&#39;
+AND   CASE WHEN $P{EXCLUDE_STUDENTS_ON_HOLD}  = &#39;True&#39; AND NVL(a.held, &#39;False&#39;) = &#39;False&#39;
+           THEN 1
+           ELSE 1
+      END = 1
+GROUP BY a.hold_type_name 
+     , a.qc_hold_type
+     , CASE
+		WHEN a.qc_hold_type = &#39;AWARD_AMOUNTS_DETERMINED&#39;  THEN &#39;Award&#39;
+		WHEN a.qc_hold_type = &#39;CREDIT_BALANCE_AMOUNT_DETERMINED&#39;  THEN &#39;Credit Balance&#39;
+		WHEN a.qc_hold_type = &#39;GRANT_OVERPAYMENT_DETERMINED&#39;  THEN &#39;Grant Over Payment&#39;
+		WHEN a.qc_hold_type = &#39;LATE_DISBURSEMENT_ACCEPTANCE_FOR_GRANT_DETERMINED&#39;  THEN &#39;LD Grant&#39;
+		WHEN a.qc_hold_type = &#39;LATE_DISBURSEMENT_REQUEST_FOR_ACCEPTANCE_FOR_LOAN_DETERMINED&#39;  THEN &#39;LD Loan&#39;
+		WHEN a.qc_hold_type = &#39;PWD_ACCEPTANCE_FOR_GRANT_DETERMINED&#39;  THEN &#39;PWD Grant&#39;
+		WHEN a.qc_hold_type = &#39;PWD_REQUEST_FOR_ACCEPTANCE_FOR_LOAN_DETERMINED&#39; THEN &#39;PWD Loan&#39;
+        WHEN a.qc_hold_type = &#39;R_2_T_4_CALCULATION_COMPLETE&#39; THEN &#39;R2T4&#39;
+		WHEN a.qc_hold_type = &#39;READY_TO_BE_CANCELED&#39; THEN &#39;Disb Canceled&#39;
+		WHEN a.qc_hold_type = &#39;READY_TO_BE_DISBURSED&#39; THEN &#39;Disb Disbursed&#39;
+		WHEN a.qc_hold_type = &#39;READY_TO_BE_RETURNED&#39; THEN &#39;Disb Returned&#39;
+        ELSE a.qc_hold_type
+	END
+     , TO_CHAR(CAST(a.release_date AS DATE),&#39;YYYY-MM-DD&#39;)  
+	 , TO_CHAR(CAST(a.release_date AS DATE) +  (1 - TO_CHAR(CAST(a.release_date AS DATE),&#39;d&#39;)),&#39;YYYY-MM-DD&#39;)
+	 , TO_CHAR(CAST(a.release_date AS DATE),&#39;YYYY-MM&#39;);
+
+-- Manual Released Query
+
+SELECT a.hold_type_name     as qc_hold_type_name
+     , a.qc_hold_type
+     , CASE
+		WHEN a.qc_hold_type = &#39;AWARD_AMOUNTS_DETERMINED&#39;  THEN &#39;Award&#39;
+		WHEN a.qc_hold_type = &#39;CREDIT_BALANCE_AMOUNT_DETERMINED&#39;  THEN &#39;Credit Balance&#39;
+		WHEN a.qc_hold_type = &#39;GRANT_OVERPAYMENT_DETERMINED&#39;  THEN &#39;Grant Over Payment&#39;
+		WHEN a.qc_hold_type = &#39;LATE_DISBURSEMENT_ACCEPTANCE_FOR_GRANT_DETERMINED&#39;  THEN &#39;LD Grant&#39;
+		WHEN a.qc_hold_type = &#39;LATE_DISBURSEMENT_REQUEST_FOR_ACCEPTANCE_FOR_LOAN_DETERMINED&#39;  THEN &#39;LD Loan&#39;
+		WHEN a.qc_hold_type = &#39;PWD_ACCEPTANCE_FOR_GRANT_DETERMINED&#39;  THEN &#39;PWD Grant&#39;
+		WHEN a.qc_hold_type = &#39;PWD_REQUEST_FOR_ACCEPTANCE_FOR_LOAN_DETERMINED&#39; THEN &#39;PWD Loan&#39;
+        WHEN a.qc_hold_type = &#39;R_2_T_4_CALCULATION_COMPLETE&#39; THEN &#39;R2T4&#39;
+		WHEN a.qc_hold_type = &#39;READY_TO_BE_CANCELED&#39; THEN &#39;Disb Canceled&#39;
+		WHEN a.qc_hold_type = &#39;READY_TO_BE_DISBURSED&#39; THEN &#39;Disb Disbursed&#39;
+		WHEN a.qc_hold_type = &#39;READY_TO_BE_RETURNED&#39; THEN &#39;Disb Returned&#39;
+        ELSE a.qc_hold_type
+	END AS QC_HOLD_TYPE_ABV
+     , TO_CHAR(CAST(a.release_date AS DATE),&#39;YYYY-MM-DD&#39;)       as release_date
+	 , TO_CHAR(CAST(a.release_date AS DATE) +  (1 - TO_CHAR(CAST(a.release_date AS DATE),&#39;d&#39;)),&#39;YYYY-MM-DD&#39;)  as  release_week
+	 , TO_CHAR(CAST(a.release_date AS DATE),&#39;YYYY-MM&#39;)          as release_month
+	 , COUNT(1)    as qc_hold_released_count
+FROM FASRPT.QC_HOLD_VW  a 
+WHERE a.hold_status = &#39;RELEASED&#39;
+AND   a.release_date BETWEEN $P{Start_Date} AND $P{End_Date} 
+AND   a.released_by &lt;&gt; &#39;system&#39;
+AND   CASE WHEN $P{EXCLUDE_STUDENTS_ON_HOLD}  = &#39;True&#39; AND NVL(a.held, &#39;False&#39;) = &#39;False&#39;
+           THEN 1
+           ELSE 1
+      END = 1
+GROUP BY a.hold_type_name 
+     , a.qc_hold_type
+     , CASE
+		WHEN a.qc_hold_type = &#39;AWARD_AMOUNTS_DETERMINED&#39;  THEN &#39;Award&#39;
+		WHEN a.qc_hold_type = &#39;CREDIT_BALANCE_AMOUNT_DETERMINED&#39;  THEN &#39;Credit Balance&#39;
+		WHEN a.qc_hold_type = &#39;GRANT_OVERPAYMENT_DETERMINED&#39;  THEN &#39;Grant Over Payment&#39;
+		WHEN a.qc_hold_type = &#39;LATE_DISBURSEMENT_ACCEPTANCE_FOR_GRANT_DETERMINED&#39;  THEN &#39;LD Grant&#39;
+		WHEN a.qc_hold_type = &#39;LATE_DISBURSEMENT_REQUEST_FOR_ACCEPTANCE_FOR_LOAN_DETERMINED&#39;  THEN &#39;LD Loan&#39;
+		WHEN a.qc_hold_type = &#39;PWD_ACCEPTANCE_FOR_GRANT_DETERMINED&#39;  THEN &#39;PWD Grant&#39;
+		WHEN a.qc_hold_type = &#39;PWD_REQUEST_FOR_ACCEPTANCE_FOR_LOAN_DETERMINED&#39; THEN &#39;PWD Loan&#39;
+        WHEN a.qc_hold_type = &#39;R_2_T_4_CALCULATION_COMPLETE&#39; THEN &#39;R2T4&#39;
+		WHEN a.qc_hold_type = &#39;READY_TO_BE_CANCELED&#39; THEN &#39;Disb Canceled&#39;
+		WHEN a.qc_hold_type = &#39;READY_TO_BE_DISBURSED&#39; THEN &#39;Disb Disbursed&#39;
+		WHEN a.qc_hold_type = &#39;READY_TO_BE_RETURNED&#39; THEN &#39;Disb Returned&#39;
+        ELSE a.qc_hold_type
+	END
+     , TO_CHAR(CAST(a.release_date AS DATE),&#39;YYYY-MM-DD&#39;)  
+	 , TO_CHAR(CAST(a.release_date AS DATE) +  (1 - TO_CHAR(CAST(a.release_date AS DATE),&#39;d&#39;)),&#39;YYYY-MM-DD&#39;)
+	 , TO_CHAR(CAST(a.release_date AS DATE),&#39;YYYY-MM&#39;);
+</pre>
+</div></div>
+                    </div>
+
+                                        
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Dec 15, 2021 15:11</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

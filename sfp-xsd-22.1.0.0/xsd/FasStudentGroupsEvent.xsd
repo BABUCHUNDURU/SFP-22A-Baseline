@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ COPYRIGHT (c) 2019 ORACLE, INC.  ALL RIGHTS RESERVED.  THIS SOFTWARE CONTAINS
+  ~ TRADE SECRETS AND/OR CONFIDENTIAL INFORMATION PROPRIETARY TO ORACLE, INC AND/OR
+  ~ ITS LICENSORS. ACCESS TO AND USE OF THIS INFORMATION IS STRICTLY LIMITED AND
+  ~ CONTROLLED BY ORACLE, INC.  THIS SOFTWARE MAY NOT BE COPIED, MODIFIED, DISTRIBUTED,
+  ~ DISPLAYED, DISCLOSED OR USED IN ANY WAY NOT EXPRESSLY AUTHORIZED BY ORACLE, INC IN WRITING.
+  -->
+<xs:schema xmlns="http://www.vocado.com/vm/fas"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:vc="http://www.vocado.com/vm/common"
+           targetNamespace="http://www.vocado.com/vm/fas"
+           elementFormDefault="qualified">
+
+    <xs:include schemaLocation="common/FasCommon.xsd"/>
+    <xs:import namespace="http://www.vocado.com/vm/common" schemaLocation="common/VocadoCommon.xsd"/>
+
+    <xs:element name="FasStudentGroupsEvent">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:element name="Student">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="ExternalStudentId" type="vc:ExternalIdentifierType"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="GroupEvents">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                                        <xs:element name="AddedToGroup" type="GroupEventType"/>
+                                        <xs:element name="RemovedFromGroup" type="GroupEventType"/>
+                                    </xs:choice>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="GroupEventType">
+        <xs:sequence>
+            <xs:element name="Name">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="1"/>
+                        <xs:maxLength value="255"/>
+                        <xs:pattern value=".*[^\s].*"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="Description" type="xs:string" minOccurs="0"/>
+            <xs:element name="EffectiveDate" type="xs:date"/>
+            <xs:element name="Comment" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

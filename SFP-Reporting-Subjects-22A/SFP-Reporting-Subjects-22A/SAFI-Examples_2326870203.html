@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Student Financial Planning : SAFI Examples</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Student Financial Planning</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="SFP-Reporting_3051320857.html">SFP Reporting</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Reporting-Subjects_2275470684.html">Reporting Subjects</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Example-Queries_2326721850.html">Example Queries</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Student Financial Planning : SAFI Examples
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Hutchinson</span>, last modified on Oct 26, 2020
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p style="">These are examples of queries that reference views in the <a href="SAFI_2311044649.html">SAFI</a><span> </span>subject.</p><p style="">The code convention <span style="color: rgb(0,0,0);"><em>$P{INPUT_PARAMETER}</em><span> </span>is single value input parameter and<span> </span><em>$X{IN, COLUMN_NAME, INPUT_PARAMETER}</em> is the equivalent of a SQL Language &quot;IN ()&quot; statement. Both of these conventions are used specifically in Jasper Server and map to the input criteria defined within a report definition.</span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>SAP Academic Information Report</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: sql; gutter: true; theme: Confluence" data-theme="Confluence">SELECT  a.address_line_1
+     , a.address_line_2
+     , a.city
+     , a.postal_code
+     , a.state 
+     , INITCAP(b.first_name)    first_name
+     , INITCAP(b.first_name||&#39; &#39;||b.last_name)  full_name
+     , c.gpa_calculation_result_status
+     , c.pace_completion_result_status
+     , c.max_program_result_status
+     , CASE WHEN c.sap_status = &#39;RG_REGULAR&#39; THEN &#39;Regular&#39;
+            WHEN c.sap_status = &#39;FW_FINANCIAL_AID_WARNING&#39; THEN &#39;Financial Aid Warning&#39;
+            WHEN c.sap_status = &#39;FP_FINANCIAL_AID_PROBATION&#39; THEN &#39;Financial Aid Probation&#39;
+            WHEN c.sap_status = &#39;FD_FINANCIAL_AID_DISQUALIFICATION&#39; THEN &#39;Financial Aid Disqualification&#39;
+       END        fa_status
+     , c.program_required_gpa
+     , c.cumulative_gpa
+     , c.pace_completion_rate
+     , c.max_program_time_frame 
+     , (SELECT d.program_code
+        FROM FASRPT.PROGRAM_VW  d
+        WHERE d.safi_rank = 1
+        AND   d.primary_program_indicator = &#39;True&#39;
+        AND   d.enrollment_id = c.enrollment_id
+       )          program_code
+     , (SELECT d.payment_period_description
+        FROM FASRPT.PACKAGE_SCHEDULE_VW  d
+        WHERE d.schedule_type = &#39;TERM&#39;
+        AND   d.packaging_rank = 1
+        AND   d.enrollment_id = c.enrollment_id
+        AND   d.academic_year_number = c.academic_year_number
+        AND   d.period_end_date = c.sap_period_end_date
+        AND   rownum = 1
+       )    term_description
+     , b.enrollment_id, b.school_student_id
+FROM FASRPT.SAP_VW   c
+     JOIN FASRPT.STUDENT_FA_VW b ON c.enrollment_id = b.enrollment_id
+     JOIN FASRPT.STUDENT_ADDRESS_VW   a ON b.student_id = a.student_id
+WHERE a.student_address_rank = 1
+AND   c.sap_appeal_rank = 1
+AND   c.sap_period_id = $P{sapPeriodId}</pre>
+</div></div>
+                    </div>
+
+                                        
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Dec 15, 2021 15:11</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+COPYRIGHT (C) 2013 VOCADO, LLC.  ALL RIGHTS RESERVED.  THIS SOFTWARE CONTAINS
+TRADE SECRETS AND/OR CONFIDENTIAL INFORMATION PROPRIETARY TO VOCADO, LLC
+AND/OR ITS LICENSORS. ACCESS TO AND USE OF THIS INFORMATION IS STRICTLY
+LIMITED AND CONTROLLED BY VOCADO, LLC.  THIS SOFTWARE MAY NOT BE COPIED,
+MODIFIED, DISTRIBUTED, DISPLAYED, DISCLOSED OR USED IN ANY WAY NOT EXPRESSLY
+AUTHORIZED BY VOCADO, LLC IN WRITING.
+
+-->
+<xs:schema xmlns="http://www.vocado.com/vm/fas"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:vc="http://www.vocado.com/vm/common"
+           targetNamespace="http://www.vocado.com/vm/fas"
+           elementFormDefault="qualified">
+
+    <xs:include schemaLocation="common/FasCommon.xsd"/>
+    <xs:import namespace="http://www.vocado.com/vm/common" schemaLocation="common/VocadoCommon.xsd"/>
+
+    <xs:element name="FasStudentInitiationEvent">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:element name="StudentIds" type="FasStudentInitiationEvent_StudentIdsType"/>
+                        <xs:element name="DemographicData" minOccurs="0">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="Gender" type="GenderEnum" minOccurs="0"/>
+                                    <xs:element name="DependencyStatus" type="DependencyStatusEnum" minOccurs="0"/>
+                                    <xs:element name="EmailAddress" type="EmailAddressType" minOccurs="0"/>
+                                    <xs:element name="IncomingTeachGpa" type="xs:float" minOccurs="0"/>
+                                    <xs:element name="BasicAllowanceForHousing" type="xs:boolean" minOccurs="0"/>
+                                    <xs:element name="SchoolEmployee" type="xs:boolean" minOccurs="0"/>
+                                    <xs:element name="SchoolEmployeeDependent" type="xs:boolean" minOccurs="0"/>
+                                    <xs:element name="Address" type="AddressType" minOccurs="0"/>
+                                    <xs:element name="Phone" type="PhoneType" minOccurs="0"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="AnticipatedStartDate" type="xs:date"/>
+                        <xs:element name="FinancialAidRequested" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="HighSchoolEquivalency" type="xs:boolean" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="FasStudentInitiationEvent_StudentIdsType">
+        <xs:sequence>
+            <xs:choice>
+                <xs:sequence>
+                    <xs:element name="FirstName" type="vc:NonBlankStringType" />
+                    <xs:element name="LastName" type="vc:NonBlankStringType" minOccurs="0">
+                    </xs:element>
+                </xs:sequence>
+                <xs:element name="LastName" type="vc:NonBlankStringType" />
+            </xs:choice>
+            <xs:element name="MiddleName" type="xs:string" minOccurs="0"/>
+            <xs:element name="Suffix" type="xs:string" minOccurs="0"/>
+            <xs:element name="Salutation" type="xs:string" minOccurs="0"/>
+            <xs:element name="Ssn" type="SsnType" minOccurs="0"/>
+            <xs:element name="Dob" type="xs:date" minOccurs="0"/>
+            <xs:element name="ExternalStudentId" type="vc:ExternalIdentifierType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

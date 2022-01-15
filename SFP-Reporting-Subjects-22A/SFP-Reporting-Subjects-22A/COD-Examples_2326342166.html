@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Student Financial Planning : COD Examples</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Student Financial Planning</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="SFP-Reporting_3051320857.html">SFP Reporting</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Reporting-Subjects_2275470684.html">Reporting Subjects</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Example-Queries_2326721850.html">Example Queries</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Student Financial Planning : COD Examples
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Hutchinson</span>, last modified on Oct 26, 2020
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>These are examples of queries that reference views in the <a href="COD_2307687244.html">COD</a><span> </span>subject.</p><p>The code convention <span style="color: rgb(0,0,0);"><em>$P{INPUT_PARAMETER}</em><span> </span>is single value input parameter and<span> </span><em>$X{IN, COLUMN_NAME, INPUT_PARAMETER}</em> is the equivalent of a SQL Language &quot;IN ()&quot; statement. Both of these conventions are used specifically in Jasper Server and map to the input criteria defined within a report definition.</span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Outstanding COD Reject Report</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: sql; gutter: true; theme: Confluence" data-theme="Confluence">SELECT a.school_student_id
+     , b.ssn
+     , a.enrollment_id
+     , b.first_name
+     , b.last_name
+     , b.descriptive_enrollment_status
+     , a.financial_award_id
+     , a.fund_code
+     , a.award_year
+     , a.academic_year_number
+     , b.payment_period_number
+     , a.disbursement_number
+     , a.sequence_number
+     , e.code                 as reject_code
+     , e.error_level 
+     , b.disbursement_status
+     , b.anticipated_date
+     , b.disbursement_date
+     , b.total_disbursement_amount
+     , b.incremental_amount
+     , a.cod_document_id                  as current_cod_document_id
+     , e.error_type
+     , b.held_reason
+     , b.date_of_determination
+     , CASE WHEN b.pwd_indicator = &#39;True&#39; and b.fund_code = &#39;PELL&#39;
+            THEN b.date_of_determination + 45
+            WHEN b.pwd_indicator = &#39;True&#39; and b.fund_code &lt;&gt; &#39;PELL&#39;
+            THEN b.date_of_determination + 180
+            ELSE null
+       END   dod_plus_days  
+     , a.financial_award_begin_date
+     , a.financial_award_end_date 
+     , a.academic_year_begin_date
+     , a.academic_year_end_date
+FROM FASRPT.COD_VW                   a
+     JOIN FASRPT.DISBURSEMENT_OTHER_VW  b ON  a.enrollment_id = b.enrollment_id
+                                 AND a.award_year = b.award_year
+                                 AND a.fund_code = b.fund_code
+                                 AND a.academic_year_number = b.academic_year_number
+                                 AND a.disbursement_number = b.disbursement_number
+                                 AND a.sequence_number = b.sequence_number
+     JOIN FASRPT.SAIG_COD_ERR_VW  e ON a.cod_document_id = e.cod_document_id                           
+WHERE a.cod_document_student_rank = 1
+AND $X{IN, a.award_year, Award_Year}</pre>
+</div></div><p><br/><br/></p>
+                    </div>
+
+                                        
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Dec 15, 2021 15:11</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

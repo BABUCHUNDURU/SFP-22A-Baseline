@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd"><html lang="en-US"><head><title>SFP Messaging API Doc (22.1.0.0)</title><meta name="generate-timestamp" content="2021-12-10T14:30:51.811Z"></meta><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" type="text/css" href="./stylesheet.css" title="Style"></link><script type="text/javascript" src="./script.js"></script></head><body onload="setup();"><div class="page-header">Oracle SFP Messaging API 22.1.0.0</div><h1>FasDisbursementAcceptanceInformationV2Request (Request/Reply)</h1><div><a href="all-labels.html#label-webservice" class="tag">webservice</a><a href="all-labels.html#label-disbursement" class="tag">disbursement</a><a href="all-labels.html#label-sync" class="tag">sync</a></div><div class="keyword-list"><div>Request Message Class</div><div><b>FasDisbursementAcceptanceInformationV2Request</b></div><div>Reply Message Class</div><div><b>FasDisbursementAcceptanceInformationV2Reply</b></div><div>Description</div><div><div class="markdown"><p>Web service that returns student disbursement acceptance information.</p>
+</div></div><div>XML Schema</div><div><div class="markdown"><p><a href="xsd/FasDisbursementAcceptanceInformationV2.xsd.html#line32">FasDisbursementAcceptanceInformationV2.xsd</a></p>
+</div></div><div>XML Namespace</div><div><code>http://www.vocado.com/vm/fas</code></div><div>HTTP Endpoint</div><div><code>/channels/in.sync/publish-consume</code></div><div>Message Exchange Pattern</div><div><div class="markdown"><p><strong>Synchronous inbound request-reply</strong></p>
+<p>A client system sends a message in the HTTP request and waits until the reply message is returned in the HTTP response. Please see &quot;<em>MPG Public API for Developers</em>&quot; for additional details.</p>
+<p>By design, this mode of communication always <strong>operates in read-only mode</strong>. This means that it  can only be used to retrieve data that is already available in SFP.</p>
+</div></div><div>Request Details</div><div><div class="markdown"><p>Contains the following fields:</p>
+<ul>
+<li><strong>External Student ID</strong> (required)</li>
+<li><strong>Program Code</strong> (optional)
+or:</li>
+<li><strong>Enrollment ID</strong> (required)</li>
+</ul>
+</div></div><div>Reply Details</div><div><div class="markdown"><p>Disbursement Acceptance information for the given student.</p>
+</div></div><div>Error Handling</div><div><div class="markdown"><p>If the request message contains validation errors, a <a href="MessageValidationErrorReply.html">MessageValidationErrorReply</a> message will be returned in the HTTP response. Please check the payload of this message for details about the error.</p>
+</div></div></div><h1>Examples</h1><div class="code-block"><div>Typical Request</div><button class="collapsible">(show ▼)</button><div class="content"><pre><tt><span id="line1" class="linenumber">   1 </span><b><font color="#000080">&lt;?xml</font></b> <font color="#009900">version</font><font color="#990000">=</font><font color="#FF0000">"1.0"</font> <font color="#009900">encoding</font><font color="#990000">=</font><font color="#FF0000">"UTF-8"</font><b><font color="#000080">?&gt;</font></b>
+<span id="line2" class="linenumber">   2 </span><i><font color="#9A1900">&lt;!--</font></i>
+<span id="line3" class="linenumber">   3 </span><i><font color="#9A1900">  ~ Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.</font></i>
+<span id="line4" class="linenumber">   4 </span><i><font color="#9A1900">  --&gt;</font></i>
+<span id="line5" class="linenumber">   5 </span>
+<span id="line6" class="linenumber">   6 </span><b><font color="#0000FF">&lt;FasDisbursementAcceptanceInformationV2Request</font></b> <font color="#009900">xmlns:vc</font><font color="#990000">=</font><font color="#FF0000">"http://www.vocado.com/vm/common"</font> <font color="#009900">xmlns</font><font color="#990000">=</font><font color="#FF0000">"http://www.vocado.com/vm/fas"</font><b><font color="#0000FF">&gt;</font></b>
+<span id="line7" class="linenumber">   7 </span>    <b><font color="#0000FF">&lt;vc:MessageHeaders&gt;</font></b>
+<span id="line8" class="linenumber">   8 </span>        <b><font color="#0000FF">&lt;vc:MessageId&gt;</font></b>550e8400-e29b-41d4-a716-446655440003<b><font color="#0000FF">&lt;/vc:MessageId&gt;</font></b>
+<span id="line9" class="linenumber">   9 </span>        <b><font color="#0000FF">&lt;vc:CreationDateTime&gt;</font></b>2014-08-13T19:20:30.450+01:00<b><font color="#0000FF">&lt;/vc:CreationDateTime&gt;</font></b>
+<span id="line10" class="linenumber">  10 </span>    <b><font color="#0000FF">&lt;/vc:MessageHeaders&gt;</font></b>
+<span id="line11" class="linenumber">  11 </span>    <b><font color="#0000FF">&lt;ExternalStudentId&gt;</font></b>386782<b><font color="#0000FF">&lt;/ExternalStudentId&gt;</font></b>
+<span id="line12" class="linenumber">  12 </span>    <b><font color="#0000FF">&lt;ProgramCode&gt;</font></b>BSIT/SE<b><font color="#0000FF">&lt;/ProgramCode&gt;</font></b>
+<span id="line13" class="linenumber">  13 </span><b><font color="#0000FF">&lt;/FasDisbursementAcceptanceInformationV2Request&gt;</font></b></tt></pre></tt></pre></div></div><div class="code-block"><div>Typical Reply</div><button class="collapsible">(show ▼)</button><div class="content"><pre><tt><span id="line1" class="linenumber">   1 </span><b><font color="#000080">&lt;?xml</font></b> <font color="#009900">version</font><font color="#990000">=</font><font color="#FF0000">"1.0"</font> <font color="#009900">encoding</font><font color="#990000">=</font><font color="#FF0000">"UTF-8"</font><b><font color="#000080">?&gt;</font></b>
+<span id="line2" class="linenumber">   2 </span><i><font color="#9A1900">&lt;!--</font></i>
+<span id="line3" class="linenumber">   3 </span><i><font color="#9A1900">  ~ Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.</font></i>
+<span id="line4" class="linenumber">   4 </span><i><font color="#9A1900">  --&gt;</font></i>
+<span id="line5" class="linenumber">   5 </span>
+<span id="line6" class="linenumber">   6 </span><b><font color="#0000FF">&lt;FasDisbursementAcceptanceInformationV2Reply</font></b> <font color="#009900">xmlns:vc</font><font color="#990000">=</font><font color="#FF0000">"http://www.vocado.com/vm/common"</font>
+<span id="line7" class="linenumber">   7 </span>                                             <font color="#009900">xmlns</font><font color="#990000">=</font><font color="#FF0000">"http://www.vocado.com/vm/fas"</font><b><font color="#0000FF">&gt;</font></b>
+<span id="line8" class="linenumber">   8 </span>    <b><font color="#0000FF">&lt;vc:MessageHeaders&gt;</font></b>
+<span id="line9" class="linenumber">   9 </span>        <b><font color="#0000FF">&lt;vc:MessageId&gt;</font></b>550e8400-e29b-41d4-a716-446655440000<b><font color="#0000FF">&lt;/vc:MessageId&gt;</font></b>
+<span id="line10" class="linenumber">  10 </span>        <b><font color="#0000FF">&lt;vc:CreationDateTime&gt;</font></b>2012-07-16T19:20:30.450+01:00<b><font color="#0000FF">&lt;/vc:CreationDateTime&gt;</font></b>
+<span id="line11" class="linenumber">  11 </span>    <b><font color="#0000FF">&lt;/vc:MessageHeaders&gt;</font></b>
+<span id="line12" class="linenumber">  12 </span>    <b><font color="#0000FF">&lt;Student&gt;</font></b>
+<span id="line13" class="linenumber">  13 </span>        <b><font color="#0000FF">&lt;ExternalStudentId&gt;</font></b>Apollo231<b><font color="#0000FF">&lt;/ExternalStudentId&gt;</font></b>
+<span id="line14" class="linenumber">  14 </span>        <b><font color="#0000FF">&lt;EnrollmentId&gt;</font></b>123<b><font color="#0000FF">&lt;/EnrollmentId&gt;</font></b>
+<span id="line15" class="linenumber">  15 </span>    <b><font color="#0000FF">&lt;/Student&gt;</font></b>
+<span id="line16" class="linenumber">  16 </span>    <b><font color="#0000FF">&lt;Program&gt;</font></b>
+<span id="line17" class="linenumber">  17 </span>        <b><font color="#0000FF">&lt;ProgramCode&gt;</font></b>PR/01<b><font color="#0000FF">&lt;/ProgramCode&gt;</font></b>
+<span id="line18" class="linenumber">  18 </span>    <b><font color="#0000FF">&lt;/Program&gt;</font></b>
+<span id="line19" class="linenumber">  19 </span>    <b><font color="#0000FF">&lt;Funds&gt;</font></b>
+<span id="line20" class="linenumber">  20 </span>        <b><font color="#0000FF">&lt;Fund&gt;</font></b>
+<span id="line21" class="linenumber">  21 </span>            <b><font color="#0000FF">&lt;FundType&gt;</font></b>Title IV Direct Loan<b><font color="#0000FF">&lt;/FundType&gt;</font></b>
+<span id="line22" class="linenumber">  22 </span>            <b><font color="#0000FF">&lt;FundCode&gt;</font></b>DSUB<b><font color="#0000FF">&lt;/FundCode&gt;</font></b>
+<span id="line23" class="linenumber">  23 </span>            <b><font color="#0000FF">&lt;AcademicYears&gt;</font></b>
+<span id="line24" class="linenumber">  24 </span>                <b><font color="#0000FF">&lt;AcademicYear&gt;</font></b>
+<span id="line25" class="linenumber">  25 </span>                    <b><font color="#0000FF">&lt;AcademicYearNumber&gt;</font></b>1<b><font color="#0000FF">&lt;/AcademicYearNumber&gt;</font></b>
+<span id="line26" class="linenumber">  26 </span>                    <b><font color="#0000FF">&lt;StartDate&gt;</font></b>2016-09-06<b><font color="#0000FF">&lt;/StartDate&gt;</font></b>
+<span id="line27" class="linenumber">  27 </span>                    <b><font color="#0000FF">&lt;EndDate&gt;</font></b>2017-08-28<b><font color="#0000FF">&lt;/EndDate&gt;</font></b>
+<span id="line28" class="linenumber">  28 </span>                    <b><font color="#0000FF">&lt;LoanPeriods&gt;</font></b>
+<span id="line29" class="linenumber">  29 </span>                        <b><font color="#0000FF">&lt;LoanPeriod&gt;</font></b>
+<span id="line30" class="linenumber">  30 </span>                            <b><font color="#0000FF">&lt;StartDate&gt;</font></b>2016-09-06<b><font color="#0000FF">&lt;/StartDate&gt;</font></b>
+<span id="line31" class="linenumber">  31 </span>                            <b><font color="#0000FF">&lt;EndDate&gt;</font></b>2017-02-20<b><font color="#0000FF">&lt;/EndDate&gt;</font></b>
+<span id="line32" class="linenumber">  32 </span>                            <b><font color="#0000FF">&lt;LoanPeriodNumber&gt;</font></b>1<b><font color="#0000FF">&lt;/LoanPeriodNumber&gt;</font></b>
+<span id="line33" class="linenumber">  33 </span>                            <b><font color="#0000FF">&lt;LoanPaymentPeriods&gt;</font></b>
+<span id="line34" class="linenumber">  34 </span>                                <b><font color="#0000FF">&lt;LoanPaymentPeriod&gt;</font></b>
+<span id="line35" class="linenumber">  35 </span>                                    <b><font color="#0000FF">&lt;LoanPaymentPeriodNumber&gt;</font></b>1<b><font color="#0000FF">&lt;/LoanPaymentPeriodNumber&gt;</font></b>
+<span id="line36" class="linenumber">  36 </span>                                    <b><font color="#0000FF">&lt;StartDate&gt;</font></b>2016-09-06<b><font color="#0000FF">&lt;/StartDate&gt;</font></b>
+<span id="line37" class="linenumber">  37 </span>                                    <b><font color="#0000FF">&lt;EndDate&gt;</font></b>2017-02-20<b><font color="#0000FF">&lt;/EndDate&gt;</font></b>
+<span id="line38" class="linenumber">  38 </span>                                    <b><font color="#0000FF">&lt;Disbursements&gt;</font></b>
+<span id="line39" class="linenumber">  39 </span>                                        <b><font color="#0000FF">&lt;Disbursement&gt;</font></b>
+<span id="line40" class="linenumber">  40 </span>                                            <b><font color="#0000FF">&lt;DisbursementNumber&gt;</font></b>1<b><font color="#0000FF">&lt;/DisbursementNumber&gt;</font></b>
+<span id="line41" class="linenumber">  41 </span>                                            <b><font color="#0000FF">&lt;AwardYear&gt;</font></b>2015-2016<b><font color="#0000FF">&lt;/AwardYear&gt;</font></b>
+<span id="line42" class="linenumber">  42 </span>                                            <b><font color="#0000FF">&lt;PwdIndicator&gt;</font></b>false<b><font color="#0000FF">&lt;/PwdIndicator&gt;</font></b>
+<span id="line43" class="linenumber">  43 </span>                                            <b><font color="#0000FF">&lt;LateDisbursementIndicator&gt;</font></b>false<b><font color="#0000FF">&lt;/LateDisbursementIndicator&gt;</font></b>
+<span id="line44" class="linenumber">  44 </span>                                            <b><font color="#0000FF">&lt;TotalDisbursementAmount&gt;</font></b>2895.00<b><font color="#0000FF">&lt;/TotalDisbursementAmount&gt;</font></b>
+<span id="line45" class="linenumber">  45 </span>                                            <b><font color="#0000FF">&lt;DisbursementLoanFeeAmount&gt;</font></b>30<b><font color="#0000FF">&lt;/DisbursementLoanFeeAmount&gt;</font></b>
+<span id="line46" class="linenumber">  46 </span>                                            <b><font color="#0000FF">&lt;DisbursementLoanRebateAmount&gt;</font></b>0<b><font color="#0000FF">&lt;/DisbursementLoanRebateAmount&gt;</font></b>
+<span id="line47" class="linenumber">  47 </span>                                            <b><font color="#0000FF">&lt;TotalNetDisbursementAmount&gt;</font></b>2865<b><font color="#0000FF">&lt;/TotalNetDisbursementAmount&gt;</font></b>
+<span id="line48" class="linenumber">  48 </span>                                            <b><font color="#0000FF">&lt;DisbursementAcceptanceStatus&gt;</font></b>Disbursement Acceptance Pending<b><font color="#0000FF">&lt;/DisbursementAcceptanceStatus&gt;</font></b>
+<span id="line49" class="linenumber">  49 </span>                                            <b><font color="#0000FF">&lt;DisbursementAcceptanceDueDate&gt;</font></b>2017-06-10<b><font color="#0000FF">&lt;/DisbursementAcceptanceDueDate&gt;</font></b>
+<span id="line50" class="linenumber">  50 </span>                                            <b><font color="#0000FF">&lt;AmountUpToOpenCharges&gt;</font></b>1000.00<b><font color="#0000FF">&lt;/AmountUpToOpenCharges&gt;</font></b>
+<span id="line51" class="linenumber">  51 </span>                                            <b><font color="#0000FF">&lt;AmountOverOpenCharges&gt;</font></b>0.00<b><font color="#0000FF">&lt;/AmountOverOpenCharges&gt;</font></b>
+<span id="line52" class="linenumber">  52 </span>                                            <b><font color="#0000FF">&lt;Payments&gt;</font></b>
+<span id="line53" class="linenumber">  53 </span>                                                <b><font color="#0000FF">&lt;Payment&gt;</font></b>
+<span id="line54" class="linenumber">  54 </span>                                                    <b><font color="#0000FF">&lt;SequenceNumber&gt;</font></b>1<b><font color="#0000FF">&lt;/SequenceNumber&gt;</font></b>
+<span id="line55" class="linenumber">  55 </span>                                                    <b><font color="#0000FF">&lt;DisbursementStatus&gt;</font></b>Projected<b><font color="#0000FF">&lt;/DisbursementStatus&gt;</font></b>
+<span id="line56" class="linenumber">  56 </span>                                                    <b><font color="#0000FF">&lt;IncrementalDisbursementAmount&gt;</font></b>2895.00<b><font color="#0000FF">&lt;/IncrementalDisbursementAmount&gt;</font></b>
+<span id="line57" class="linenumber">  57 </span>                                                    <b><font color="#0000FF">&lt;IncrementalNetDisbursementAmount&gt;</font></b>2865.00<b><font color="#0000FF">&lt;/IncrementalNetDisbursementAmount&gt;</font></b>
+<span id="line58" class="linenumber">  58 </span>                                                <b><font color="#0000FF">&lt;/Payment&gt;</font></b>
+<span id="line59" class="linenumber">  59 </span>                                            <b><font color="#0000FF">&lt;/Payments&gt;</font></b>
+<span id="line60" class="linenumber">  60 </span>                                        <b><font color="#0000FF">&lt;/Disbursement&gt;</font></b>
+<span id="line61" class="linenumber">  61 </span>                                    <b><font color="#0000FF">&lt;/Disbursements&gt;</font></b>
+<span id="line62" class="linenumber">  62 </span>                                <b><font color="#0000FF">&lt;/LoanPaymentPeriod&gt;</font></b>
+<span id="line63" class="linenumber">  63 </span>                            <b><font color="#0000FF">&lt;/LoanPaymentPeriods&gt;</font></b>
+<span id="line64" class="linenumber">  64 </span>                        <b><font color="#0000FF">&lt;/LoanPeriod&gt;</font></b>
+<span id="line65" class="linenumber">  65 </span>                        <b><font color="#0000FF">&lt;LoanPeriod&gt;</font></b>
+<span id="line66" class="linenumber">  66 </span>                            <b><font color="#0000FF">&lt;StartDate&gt;</font></b>2017-07-11<b><font color="#0000FF">&lt;/StartDate&gt;</font></b>
+<span id="line67" class="linenumber">  67 </span>                            <b><font color="#0000FF">&lt;EndDate&gt;</font></b>2017-08-28<b><font color="#0000FF">&lt;/EndDate&gt;</font></b>
+<span id="line68" class="linenumber">  68 </span>                            <b><font color="#0000FF">&lt;LoanPeriodNumber&gt;</font></b>3<b><font color="#0000FF">&lt;/LoanPeriodNumber&gt;</font></b>
+<span id="line69" class="linenumber">  69 </span>                            <b><font color="#0000FF">&lt;LoanPaymentPeriods&gt;</font></b>
+<span id="line70" class="linenumber">  70 </span>                                <b><font color="#0000FF">&lt;LoanPaymentPeriod&gt;</font></b>
+<span id="line71" class="linenumber">  71 </span>                                    <b><font color="#0000FF">&lt;LoanPaymentPeriodNumber&gt;</font></b>1<b><font color="#0000FF">&lt;/LoanPaymentPeriodNumber&gt;</font></b>
+<span id="line72" class="linenumber">  72 </span>                                    <b><font color="#0000FF">&lt;StartDate&gt;</font></b>2017-07-11<b><font color="#0000FF">&lt;/StartDate&gt;</font></b>
+<span id="line73" class="linenumber">  73 </span>                                    <b><font color="#0000FF">&lt;EndDate&gt;</font></b>2017-08-28<b><font color="#0000FF">&lt;/EndDate&gt;</font></b>
+<span id="line74" class="linenumber">  74 </span>                                    <b><font color="#0000FF">&lt;Disbursements&gt;</font></b>
+<span id="line75" class="linenumber">  75 </span>                                        <b><font color="#0000FF">&lt;Disbursement&gt;</font></b>
+<span id="line76" class="linenumber">  76 </span>                                            <b><font color="#0000FF">&lt;DisbursementNumber&gt;</font></b>1<b><font color="#0000FF">&lt;/DisbursementNumber&gt;</font></b>
+<span id="line77" class="linenumber">  77 </span>                                            <b><font color="#0000FF">&lt;AwardYear&gt;</font></b>2015-2016<b><font color="#0000FF">&lt;/AwardYear&gt;</font></b>
+<span id="line78" class="linenumber">  78 </span>                                            <b><font color="#0000FF">&lt;PwdIndicator&gt;</font></b>false<b><font color="#0000FF">&lt;/PwdIndicator&gt;</font></b>
+<span id="line79" class="linenumber">  79 </span>                                            <b><font color="#0000FF">&lt;LateDisbursementIndicator&gt;</font></b>false<b><font color="#0000FF">&lt;/LateDisbursementIndicator&gt;</font></b>
+<span id="line80" class="linenumber">  80 </span>                                            <b><font color="#0000FF">&lt;TotalDisbursementAmount&gt;</font></b>2894.00<b><font color="#0000FF">&lt;/TotalDisbursementAmount&gt;</font></b>
+<span id="line81" class="linenumber">  81 </span>                                            <b><font color="#0000FF">&lt;DisbursementLoanFeeAmount&gt;</font></b>30<b><font color="#0000FF">&lt;/DisbursementLoanFeeAmount&gt;</font></b>
+<span id="line82" class="linenumber">  82 </span>                                            <b><font color="#0000FF">&lt;DisbursementLoanRebateAmount&gt;</font></b>0<b><font color="#0000FF">&lt;/DisbursementLoanRebateAmount&gt;</font></b>
+<span id="line83" class="linenumber">  83 </span>                                            <b><font color="#0000FF">&lt;TotalNetDisbursementAmount&gt;</font></b>2864<b><font color="#0000FF">&lt;/TotalNetDisbursementAmount&gt;</font></b>
+<span id="line84" class="linenumber">  84 </span>                                            <b><font color="#0000FF">&lt;DisbursementAcceptanceStatus&gt;</font></b>Disbursement Acceptance Pending<b><font color="#0000FF">&lt;/DisbursementAcceptanceStatus&gt;</font></b>
+<span id="line85" class="linenumber">  85 </span>                                            <b><font color="#0000FF">&lt;DisbursementAcceptanceDueDate&gt;</font></b>2017-06-10<b><font color="#0000FF">&lt;/DisbursementAcceptanceDueDate&gt;</font></b>
+<span id="line86" class="linenumber">  86 </span>                                            <b><font color="#0000FF">&lt;AmountUpToOpenCharges&gt;</font></b>4000.00<b><font color="#0000FF">&lt;/AmountUpToOpenCharges&gt;</font></b>
+<span id="line87" class="linenumber">  87 </span>                                            <b><font color="#0000FF">&lt;AmountOverOpenCharges&gt;</font></b>0.00<b><font color="#0000FF">&lt;/AmountOverOpenCharges&gt;</font></b>
+<span id="line88" class="linenumber">  88 </span>                                            <b><font color="#0000FF">&lt;Payments&gt;</font></b>
+<span id="line89" class="linenumber">  89 </span>                                                <b><font color="#0000FF">&lt;Payment&gt;</font></b>
+<span id="line90" class="linenumber">  90 </span>                                                    <b><font color="#0000FF">&lt;SequenceNumber&gt;</font></b>1<b><font color="#0000FF">&lt;/SequenceNumber&gt;</font></b>
+<span id="line91" class="linenumber">  91 </span>                                                    <b><font color="#0000FF">&lt;DisbursementStatus&gt;</font></b>Pending Previous Financial Award ID Cancellation<b><font color="#0000FF">&lt;/DisbursementStatus&gt;</font></b>
+<span id="line92" class="linenumber">  92 </span>                                                    <b><font color="#0000FF">&lt;IncrementalDisbursementAmount&gt;</font></b>2894.00<b><font color="#0000FF">&lt;/IncrementalDisbursementAmount&gt;</font></b>
+<span id="line93" class="linenumber">  93 </span>                                                    <b><font color="#0000FF">&lt;IncrementalNetDisbursementAmount&gt;</font></b>2864.00<b><font color="#0000FF">&lt;/IncrementalNetDisbursementAmount&gt;</font></b>
+<span id="line94" class="linenumber">  94 </span>                                                <b><font color="#0000FF">&lt;/Payment&gt;</font></b>
+<span id="line95" class="linenumber">  95 </span>                                            <b><font color="#0000FF">&lt;/Payments&gt;</font></b>
+<span id="line96" class="linenumber">  96 </span>                                        <b><font color="#0000FF">&lt;/Disbursement&gt;</font></b>
+<span id="line97" class="linenumber">  97 </span>                                    <b><font color="#0000FF">&lt;/Disbursements&gt;</font></b>
+<span id="line98" class="linenumber">  98 </span>                                <b><font color="#0000FF">&lt;/LoanPaymentPeriod&gt;</font></b>
+<span id="line99" class="linenumber">  99 </span>                            <b><font color="#0000FF">&lt;/LoanPaymentPeriods&gt;</font></b>
+<span id="line100" class="linenumber"> 100 </span>                        <b><font color="#0000FF">&lt;/LoanPeriod&gt;</font></b>
+<span id="line101" class="linenumber"> 101 </span>                    <b><font color="#0000FF">&lt;/LoanPeriods&gt;</font></b>
+<span id="line102" class="linenumber"> 102 </span>                <b><font color="#0000FF">&lt;/AcademicYear&gt;</font></b>
+<span id="line103" class="linenumber"> 103 </span>            <b><font color="#0000FF">&lt;/AcademicYears&gt;</font></b>
+<span id="line104" class="linenumber"> 104 </span>        <b><font color="#0000FF">&lt;/Fund&gt;</font></b>
+<span id="line105" class="linenumber"> 105 </span>    <b><font color="#0000FF">&lt;/Funds&gt;</font></b>
+<span id="line106" class="linenumber"> 106 </span><b><font color="#0000FF">&lt;/FasDisbursementAcceptanceInformationV2Reply&gt;</font></b></tt></pre></tt></pre></div></div><div class="page-footer">Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.</div></body></html>

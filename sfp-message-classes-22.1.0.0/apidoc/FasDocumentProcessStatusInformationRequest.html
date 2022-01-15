@@ -1,0 +1,396 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd"><html lang="en-US"><head><title>SFP Messaging API Doc (22.1.0.0)</title><meta name="generate-timestamp" content="2021-12-10T14:30:52.155Z"></meta><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" type="text/css" href="./stylesheet.css" title="Style"></link><script type="text/javascript" src="./script.js"></script></head><body onload="setup();"><div class="page-header">Oracle SFP Messaging API 22.1.0.0</div><h1>FasDocumentProcessStatusInformationRequest (Request/Reply)</h1><div><a href="all-labels.html#label-webservice" class="tag">webservice</a><a href="all-labels.html#label-document" class="tag">document</a><a href="all-labels.html#label-sync" class="tag">sync</a></div><div class="keyword-list"><div>Request Message Class</div><div><b>FasDocumentProcessStatusInformationRequest</b></div><div>Reply Message Class</div><div><b>FasDocumentProcessStatusInformationReply</b></div><div>Description</div><div><div class="markdown"><p>Service that returns information about documents per process for a
+given student.</p>
+</div></div><div>XML Schema</div><div><div class="markdown"><p><a href="xsd/FasDocumentProcessStatusInformation.xsd.html#line46">FasDocumentProcessStatusInformation.xsd</a></p>
+</div></div><div>XML Namespace</div><div><code>http://www.vocado.com/vm/fas</code></div><div>HTTP Endpoint</div><div><code>/channels/in.sync/publish-consume</code></div><div>Message Exchange Pattern</div><div><div class="markdown"><p><strong>Synchronous inbound request-reply</strong></p>
+<p>A client system sends a message in the HTTP request and waits until the reply message is returned in the HTTP response. Please see &quot;<em>MPG Public API for Developers</em>&quot; for additional details.</p>
+<p>By design, this mode of communication always <strong>operates in read-only mode</strong>. This means that it  can only be used to retrieve data that is already available in SFP.</p>
+</div></div><div>Request Details</div><div><div class="markdown"><p>It contains the following fields:</p>
+<ul>
+<li><strong>External Student ID</strong> (required)</li>
+<li><strong>Process Instance ID</strong> (optional)</li>
+<li><strong>Process Status</strong> (optional)</li>
+<li><strong>Document Status</strong> (optional)</li>
+<li><strong>StudentRequestFlag</strong> (optional)</li>
+</ul>
+</div></div><div>Reply Details</div><div><div class="markdown"><p>It contains a list of <strong><DocumentProcess></strong> tags according to rules
+below:</p>
+<ul>
+<li>If Process Instance ID is provided, then only the process with the
+given ID will be returned (if it exists)</li>
+<li>If Process Status is provided in the request, then only the
+processes in the given status will be returned</li>
+<li>If Process Status is not provided in the request, then all
+processes will be returned</li>
+<li>If Document Status is provided in the request, then only the
+documents in the given status will be returned (associated to
+their specific process)</li>
+<li>If Document Status is not provided in the request, then all
+documents will be returned (associated to their specific process)</li>
+<li>If the StudentRequestFlag is included in the request and set to
+true, documents that are configured to be hidden from the
+self-service UI will be excluded in the response.</li>
+</ul>
+</div></div><div>Error Handling</div><div><div class="markdown"><p>If the request message contains validation errors, a <a href="MessageValidationErrorReply.html">MessageValidationErrorReply</a> message will be returned in the HTTP response. Please check the payload of this message for details about the error.</p>
+</div></div></div><h1>Examples</h1><div class="code-block"><div>Sample request</div><button class="collapsible">(show ▼)</button><div class="content"><pre><tt><span id="line1" class="linenumber">   1 </span><i><font color="#9A1900">&lt;!--</font></i>
+<span id="line2" class="linenumber">   2 </span><i><font color="#9A1900">  ~ Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.</font></i>
+<span id="line3" class="linenumber">   3 </span><i><font color="#9A1900">  --&gt;</font></i>
+<span id="line4" class="linenumber">   4 </span>
+<span id="line5" class="linenumber">   5 </span><b><font color="#0000FF">&lt;FasDocumentProcessStatusInformationRequest</font></b> <font color="#009900">xmlns:vc</font><font color="#990000">=</font><font color="#FF0000">"http://www.vocado.com/vm/common"</font>
+<span id="line6" class="linenumber">   6 </span>                                            <font color="#009900">xmlns</font><font color="#990000">=</font><font color="#FF0000">"http://www.vocado.com/vm/fas"</font><b><font color="#0000FF">&gt;</font></b>
+<span id="line7" class="linenumber">   7 </span>    <b><font color="#0000FF">&lt;vc:MessageHeaders&gt;</font></b>
+<span id="line8" class="linenumber">   8 </span>        <b><font color="#0000FF">&lt;vc:MessageId&gt;</font></b>550e8400-e29b-41d4-a716-446655440001<b><font color="#0000FF">&lt;/vc:MessageId&gt;</font></b>
+<span id="line9" class="linenumber">   9 </span>        <b><font color="#0000FF">&lt;vc:CreationDateTime&gt;</font></b>2012-07-16T19:20:30.450+01:00<b><font color="#0000FF">&lt;/vc:CreationDateTime&gt;</font></b>
+<span id="line10" class="linenumber">  10 </span>    <b><font color="#0000FF">&lt;/vc:MessageHeaders&gt;</font></b>
+<span id="line11" class="linenumber">  11 </span>    <b><font color="#0000FF">&lt;ExternalStudentId&gt;</font></b>23454<b><font color="#0000FF">&lt;/ExternalStudentId&gt;</font></b>
+<span id="line12" class="linenumber">  12 </span>    <b><font color="#0000FF">&lt;ProcessInstanceId&gt;</font></b>123<b><font color="#0000FF">&lt;/ProcessInstanceId&gt;</font></b>
+<span id="line13" class="linenumber">  13 </span>    <b><font color="#0000FF">&lt;ProcessStatus&gt;</font></b>Started<b><font color="#0000FF">&lt;/ProcessStatus&gt;</font></b>
+<span id="line14" class="linenumber">  14 </span>    <b><font color="#0000FF">&lt;DocumentStatus&gt;</font></b>Received<b><font color="#0000FF">&lt;/DocumentStatus&gt;</font></b>
+<span id="line15" class="linenumber">  15 </span><b><font color="#0000FF">&lt;/FasDocumentProcessStatusInformationRequest&gt;</font></b></tt></pre></tt></pre></div></div><div class="code-block"><div>Sample reply</div><button class="collapsible">(show ▼)</button><div class="content"><pre><tt><span id="line1" class="linenumber">   1 </span><i><font color="#9A1900">&lt;!--</font></i>
+<span id="line2" class="linenumber">   2 </span><i><font color="#9A1900">  ~ Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.</font></i>
+<span id="line3" class="linenumber">   3 </span><i><font color="#9A1900">  --&gt;</font></i>
+<span id="line4" class="linenumber">   4 </span>
+<span id="line5" class="linenumber">   5 </span><b><font color="#0000FF">&lt;FasDocumentProcessStatusInformationReply</font></b> <font color="#009900">xmlns:vc</font><font color="#990000">=</font><font color="#FF0000">"http://www.vocado.com/vm/common"</font>
+<span id="line6" class="linenumber">   6 </span>                                          <font color="#009900">xmlns</font><font color="#990000">=</font><font color="#FF0000">"http://www.vocado.com/vm/fas"</font><b><font color="#0000FF">&gt;</font></b>
+<span id="line7" class="linenumber">   7 </span>    <b><font color="#0000FF">&lt;vc:MessageHeaders&gt;</font></b>
+<span id="line8" class="linenumber">   8 </span>        <b><font color="#0000FF">&lt;vc:MessageId&gt;</font></b>550e8400-e29b-41d4-a716-446655440001<b><font color="#0000FF">&lt;/vc:MessageId&gt;</font></b>
+<span id="line9" class="linenumber">   9 </span>        <b><font color="#0000FF">&lt;vc:CreationDateTime&gt;</font></b>2012-07-16T19:20:30.450+01:00<b><font color="#0000FF">&lt;/vc:CreationDateTime&gt;</font></b>
+<span id="line10" class="linenumber">  10 </span>        <b><font color="#0000FF">&lt;vc:CorrelationId&gt;</font></b>550e8400-e29b-41d4-a716-446655440000<b><font color="#0000FF">&lt;/vc:CorrelationId&gt;</font></b>
+<span id="line11" class="linenumber">  11 </span>    <b><font color="#0000FF">&lt;/vc:MessageHeaders&gt;</font></b>
+<span id="line12" class="linenumber">  12 </span>    <b><font color="#0000FF">&lt;Student&gt;</font></b>
+<span id="line13" class="linenumber">  13 </span>        <b><font color="#0000FF">&lt;ExternalStudentId&gt;</font></b>1234<b><font color="#0000FF">&lt;/ExternalStudentId&gt;</font></b>
+<span id="line14" class="linenumber">  14 </span>    <b><font color="#0000FF">&lt;/Student&gt;</font></b>
+<span id="line15" class="linenumber">  15 </span>    <b><font color="#0000FF">&lt;RequiredDocuments&gt;</font></b>
+<span id="line16" class="linenumber">  16 </span>        <b><font color="#0000FF">&lt;Documents&gt;</font></b>
+<span id="line17" class="linenumber">  17 </span>            <b><font color="#0000FF">&lt;Document&gt;</font></b>
+<span id="line18" class="linenumber">  18 </span>                <b><font color="#0000FF">&lt;DocumentOwnerTypes&gt;</font></b>
+<span id="line19" class="linenumber">  19 </span>                    <b><font color="#0000FF">&lt;DocumentOwnerType&gt;</font></b>Student<b><font color="#0000FF">&lt;/DocumentOwnerType&gt;</font></b>
+<span id="line20" class="linenumber">  20 </span>                <b><font color="#0000FF">&lt;/DocumentOwnerTypes&gt;</font></b>
+<span id="line21" class="linenumber">  21 </span>                <b><font color="#0000FF">&lt;Processes&gt;</font></b>
+<span id="line22" class="linenumber">  22 </span>                    <b><font color="#0000FF">&lt;Process&gt;</font></b>
+<span id="line23" class="linenumber">  23 </span>                        <b><font color="#0000FF">&lt;ProcessInstanceId&gt;</font></b>234<b><font color="#0000FF">&lt;/ProcessInstanceId&gt;</font></b>
+<span id="line24" class="linenumber">  24 </span>                        <b><font color="#0000FF">&lt;ProcessStatus&gt;</font></b>Started<b><font color="#0000FF">&lt;/ProcessStatus&gt;</font></b>
+<span id="line25" class="linenumber">  25 </span>                        <b><font color="#0000FF">&lt;ProcessName&gt;</font></b>Professional Judgement<b><font color="#0000FF">&lt;/ProcessName&gt;</font></b>
+<span id="line26" class="linenumber">  26 </span>                        <b><font color="#0000FF">&lt;ProcessOpenDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/ProcessOpenDate&gt;</font></b>
+<span id="line27" class="linenumber">  27 </span>                    <b><font color="#0000FF">&lt;/Process&gt;</font></b>
+<span id="line28" class="linenumber">  28 </span>                    <b><font color="#0000FF">&lt;Process&gt;</font></b>
+<span id="line29" class="linenumber">  29 </span>                        <b><font color="#0000FF">&lt;ProcessInstanceId&gt;</font></b>456<b><font color="#0000FF">&lt;/ProcessInstanceId&gt;</font></b>
+<span id="line30" class="linenumber">  30 </span>                        <b><font color="#0000FF">&lt;ProcessStatus&gt;</font></b>Completed<b><font color="#0000FF">&lt;/ProcessStatus&gt;</font></b>
+<span id="line31" class="linenumber">  31 </span>                        <b><font color="#0000FF">&lt;ProcessName&gt;</font></b>At Will Document Request<b><font color="#0000FF">&lt;/ProcessName&gt;</font></b>
+<span id="line32" class="linenumber">  32 </span>                        <b><font color="#0000FF">&lt;ProcessOpenDate&gt;</font></b>2014-06-30T09:00:00<b><font color="#0000FF">&lt;/ProcessOpenDate&gt;</font></b>
+<span id="line33" class="linenumber">  33 </span>                        <b><font color="#0000FF">&lt;ProcessCloseDate&gt;</font></b>2014-04-30T09:00:00<b><font color="#0000FF">&lt;/ProcessCloseDate&gt;</font></b>
+<span id="line34" class="linenumber">  34 </span>                    <b><font color="#0000FF">&lt;/Process&gt;</font></b>
+<span id="line35" class="linenumber">  35 </span>                <b><font color="#0000FF">&lt;/Processes&gt;</font></b>
+<span id="line36" class="linenumber">  36 </span>                <b><font color="#0000FF">&lt;DocumentCode&gt;</font></b>234<b><font color="#0000FF">&lt;/DocumentCode&gt;</font></b>
+<span id="line37" class="linenumber">  37 </span>                <b><font color="#0000FF">&lt;DocumentName&gt;</font></b>BirthCertificate<b><font color="#0000FF">&lt;/DocumentName&gt;</font></b>
+<span id="line38" class="linenumber">  38 </span>                <b><font color="#0000FF">&lt;DocumentRequestDate&gt;</font></b>2014-08-08<b><font color="#0000FF">&lt;/DocumentRequestDate&gt;</font></b>
+<span id="line39" class="linenumber">  39 </span>                <b><font color="#0000FF">&lt;DocumentStatus&gt;</font></b>Unacceptable<b><font color="#0000FF">&lt;/DocumentStatus&gt;</font></b>
+<span id="line40" class="linenumber">  40 </span>                <b><font color="#0000FF">&lt;DocumentStatusDate&gt;</font></b>2014-08-09<b><font color="#0000FF">&lt;/DocumentStatusDate&gt;</font></b>
+<span id="line41" class="linenumber">  41 </span>                <b><font color="#0000FF">&lt;DocumentReceiptDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/DocumentReceiptDate&gt;</font></b>
+<span id="line42" class="linenumber">  42 </span>                <b><font color="#0000FF">&lt;AwardYear&gt;</font></b>2012<b><font color="#0000FF">&lt;/AwardYear&gt;</font></b>
+<span id="line43" class="linenumber">  43 </span>                <b><font color="#0000FF">&lt;ExternalDocumentID&gt;</font></b>BirthCertificate<b><font color="#0000FF">&lt;/ExternalDocumentID&gt;</font></b>
+<span id="line44" class="linenumber">  44 </span>                <b><font color="#0000FF">&lt;DocumentRationale&gt;</font></b>At Will<b><font color="#0000FF">&lt;/DocumentRationale&gt;</font></b>
+<span id="line45" class="linenumber">  45 </span>                <b><font color="#0000FF">&lt;DocumentRequestMessage&gt;</font></b>PJSpecialCase<b><font color="#0000FF">&lt;/DocumentRequestMessage&gt;</font></b>
+<span id="line46" class="linenumber">  46 </span>                <b><font color="#0000FF">&lt;DocumentReviewComments&gt;</font></b>
+<span id="line47" class="linenumber">  47 </span>                    <b><font color="#0000FF">&lt;DocumentReviewComment&gt;</font></b>
+<span id="line48" class="linenumber">  48 </span>                        <b><font color="#0000FF">&lt;ReviewComment&gt;</font></b>The  document loaded does not match the supplied data<b><font color="#0000FF">&lt;/ReviewComment&gt;</font></b>
+<span id="line49" class="linenumber">  49 </span>                        <b><font color="#0000FF">&lt;ReviewCommentDateTime&gt;</font></b>2020-05-30T09:00:00<b><font color="#0000FF">&lt;/ReviewCommentDateTime&gt;</font></b>
+<span id="line50" class="linenumber">  50 </span>                    <b><font color="#0000FF">&lt;/DocumentReviewComment&gt;</font></b>
+<span id="line51" class="linenumber">  51 </span>                    <b><font color="#0000FF">&lt;DocumentReviewComment&gt;</font></b>
+<span id="line52" class="linenumber">  52 </span>                        <b><font color="#0000FF">&lt;ReviewComment&gt;</font></b>We will need an updated document loaded<b><font color="#0000FF">&lt;/ReviewComment&gt;</font></b>
+<span id="line53" class="linenumber">  53 </span>                        <b><font color="#0000FF">&lt;ReviewCommentDateTime&gt;</font></b>2020-05-30T09:10:00<b><font color="#0000FF">&lt;/ReviewCommentDateTime&gt;</font></b>
+<span id="line54" class="linenumber">  54 </span>                    <b><font color="#0000FF">&lt;/DocumentReviewComment&gt;</font></b>
+<span id="line55" class="linenumber">  55 </span>                <b><font color="#0000FF">&lt;/DocumentReviewComments&gt;</font></b>
+<span id="line56" class="linenumber">  56 </span>            <b><font color="#0000FF">&lt;/Document&gt;</font></b>
+<span id="line57" class="linenumber">  57 </span>            <b><font color="#0000FF">&lt;Document&gt;</font></b>
+<span id="line58" class="linenumber">  58 </span>                <b><font color="#0000FF">&lt;DocumentOwnerTypes&gt;</font></b>
+<span id="line59" class="linenumber">  59 </span>                    <b><font color="#0000FF">&lt;DocumentOwnerType&gt;</font></b>Student<b><font color="#0000FF">&lt;/DocumentOwnerType&gt;</font></b>
+<span id="line60" class="linenumber">  60 </span>                <b><font color="#0000FF">&lt;/DocumentOwnerTypes&gt;</font></b>
+<span id="line61" class="linenumber">  61 </span>                <b><font color="#0000FF">&lt;Processes&gt;</font></b>
+<span id="line62" class="linenumber">  62 </span>                    <b><font color="#0000FF">&lt;Process&gt;</font></b>
+<span id="line63" class="linenumber">  63 </span>                        <b><font color="#0000FF">&lt;ProcessInstanceId&gt;</font></b>234<b><font color="#0000FF">&lt;/ProcessInstanceId&gt;</font></b>
+<span id="line64" class="linenumber">  64 </span>                        <b><font color="#0000FF">&lt;ProcessStatus&gt;</font></b>Started<b><font color="#0000FF">&lt;/ProcessStatus&gt;</font></b>
+<span id="line65" class="linenumber">  65 </span>                        <b><font color="#0000FF">&lt;ProcessName&gt;</font></b>Professional Judgement<b><font color="#0000FF">&lt;/ProcessName&gt;</font></b>
+<span id="line66" class="linenumber">  66 </span>                        <b><font color="#0000FF">&lt;ProcessOpenDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/ProcessOpenDate&gt;</font></b>
+<span id="line67" class="linenumber">  67 </span>                    <b><font color="#0000FF">&lt;/Process&gt;</font></b>
+<span id="line68" class="linenumber">  68 </span>                    <b><font color="#0000FF">&lt;Process&gt;</font></b>
+<span id="line69" class="linenumber">  69 </span>                        <b><font color="#0000FF">&lt;ProcessInstanceId&gt;</font></b>786<b><font color="#0000FF">&lt;/ProcessInstanceId&gt;</font></b>
+<span id="line70" class="linenumber">  70 </span>                        <b><font color="#0000FF">&lt;ProcessStatus&gt;</font></b>Completed<b><font color="#0000FF">&lt;/ProcessStatus&gt;</font></b>
+<span id="line71" class="linenumber">  71 </span>                        <b><font color="#0000FF">&lt;ProcessName&gt;</font></b>At Will Document Request<b><font color="#0000FF">&lt;/ProcessName&gt;</font></b>
+<span id="line72" class="linenumber">  72 </span>                        <b><font color="#0000FF">&lt;ProcessOpenDate&gt;</font></b>2014-06-02T09:00:00<b><font color="#0000FF">&lt;/ProcessOpenDate&gt;</font></b>
+<span id="line73" class="linenumber">  73 </span>                    <b><font color="#0000FF">&lt;/Process&gt;</font></b>
+<span id="line74" class="linenumber">  74 </span>                <b><font color="#0000FF">&lt;/Processes&gt;</font></b>
+<span id="line75" class="linenumber">  75 </span>                <b><font color="#0000FF">&lt;DocumentCode&gt;</font></b>232<b><font color="#0000FF">&lt;/DocumentCode&gt;</font></b>
+<span id="line76" class="linenumber">  76 </span>                <b><font color="#0000FF">&lt;DocumentName&gt;</font></b>BirthCertificate<b><font color="#0000FF">&lt;/DocumentName&gt;</font></b>
+<span id="line77" class="linenumber">  77 </span>                <b><font color="#0000FF">&lt;DocumentRequestDate&gt;</font></b>2014-08-08<b><font color="#0000FF">&lt;/DocumentRequestDate&gt;</font></b>
+<span id="line78" class="linenumber">  78 </span>                <b><font color="#0000FF">&lt;DocumentStatus&gt;</font></b>Acceptable<b><font color="#0000FF">&lt;/DocumentStatus&gt;</font></b>
+<span id="line79" class="linenumber">  79 </span>                <b><font color="#0000FF">&lt;DocumentStatusDate&gt;</font></b>2014-08-09<b><font color="#0000FF">&lt;/DocumentStatusDate&gt;</font></b>
+<span id="line80" class="linenumber">  80 </span>                <b><font color="#0000FF">&lt;DocumentReceiptDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/DocumentReceiptDate&gt;</font></b>
+<span id="line81" class="linenumber">  81 </span>                <b><font color="#0000FF">&lt;AwardYear&gt;</font></b>2012<b><font color="#0000FF">&lt;/AwardYear&gt;</font></b>
+<span id="line82" class="linenumber">  82 </span>                <b><font color="#0000FF">&lt;ExternalDocumentID&gt;</font></b>BirthCertificate<b><font color="#0000FF">&lt;/ExternalDocumentID&gt;</font></b>
+<span id="line83" class="linenumber">  83 </span>                <b><font color="#0000FF">&lt;DocumentRationale&gt;</font></b>At Will<b><font color="#0000FF">&lt;/DocumentRationale&gt;</font></b>
+<span id="line84" class="linenumber">  84 </span>                <b><font color="#0000FF">&lt;DocumentRequestMessage&gt;</font></b>PJSpecialCase<b><font color="#0000FF">&lt;/DocumentRequestMessage&gt;</font></b>
+<span id="line85" class="linenumber">  85 </span>                <b><font color="#0000FF">&lt;SupportingDocuments&gt;</font></b>
+<span id="line86" class="linenumber">  86 </span>                    <b><font color="#0000FF">&lt;Documents&gt;</font></b>
+<span id="line87" class="linenumber">  87 </span>                        <b><font color="#0000FF">&lt;Document&gt;</font></b>
+<span id="line88" class="linenumber">  88 </span>                            <b><font color="#0000FF">&lt;DocumentOwnerTypes&gt;</font></b>
+<span id="line89" class="linenumber">  89 </span>                                <b><font color="#0000FF">&lt;DocumentOwnerType&gt;</font></b>Student<b><font color="#0000FF">&lt;/DocumentOwnerType&gt;</font></b>
+<span id="line90" class="linenumber">  90 </span>                            <b><font color="#0000FF">&lt;/DocumentOwnerTypes&gt;</font></b>
+<span id="line91" class="linenumber">  91 </span>                            <b><font color="#0000FF">&lt;Processes&gt;</font></b>
+<span id="line92" class="linenumber">  92 </span>                                <b><font color="#0000FF">&lt;Process&gt;</font></b>
+<span id="line93" class="linenumber">  93 </span>                                    <b><font color="#0000FF">&lt;ProcessInstanceId&gt;</font></b>234<b><font color="#0000FF">&lt;/ProcessInstanceId&gt;</font></b>
+<span id="line94" class="linenumber">  94 </span>                                    <b><font color="#0000FF">&lt;ProcessStatus&gt;</font></b>Started<b><font color="#0000FF">&lt;/ProcessStatus&gt;</font></b>
+<span id="line95" class="linenumber">  95 </span>                                    <b><font color="#0000FF">&lt;ProcessName&gt;</font></b>Professional Judgement<b><font color="#0000FF">&lt;/ProcessName&gt;</font></b>
+<span id="line96" class="linenumber">  96 </span>                                    <b><font color="#0000FF">&lt;ProcessOpenDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/ProcessOpenDate&gt;</font></b>
+<span id="line97" class="linenumber">  97 </span>                                <b><font color="#0000FF">&lt;/Process&gt;</font></b>
+<span id="line98" class="linenumber">  98 </span>                                <b><font color="#0000FF">&lt;Process&gt;</font></b>
+<span id="line99" class="linenumber">  99 </span>                                    <b><font color="#0000FF">&lt;ProcessInstanceId&gt;</font></b>456<b><font color="#0000FF">&lt;/ProcessInstanceId&gt;</font></b>
+<span id="line100" class="linenumber"> 100 </span>                                    <b><font color="#0000FF">&lt;ProcessStatus&gt;</font></b>Completed<b><font color="#0000FF">&lt;/ProcessStatus&gt;</font></b>
+<span id="line101" class="linenumber"> 101 </span>                                    <b><font color="#0000FF">&lt;ProcessName&gt;</font></b>Valid ISIR<b><font color="#0000FF">&lt;/ProcessName&gt;</font></b>
+<span id="line102" class="linenumber"> 102 </span>                                    <b><font color="#0000FF">&lt;ProcessOpenDate&gt;</font></b>2014-07-30T09:00:00<b><font color="#0000FF">&lt;/ProcessOpenDate&gt;</font></b>
+<span id="line103" class="linenumber"> 103 </span>                                <b><font color="#0000FF">&lt;/Process&gt;</font></b>
+<span id="line104" class="linenumber"> 104 </span>                            <b><font color="#0000FF">&lt;/Processes&gt;</font></b>
+<span id="line105" class="linenumber"> 105 </span>                            <b><font color="#0000FF">&lt;DocumentCode&gt;</font></b>565<b><font color="#0000FF">&lt;/DocumentCode&gt;</font></b>
+<span id="line106" class="linenumber"> 106 </span>                            <b><font color="#0000FF">&lt;DocumentName&gt;</font></b>BirthCertificate<b><font color="#0000FF">&lt;/DocumentName&gt;</font></b>
+<span id="line107" class="linenumber"> 107 </span>                            <b><font color="#0000FF">&lt;DocumentRequestDate&gt;</font></b>2014-08-08<b><font color="#0000FF">&lt;/DocumentRequestDate&gt;</font></b>
+<span id="line108" class="linenumber"> 108 </span>                            <b><font color="#0000FF">&lt;DocumentStatus&gt;</font></b>Requested<b><font color="#0000FF">&lt;/DocumentStatus&gt;</font></b>
+<span id="line109" class="linenumber"> 109 </span>                            <b><font color="#0000FF">&lt;DocumentStatusDate&gt;</font></b>2014-08-09<b><font color="#0000FF">&lt;/DocumentStatusDate&gt;</font></b>
+<span id="line110" class="linenumber"> 110 </span>                            <b><font color="#0000FF">&lt;DocumentReceiptDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/DocumentReceiptDate&gt;</font></b>
+<span id="line111" class="linenumber"> 111 </span>                            <b><font color="#0000FF">&lt;AwardYear&gt;</font></b>2012<b><font color="#0000FF">&lt;/AwardYear&gt;</font></b>
+<span id="line112" class="linenumber"> 112 </span>                            <b><font color="#0000FF">&lt;ExternalDocumentID&gt;</font></b>BirthCertificate<b><font color="#0000FF">&lt;/ExternalDocumentID&gt;</font></b>
+<span id="line113" class="linenumber"> 113 </span>                            <b><font color="#0000FF">&lt;DocumentRationale&gt;</font></b>At Will<b><font color="#0000FF">&lt;/DocumentRationale&gt;</font></b>
+<span id="line114" class="linenumber"> 114 </span>                            <b><font color="#0000FF">&lt;DocumentRequestMessage&gt;</font></b>PJSpecialCase<b><font color="#0000FF">&lt;/DocumentRequestMessage&gt;</font></b>
+<span id="line115" class="linenumber"> 115 </span>                        <b><font color="#0000FF">&lt;/Document&gt;</font></b>
+<span id="line116" class="linenumber"> 116 </span>                        <b><font color="#0000FF">&lt;Document&gt;</font></b>
+<span id="line117" class="linenumber"> 117 </span>                            <b><font color="#0000FF">&lt;DocumentOwnerTypes&gt;</font></b>
+<span id="line118" class="linenumber"> 118 </span>                                <b><font color="#0000FF">&lt;DocumentOwnerType&gt;</font></b>Student<b><font color="#0000FF">&lt;/DocumentOwnerType&gt;</font></b>
+<span id="line119" class="linenumber"> 119 </span>                            <b><font color="#0000FF">&lt;/DocumentOwnerTypes&gt;</font></b>
+<span id="line120" class="linenumber"> 120 </span>                            <b><font color="#0000FF">&lt;Processes&gt;</font></b>
+<span id="line121" class="linenumber"> 121 </span>                                <b><font color="#0000FF">&lt;Process&gt;</font></b>
+<span id="line122" class="linenumber"> 122 </span>                                    <b><font color="#0000FF">&lt;ProcessInstanceId&gt;</font></b>234<b><font color="#0000FF">&lt;/ProcessInstanceId&gt;</font></b>
+<span id="line123" class="linenumber"> 123 </span>                                    <b><font color="#0000FF">&lt;ProcessStatus&gt;</font></b>Completed<b><font color="#0000FF">&lt;/ProcessStatus&gt;</font></b>
+<span id="line124" class="linenumber"> 124 </span>                                    <b><font color="#0000FF">&lt;ProcessName&gt;</font></b>Professional Judgement<b><font color="#0000FF">&lt;/ProcessName&gt;</font></b>
+<span id="line125" class="linenumber"> 125 </span>                                    <b><font color="#0000FF">&lt;ProcessOpenDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/ProcessOpenDate&gt;</font></b>
+<span id="line126" class="linenumber"> 126 </span>                                <b><font color="#0000FF">&lt;/Process&gt;</font></b>
+<span id="line127" class="linenumber"> 127 </span>                            <b><font color="#0000FF">&lt;/Processes&gt;</font></b>
+<span id="line128" class="linenumber"> 128 </span>                            <b><font color="#0000FF">&lt;DocumentCode&gt;</font></b>564<b><font color="#0000FF">&lt;/DocumentCode&gt;</font></b>
+<span id="line129" class="linenumber"> 129 </span>                            <b><font color="#0000FF">&lt;DocumentName&gt;</font></b>BirthCertificate<b><font color="#0000FF">&lt;/DocumentName&gt;</font></b>
+<span id="line130" class="linenumber"> 130 </span>                            <b><font color="#0000FF">&lt;DocumentRequestDate&gt;</font></b>2014-08-08<b><font color="#0000FF">&lt;/DocumentRequestDate&gt;</font></b>
+<span id="line131" class="linenumber"> 131 </span>                            <b><font color="#0000FF">&lt;DocumentStatus&gt;</font></b>Received<b><font color="#0000FF">&lt;/DocumentStatus&gt;</font></b>
+<span id="line132" class="linenumber"> 132 </span>                            <b><font color="#0000FF">&lt;DocumentStatusDate&gt;</font></b>2014-08-09<b><font color="#0000FF">&lt;/DocumentStatusDate&gt;</font></b>
+<span id="line133" class="linenumber"> 133 </span>                            <b><font color="#0000FF">&lt;DocumentReceiptDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/DocumentReceiptDate&gt;</font></b>
+<span id="line134" class="linenumber"> 134 </span>                            <b><font color="#0000FF">&lt;AwardYear&gt;</font></b>2012<b><font color="#0000FF">&lt;/AwardYear&gt;</font></b>
+<span id="line135" class="linenumber"> 135 </span>                            <b><font color="#0000FF">&lt;ExternalDocumentID&gt;</font></b>BirthCertificate<b><font color="#0000FF">&lt;/ExternalDocumentID&gt;</font></b>
+<span id="line136" class="linenumber"> 136 </span>                            <b><font color="#0000FF">&lt;DocumentRationale&gt;</font></b>At Will<b><font color="#0000FF">&lt;/DocumentRationale&gt;</font></b>
+<span id="line137" class="linenumber"> 137 </span>                            <b><font color="#0000FF">&lt;DocumentRequestMessage&gt;</font></b>PJSpecialCase<b><font color="#0000FF">&lt;/DocumentRequestMessage&gt;</font></b>
+<span id="line138" class="linenumber"> 138 </span>                        <b><font color="#0000FF">&lt;/Document&gt;</font></b>
+<span id="line139" class="linenumber"> 139 </span>                    <b><font color="#0000FF">&lt;/Documents&gt;</font></b>
+<span id="line140" class="linenumber"> 140 </span>                    <b><font color="#0000FF">&lt;OneOfDocuments&gt;</font></b>
+<span id="line141" class="linenumber"> 141 </span>                        <b><font color="#0000FF">&lt;Documents&gt;</font></b>
+<span id="line142" class="linenumber"> 142 </span>                            <b><font color="#0000FF">&lt;Document&gt;</font></b>
+<span id="line143" class="linenumber"> 143 </span>                                <b><font color="#0000FF">&lt;DocumentOwnerTypes&gt;</font></b>
+<span id="line144" class="linenumber"> 144 </span>                                    <b><font color="#0000FF">&lt;DocumentOwnerType&gt;</font></b>Student<b><font color="#0000FF">&lt;/DocumentOwnerType&gt;</font></b>
+<span id="line145" class="linenumber"> 145 </span>                                <b><font color="#0000FF">&lt;/DocumentOwnerTypes&gt;</font></b>
+<span id="line146" class="linenumber"> 146 </span>                                <b><font color="#0000FF">&lt;Processes&gt;</font></b>
+<span id="line147" class="linenumber"> 147 </span>                                    <b><font color="#0000FF">&lt;Process&gt;</font></b>
+<span id="line148" class="linenumber"> 148 </span>                                        <b><font color="#0000FF">&lt;ProcessInstanceId&gt;</font></b>234<b><font color="#0000FF">&lt;/ProcessInstanceId&gt;</font></b>
+<span id="line149" class="linenumber"> 149 </span>                                        <b><font color="#0000FF">&lt;ProcessStatus&gt;</font></b>Completed<b><font color="#0000FF">&lt;/ProcessStatus&gt;</font></b>
+<span id="line150" class="linenumber"> 150 </span>                                        <b><font color="#0000FF">&lt;ProcessName&gt;</font></b>Professional Judgement<b><font color="#0000FF">&lt;/ProcessName&gt;</font></b>
+<span id="line151" class="linenumber"> 151 </span>                                        <b><font color="#0000FF">&lt;ProcessOpenDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/ProcessOpenDate&gt;</font></b>
+<span id="line152" class="linenumber"> 152 </span>                                    <b><font color="#0000FF">&lt;/Process&gt;</font></b>
+<span id="line153" class="linenumber"> 153 </span>                                <b><font color="#0000FF">&lt;/Processes&gt;</font></b>
+<span id="line154" class="linenumber"> 154 </span>                                <b><font color="#0000FF">&lt;DocumentCode&gt;</font></b>456<b><font color="#0000FF">&lt;/DocumentCode&gt;</font></b>
+<span id="line155" class="linenumber"> 155 </span>                                <b><font color="#0000FF">&lt;DocumentName&gt;</font></b>BirthCertificate<b><font color="#0000FF">&lt;/DocumentName&gt;</font></b>
+<span id="line156" class="linenumber"> 156 </span>                                <b><font color="#0000FF">&lt;DocumentRequestDate&gt;</font></b>2014-08-08<b><font color="#0000FF">&lt;/DocumentRequestDate&gt;</font></b>
+<span id="line157" class="linenumber"> 157 </span>                                <b><font color="#0000FF">&lt;DocumentStatus&gt;</font></b>Acceptable<b><font color="#0000FF">&lt;/DocumentStatus&gt;</font></b>
+<span id="line158" class="linenumber"> 158 </span>                                <b><font color="#0000FF">&lt;DocumentStatusDate&gt;</font></b>2014-08-09<b><font color="#0000FF">&lt;/DocumentStatusDate&gt;</font></b>
+<span id="line159" class="linenumber"> 159 </span>                                <b><font color="#0000FF">&lt;DocumentReceiptDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/DocumentReceiptDate&gt;</font></b>
+<span id="line160" class="linenumber"> 160 </span>                                <b><font color="#0000FF">&lt;AwardYear&gt;</font></b>2012<b><font color="#0000FF">&lt;/AwardYear&gt;</font></b>
+<span id="line161" class="linenumber"> 161 </span>                                <b><font color="#0000FF">&lt;ExternalDocumentID&gt;</font></b>BirthCertificate<b><font color="#0000FF">&lt;/ExternalDocumentID&gt;</font></b>
+<span id="line162" class="linenumber"> 162 </span>                                <b><font color="#0000FF">&lt;DocumentRationale&gt;</font></b>At Will<b><font color="#0000FF">&lt;/DocumentRationale&gt;</font></b>
+<span id="line163" class="linenumber"> 163 </span>                                <b><font color="#0000FF">&lt;DocumentRequestMessage&gt;</font></b>PJSpecialCase<b><font color="#0000FF">&lt;/DocumentRequestMessage&gt;</font></b>
+<span id="line164" class="linenumber"> 164 </span>                            <b><font color="#0000FF">&lt;/Document&gt;</font></b>
+<span id="line165" class="linenumber"> 165 </span>                            <b><font color="#0000FF">&lt;Document&gt;</font></b>
+<span id="line166" class="linenumber"> 166 </span>                                <b><font color="#0000FF">&lt;DocumentOwnerTypes&gt;</font></b>
+<span id="line167" class="linenumber"> 167 </span>                                    <b><font color="#0000FF">&lt;DocumentOwnerType&gt;</font></b>Student<b><font color="#0000FF">&lt;/DocumentOwnerType&gt;</font></b>
+<span id="line168" class="linenumber"> 168 </span>                                <b><font color="#0000FF">&lt;/DocumentOwnerTypes&gt;</font></b>
+<span id="line169" class="linenumber"> 169 </span>                                <b><font color="#0000FF">&lt;Processes&gt;</font></b>
+<span id="line170" class="linenumber"> 170 </span>                                    <b><font color="#0000FF">&lt;Process&gt;</font></b>
+<span id="line171" class="linenumber"> 171 </span>                                        <b><font color="#0000FF">&lt;ProcessInstanceId&gt;</font></b>234<b><font color="#0000FF">&lt;/ProcessInstanceId&gt;</font></b>
+<span id="line172" class="linenumber"> 172 </span>                                        <b><font color="#0000FF">&lt;ProcessStatus&gt;</font></b>Completed<b><font color="#0000FF">&lt;/ProcessStatus&gt;</font></b>
+<span id="line173" class="linenumber"> 173 </span>                                        <b><font color="#0000FF">&lt;ProcessName&gt;</font></b>Professional Judgement<b><font color="#0000FF">&lt;/ProcessName&gt;</font></b>
+<span id="line174" class="linenumber"> 174 </span>                                        <b><font color="#0000FF">&lt;ProcessOpenDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/ProcessOpenDate&gt;</font></b>
+<span id="line175" class="linenumber"> 175 </span>                                    <b><font color="#0000FF">&lt;/Process&gt;</font></b>
+<span id="line176" class="linenumber"> 176 </span>                                <b><font color="#0000FF">&lt;/Processes&gt;</font></b>
+<span id="line177" class="linenumber"> 177 </span>                                <b><font color="#0000FF">&lt;DocumentCode&gt;</font></b>6778<b><font color="#0000FF">&lt;/DocumentCode&gt;</font></b>
+<span id="line178" class="linenumber"> 178 </span>                                <b><font color="#0000FF">&lt;DocumentName&gt;</font></b>BirthCertificate<b><font color="#0000FF">&lt;/DocumentName&gt;</font></b>
+<span id="line179" class="linenumber"> 179 </span>                                <b><font color="#0000FF">&lt;DocumentRequestDate&gt;</font></b>2014-08-08<b><font color="#0000FF">&lt;/DocumentRequestDate&gt;</font></b>
+<span id="line180" class="linenumber"> 180 </span>                                <b><font color="#0000FF">&lt;DocumentStatus&gt;</font></b>Acceptable<b><font color="#0000FF">&lt;/DocumentStatus&gt;</font></b>
+<span id="line181" class="linenumber"> 181 </span>                                <b><font color="#0000FF">&lt;DocumentStatusDate&gt;</font></b>2014-08-09<b><font color="#0000FF">&lt;/DocumentStatusDate&gt;</font></b>
+<span id="line182" class="linenumber"> 182 </span>                                <b><font color="#0000FF">&lt;DocumentReceiptDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/DocumentReceiptDate&gt;</font></b>
+<span id="line183" class="linenumber"> 183 </span>                                <b><font color="#0000FF">&lt;AwardYear&gt;</font></b>2012<b><font color="#0000FF">&lt;/AwardYear&gt;</font></b>
+<span id="line184" class="linenumber"> 184 </span>                                <b><font color="#0000FF">&lt;ExternalDocumentID&gt;</font></b>BirthCertificate<b><font color="#0000FF">&lt;/ExternalDocumentID&gt;</font></b>
+<span id="line185" class="linenumber"> 185 </span>                                <b><font color="#0000FF">&lt;DocumentRationale&gt;</font></b>At Will<b><font color="#0000FF">&lt;/DocumentRationale&gt;</font></b>
+<span id="line186" class="linenumber"> 186 </span>                                <b><font color="#0000FF">&lt;DocumentRequestMessage&gt;</font></b>PJSpecialCase<b><font color="#0000FF">&lt;/DocumentRequestMessage&gt;</font></b>
+<span id="line187" class="linenumber"> 187 </span>                            <b><font color="#0000FF">&lt;/Document&gt;</font></b>
+<span id="line188" class="linenumber"> 188 </span>                        <b><font color="#0000FF">&lt;/Documents&gt;</font></b>
+<span id="line189" class="linenumber"> 189 </span>                    <b><font color="#0000FF">&lt;/OneOfDocuments&gt;</font></b>
+<span id="line190" class="linenumber"> 190 </span>                <b><font color="#0000FF">&lt;/SupportingDocuments&gt;</font></b>
+<span id="line191" class="linenumber"> 191 </span>            <b><font color="#0000FF">&lt;/Document&gt;</font></b>
+<span id="line192" class="linenumber"> 192 </span>        <b><font color="#0000FF">&lt;/Documents&gt;</font></b>
+<span id="line193" class="linenumber"> 193 </span>        <b><font color="#0000FF">&lt;OneOfDocuments&gt;</font></b>
+<span id="line194" class="linenumber"> 194 </span>            <b><font color="#0000FF">&lt;Documents&gt;</font></b>
+<span id="line195" class="linenumber"> 195 </span>                <b><font color="#0000FF">&lt;Document&gt;</font></b>
+<span id="line196" class="linenumber"> 196 </span>                    <b><font color="#0000FF">&lt;DocumentOwnerTypes&gt;</font></b>
+<span id="line197" class="linenumber"> 197 </span>                        <b><font color="#0000FF">&lt;DocumentOwnerType&gt;</font></b>Student<b><font color="#0000FF">&lt;/DocumentOwnerType&gt;</font></b>
+<span id="line198" class="linenumber"> 198 </span>                    <b><font color="#0000FF">&lt;/DocumentOwnerTypes&gt;</font></b>
+<span id="line199" class="linenumber"> 199 </span>                    <b><font color="#0000FF">&lt;Processes&gt;</font></b>
+<span id="line200" class="linenumber"> 200 </span>                        <b><font color="#0000FF">&lt;Process&gt;</font></b>
+<span id="line201" class="linenumber"> 201 </span>                            <b><font color="#0000FF">&lt;ProcessInstanceId&gt;</font></b>234<b><font color="#0000FF">&lt;/ProcessInstanceId&gt;</font></b>
+<span id="line202" class="linenumber"> 202 </span>                            <b><font color="#0000FF">&lt;ProcessStatus&gt;</font></b>Completed<b><font color="#0000FF">&lt;/ProcessStatus&gt;</font></b>
+<span id="line203" class="linenumber"> 203 </span>                            <b><font color="#0000FF">&lt;ProcessName&gt;</font></b>Professional Judgement<b><font color="#0000FF">&lt;/ProcessName&gt;</font></b>
+<span id="line204" class="linenumber"> 204 </span>                            <b><font color="#0000FF">&lt;ProcessOpenDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/ProcessOpenDate&gt;</font></b>
+<span id="line205" class="linenumber"> 205 </span>                        <b><font color="#0000FF">&lt;/Process&gt;</font></b>
+<span id="line206" class="linenumber"> 206 </span>                    <b><font color="#0000FF">&lt;/Processes&gt;</font></b>
+<span id="line207" class="linenumber"> 207 </span>                    <b><font color="#0000FF">&lt;DocumentCode&gt;</font></b>232<b><font color="#0000FF">&lt;/DocumentCode&gt;</font></b>
+<span id="line208" class="linenumber"> 208 </span>                    <b><font color="#0000FF">&lt;DocumentName&gt;</font></b>BirthCertificate<b><font color="#0000FF">&lt;/DocumentName&gt;</font></b>
+<span id="line209" class="linenumber"> 209 </span>                    <b><font color="#0000FF">&lt;DocumentRequestDate&gt;</font></b>2014-08-08<b><font color="#0000FF">&lt;/DocumentRequestDate&gt;</font></b>
+<span id="line210" class="linenumber"> 210 </span>                    <b><font color="#0000FF">&lt;DocumentStatus&gt;</font></b>Acceptable<b><font color="#0000FF">&lt;/DocumentStatus&gt;</font></b>
+<span id="line211" class="linenumber"> 211 </span>                    <b><font color="#0000FF">&lt;DocumentStatusDate&gt;</font></b>2014-08-09<b><font color="#0000FF">&lt;/DocumentStatusDate&gt;</font></b>
+<span id="line212" class="linenumber"> 212 </span>                    <b><font color="#0000FF">&lt;DocumentReceiptDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/DocumentReceiptDate&gt;</font></b>
+<span id="line213" class="linenumber"> 213 </span>                    <b><font color="#0000FF">&lt;AwardYear&gt;</font></b>2012<b><font color="#0000FF">&lt;/AwardYear&gt;</font></b>
+<span id="line214" class="linenumber"> 214 </span>                    <b><font color="#0000FF">&lt;ExternalDocumentID&gt;</font></b>BirthCertificate<b><font color="#0000FF">&lt;/ExternalDocumentID&gt;</font></b>
+<span id="line215" class="linenumber"> 215 </span>                    <b><font color="#0000FF">&lt;DocumentRationale&gt;</font></b>At Will<b><font color="#0000FF">&lt;/DocumentRationale&gt;</font></b>
+<span id="line216" class="linenumber"> 216 </span>                    <b><font color="#0000FF">&lt;DocumentRequestMessage&gt;</font></b>PJSpecialCase<b><font color="#0000FF">&lt;/DocumentRequestMessage&gt;</font></b>
+<span id="line217" class="linenumber"> 217 </span>                    <b><font color="#0000FF">&lt;SupportingDocuments&gt;</font></b>
+<span id="line218" class="linenumber"> 218 </span>                        <b><font color="#0000FF">&lt;Documents&gt;</font></b>
+<span id="line219" class="linenumber"> 219 </span>                            <b><font color="#0000FF">&lt;Document&gt;</font></b>
+<span id="line220" class="linenumber"> 220 </span>                                <b><font color="#0000FF">&lt;DocumentOwnerTypes&gt;</font></b>
+<span id="line221" class="linenumber"> 221 </span>                                    <b><font color="#0000FF">&lt;DocumentOwnerType&gt;</font></b>Student<b><font color="#0000FF">&lt;/DocumentOwnerType&gt;</font></b>
+<span id="line222" class="linenumber"> 222 </span>                                <b><font color="#0000FF">&lt;/DocumentOwnerTypes&gt;</font></b>
+<span id="line223" class="linenumber"> 223 </span>                                <b><font color="#0000FF">&lt;Processes&gt;</font></b>
+<span id="line224" class="linenumber"> 224 </span>                                    <b><font color="#0000FF">&lt;Process&gt;</font></b>
+<span id="line225" class="linenumber"> 225 </span>                                        <b><font color="#0000FF">&lt;ProcessInstanceId&gt;</font></b>234<b><font color="#0000FF">&lt;/ProcessInstanceId&gt;</font></b>
+<span id="line226" class="linenumber"> 226 </span>                                        <b><font color="#0000FF">&lt;ProcessStatus&gt;</font></b>Completed<b><font color="#0000FF">&lt;/ProcessStatus&gt;</font></b>
+<span id="line227" class="linenumber"> 227 </span>                                        <b><font color="#0000FF">&lt;ProcessName&gt;</font></b>Professional Judgement<b><font color="#0000FF">&lt;/ProcessName&gt;</font></b>
+<span id="line228" class="linenumber"> 228 </span>                                        <b><font color="#0000FF">&lt;ProcessOpenDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/ProcessOpenDate&gt;</font></b>
+<span id="line229" class="linenumber"> 229 </span>                                    <b><font color="#0000FF">&lt;/Process&gt;</font></b>
+<span id="line230" class="linenumber"> 230 </span>                                <b><font color="#0000FF">&lt;/Processes&gt;</font></b>
+<span id="line231" class="linenumber"> 231 </span>                                <b><font color="#0000FF">&lt;DocumentCode&gt;</font></b>239<b><font color="#0000FF">&lt;/DocumentCode&gt;</font></b>
+<span id="line232" class="linenumber"> 232 </span>                                <b><font color="#0000FF">&lt;DocumentName&gt;</font></b>BirthCertificate<b><font color="#0000FF">&lt;/DocumentName&gt;</font></b>
+<span id="line233" class="linenumber"> 233 </span>                                <b><font color="#0000FF">&lt;DocumentRequestDate&gt;</font></b>2014-08-08<b><font color="#0000FF">&lt;/DocumentRequestDate&gt;</font></b>
+<span id="line234" class="linenumber"> 234 </span>                                <b><font color="#0000FF">&lt;DocumentStatus&gt;</font></b>Acceptable<b><font color="#0000FF">&lt;/DocumentStatus&gt;</font></b>
+<span id="line235" class="linenumber"> 235 </span>                                <b><font color="#0000FF">&lt;DocumentStatusDate&gt;</font></b>2014-08-09<b><font color="#0000FF">&lt;/DocumentStatusDate&gt;</font></b>
+<span id="line236" class="linenumber"> 236 </span>                                <b><font color="#0000FF">&lt;DocumentReceiptDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/DocumentReceiptDate&gt;</font></b>
+<span id="line237" class="linenumber"> 237 </span>                                <b><font color="#0000FF">&lt;AwardYear&gt;</font></b>2012<b><font color="#0000FF">&lt;/AwardYear&gt;</font></b>
+<span id="line238" class="linenumber"> 238 </span>                                <b><font color="#0000FF">&lt;ExternalDocumentID&gt;</font></b>BirthCertificate<b><font color="#0000FF">&lt;/ExternalDocumentID&gt;</font></b>
+<span id="line239" class="linenumber"> 239 </span>                                <b><font color="#0000FF">&lt;DocumentRationale&gt;</font></b>At Will<b><font color="#0000FF">&lt;/DocumentRationale&gt;</font></b>
+<span id="line240" class="linenumber"> 240 </span>                                <b><font color="#0000FF">&lt;DocumentRequestMessage&gt;</font></b>PJSpecialCase<b><font color="#0000FF">&lt;/DocumentRequestMessage&gt;</font></b>
+<span id="line241" class="linenumber"> 241 </span>                            <b><font color="#0000FF">&lt;/Document&gt;</font></b>
+<span id="line242" class="linenumber"> 242 </span>                        <b><font color="#0000FF">&lt;/Documents&gt;</font></b>
+<span id="line243" class="linenumber"> 243 </span>                    <b><font color="#0000FF">&lt;/SupportingDocuments&gt;</font></b>
+<span id="line244" class="linenumber"> 244 </span>                <b><font color="#0000FF">&lt;/Document&gt;</font></b>
+<span id="line245" class="linenumber"> 245 </span>                <b><font color="#0000FF">&lt;Document&gt;</font></b>
+<span id="line246" class="linenumber"> 246 </span>                    <b><font color="#0000FF">&lt;DocumentOwnerTypes&gt;</font></b>
+<span id="line247" class="linenumber"> 247 </span>                        <b><font color="#0000FF">&lt;DocumentOwnerType&gt;</font></b>Student<b><font color="#0000FF">&lt;/DocumentOwnerType&gt;</font></b>
+<span id="line248" class="linenumber"> 248 </span>                    <b><font color="#0000FF">&lt;/DocumentOwnerTypes&gt;</font></b>
+<span id="line249" class="linenumber"> 249 </span>                    <b><font color="#0000FF">&lt;Processes&gt;</font></b>
+<span id="line250" class="linenumber"> 250 </span>                        <b><font color="#0000FF">&lt;Process&gt;</font></b>
+<span id="line251" class="linenumber"> 251 </span>                            <b><font color="#0000FF">&lt;ProcessInstanceId&gt;</font></b>234<b><font color="#0000FF">&lt;/ProcessInstanceId&gt;</font></b>
+<span id="line252" class="linenumber"> 252 </span>                            <b><font color="#0000FF">&lt;ProcessStatus&gt;</font></b>Completed<b><font color="#0000FF">&lt;/ProcessStatus&gt;</font></b>
+<span id="line253" class="linenumber"> 253 </span>                            <b><font color="#0000FF">&lt;ProcessName&gt;</font></b>Professional Judgement<b><font color="#0000FF">&lt;/ProcessName&gt;</font></b>
+<span id="line254" class="linenumber"> 254 </span>                            <b><font color="#0000FF">&lt;ProcessOpenDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/ProcessOpenDate&gt;</font></b>
+<span id="line255" class="linenumber"> 255 </span>                        <b><font color="#0000FF">&lt;/Process&gt;</font></b>
+<span id="line256" class="linenumber"> 256 </span>                    <b><font color="#0000FF">&lt;/Processes&gt;</font></b>
+<span id="line257" class="linenumber"> 257 </span>                    <b><font color="#0000FF">&lt;DocumentCode&gt;</font></b>237<b><font color="#0000FF">&lt;/DocumentCode&gt;</font></b>
+<span id="line258" class="linenumber"> 258 </span>                    <b><font color="#0000FF">&lt;DocumentName&gt;</font></b>BirthCertificate<b><font color="#0000FF">&lt;/DocumentName&gt;</font></b>
+<span id="line259" class="linenumber"> 259 </span>                    <b><font color="#0000FF">&lt;DocumentRequestDate&gt;</font></b>2014-08-08<b><font color="#0000FF">&lt;/DocumentRequestDate&gt;</font></b>
+<span id="line260" class="linenumber"> 260 </span>                    <b><font color="#0000FF">&lt;DocumentStatus&gt;</font></b>Acceptable<b><font color="#0000FF">&lt;/DocumentStatus&gt;</font></b>
+<span id="line261" class="linenumber"> 261 </span>                    <b><font color="#0000FF">&lt;DocumentStatusDate&gt;</font></b>2014-08-09<b><font color="#0000FF">&lt;/DocumentStatusDate&gt;</font></b>
+<span id="line262" class="linenumber"> 262 </span>                    <b><font color="#0000FF">&lt;DocumentReceiptDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/DocumentReceiptDate&gt;</font></b>
+<span id="line263" class="linenumber"> 263 </span>                    <b><font color="#0000FF">&lt;AwardYear&gt;</font></b>2012<b><font color="#0000FF">&lt;/AwardYear&gt;</font></b>
+<span id="line264" class="linenumber"> 264 </span>                    <b><font color="#0000FF">&lt;ExternalDocumentID&gt;</font></b>BirthCertificate<b><font color="#0000FF">&lt;/ExternalDocumentID&gt;</font></b>
+<span id="line265" class="linenumber"> 265 </span>                    <b><font color="#0000FF">&lt;DocumentRationale&gt;</font></b>At Will<b><font color="#0000FF">&lt;/DocumentRationale&gt;</font></b>
+<span id="line266" class="linenumber"> 266 </span>                    <b><font color="#0000FF">&lt;DocumentRequestMessage&gt;</font></b>PJSpecialCase<b><font color="#0000FF">&lt;/DocumentRequestMessage&gt;</font></b>
+<span id="line267" class="linenumber"> 267 </span>                <b><font color="#0000FF">&lt;/Document&gt;</font></b>
+<span id="line268" class="linenumber"> 268 </span>            <b><font color="#0000FF">&lt;/Documents&gt;</font></b>
+<span id="line269" class="linenumber"> 269 </span>        <b><font color="#0000FF">&lt;/OneOfDocuments&gt;</font></b>
+<span id="line270" class="linenumber"> 270 </span>        <b><font color="#0000FF">&lt;OneOfDocuments&gt;</font></b>
+<span id="line271" class="linenumber"> 271 </span>            <b><font color="#0000FF">&lt;Documents&gt;</font></b>
+<span id="line272" class="linenumber"> 272 </span>                <b><font color="#0000FF">&lt;Document&gt;</font></b>
+<span id="line273" class="linenumber"> 273 </span>                    <b><font color="#0000FF">&lt;DocumentOwnerTypes&gt;</font></b>
+<span id="line274" class="linenumber"> 274 </span>                        <b><font color="#0000FF">&lt;DocumentOwnerType&gt;</font></b>Student<b><font color="#0000FF">&lt;/DocumentOwnerType&gt;</font></b>
+<span id="line275" class="linenumber"> 275 </span>                    <b><font color="#0000FF">&lt;/DocumentOwnerTypes&gt;</font></b>
+<span id="line276" class="linenumber"> 276 </span>                    <b><font color="#0000FF">&lt;Processes&gt;</font></b>
+<span id="line277" class="linenumber"> 277 </span>                        <b><font color="#0000FF">&lt;Process&gt;</font></b>
+<span id="line278" class="linenumber"> 278 </span>                            <b><font color="#0000FF">&lt;ProcessInstanceId&gt;</font></b>234<b><font color="#0000FF">&lt;/ProcessInstanceId&gt;</font></b>
+<span id="line279" class="linenumber"> 279 </span>                            <b><font color="#0000FF">&lt;ProcessStatus&gt;</font></b>Completed<b><font color="#0000FF">&lt;/ProcessStatus&gt;</font></b>
+<span id="line280" class="linenumber"> 280 </span>                            <b><font color="#0000FF">&lt;ProcessName&gt;</font></b>Professional Judgement<b><font color="#0000FF">&lt;/ProcessName&gt;</font></b>
+<span id="line281" class="linenumber"> 281 </span>                            <b><font color="#0000FF">&lt;ProcessOpenDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/ProcessOpenDate&gt;</font></b>
+<span id="line282" class="linenumber"> 282 </span>                        <b><font color="#0000FF">&lt;/Process&gt;</font></b>
+<span id="line283" class="linenumber"> 283 </span>                    <b><font color="#0000FF">&lt;/Processes&gt;</font></b>
+<span id="line284" class="linenumber"> 284 </span>                    <b><font color="#0000FF">&lt;DocumentCode&gt;</font></b>232<b><font color="#0000FF">&lt;/DocumentCode&gt;</font></b>
+<span id="line285" class="linenumber"> 285 </span>                    <b><font color="#0000FF">&lt;DocumentName&gt;</font></b>HS-Diploma<b><font color="#0000FF">&lt;/DocumentName&gt;</font></b>
+<span id="line286" class="linenumber"> 286 </span>                    <b><font color="#0000FF">&lt;DocumentRequestDate&gt;</font></b>2014-08-08<b><font color="#0000FF">&lt;/DocumentRequestDate&gt;</font></b>
+<span id="line287" class="linenumber"> 287 </span>                    <b><font color="#0000FF">&lt;DocumentStatus&gt;</font></b>Acceptable<b><font color="#0000FF">&lt;/DocumentStatus&gt;</font></b>
+<span id="line288" class="linenumber"> 288 </span>                    <b><font color="#0000FF">&lt;DocumentStatusDate&gt;</font></b>2014-08-09<b><font color="#0000FF">&lt;/DocumentStatusDate&gt;</font></b>
+<span id="line289" class="linenumber"> 289 </span>                    <b><font color="#0000FF">&lt;DocumentReceiptDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/DocumentReceiptDate&gt;</font></b>
+<span id="line290" class="linenumber"> 290 </span>                    <b><font color="#0000FF">&lt;AwardYear&gt;</font></b>2012<b><font color="#0000FF">&lt;/AwardYear&gt;</font></b>
+<span id="line291" class="linenumber"> 291 </span>                    <b><font color="#0000FF">&lt;ExternalDocumentID&gt;</font></b>HS-Diploma<b><font color="#0000FF">&lt;/ExternalDocumentID&gt;</font></b>
+<span id="line292" class="linenumber"> 292 </span>                    <b><font color="#0000FF">&lt;DocumentRationale&gt;</font></b>At Will<b><font color="#0000FF">&lt;/DocumentRationale&gt;</font></b>
+<span id="line293" class="linenumber"> 293 </span>                    <b><font color="#0000FF">&lt;DocumentRequestMessage&gt;</font></b>PJSpecialCase<b><font color="#0000FF">&lt;/DocumentRequestMessage&gt;</font></b>
+<span id="line294" class="linenumber"> 294 </span>                    <b><font color="#0000FF">&lt;SupportingDocuments&gt;</font></b>
+<span id="line295" class="linenumber"> 295 </span>                        <b><font color="#0000FF">&lt;Documents&gt;</font></b>
+<span id="line296" class="linenumber"> 296 </span>                            <b><font color="#0000FF">&lt;Document&gt;</font></b>
+<span id="line297" class="linenumber"> 297 </span>                                <b><font color="#0000FF">&lt;DocumentOwnerTypes&gt;</font></b>
+<span id="line298" class="linenumber"> 298 </span>                                    <b><font color="#0000FF">&lt;DocumentOwnerType&gt;</font></b>Student<b><font color="#0000FF">&lt;/DocumentOwnerType&gt;</font></b>
+<span id="line299" class="linenumber"> 299 </span>                                <b><font color="#0000FF">&lt;/DocumentOwnerTypes&gt;</font></b>
+<span id="line300" class="linenumber"> 300 </span>                                <b><font color="#0000FF">&lt;Processes&gt;</font></b>
+<span id="line301" class="linenumber"> 301 </span>                                    <b><font color="#0000FF">&lt;Process&gt;</font></b>
+<span id="line302" class="linenumber"> 302 </span>                                        <b><font color="#0000FF">&lt;ProcessInstanceId&gt;</font></b>234<b><font color="#0000FF">&lt;/ProcessInstanceId&gt;</font></b>
+<span id="line303" class="linenumber"> 303 </span>                                        <b><font color="#0000FF">&lt;ProcessStatus&gt;</font></b>Completed<b><font color="#0000FF">&lt;/ProcessStatus&gt;</font></b>
+<span id="line304" class="linenumber"> 304 </span>                                        <b><font color="#0000FF">&lt;ProcessName&gt;</font></b>Professional Judgement<b><font color="#0000FF">&lt;/ProcessName&gt;</font></b>
+<span id="line305" class="linenumber"> 305 </span>                                        <b><font color="#0000FF">&lt;ProcessOpenDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/ProcessOpenDate&gt;</font></b>
+<span id="line306" class="linenumber"> 306 </span>                                    <b><font color="#0000FF">&lt;/Process&gt;</font></b>
+<span id="line307" class="linenumber"> 307 </span>                                <b><font color="#0000FF">&lt;/Processes&gt;</font></b>
+<span id="line308" class="linenumber"> 308 </span>                                <b><font color="#0000FF">&lt;DocumentCode&gt;</font></b>239<b><font color="#0000FF">&lt;/DocumentCode&gt;</font></b>
+<span id="line309" class="linenumber"> 309 </span>                                <b><font color="#0000FF">&lt;DocumentName&gt;</font></b>HS-Diploma<b><font color="#0000FF">&lt;/DocumentName&gt;</font></b>
+<span id="line310" class="linenumber"> 310 </span>                                <b><font color="#0000FF">&lt;DocumentRequestDate&gt;</font></b>2014-08-08<b><font color="#0000FF">&lt;/DocumentRequestDate&gt;</font></b>
+<span id="line311" class="linenumber"> 311 </span>                                <b><font color="#0000FF">&lt;DocumentStatus&gt;</font></b>Acceptable<b><font color="#0000FF">&lt;/DocumentStatus&gt;</font></b>
+<span id="line312" class="linenumber"> 312 </span>                                <b><font color="#0000FF">&lt;DocumentStatusDate&gt;</font></b>2014-08-09<b><font color="#0000FF">&lt;/DocumentStatusDate&gt;</font></b>
+<span id="line313" class="linenumber"> 313 </span>                                <b><font color="#0000FF">&lt;DocumentReceiptDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/DocumentReceiptDate&gt;</font></b>
+<span id="line314" class="linenumber"> 314 </span>                                <b><font color="#0000FF">&lt;AwardYear&gt;</font></b>2012<b><font color="#0000FF">&lt;/AwardYear&gt;</font></b>
+<span id="line315" class="linenumber"> 315 </span>                                <b><font color="#0000FF">&lt;ExternalDocumentID&gt;</font></b>HS-Diploma<b><font color="#0000FF">&lt;/ExternalDocumentID&gt;</font></b>
+<span id="line316" class="linenumber"> 316 </span>                                <b><font color="#0000FF">&lt;DocumentRationale&gt;</font></b>At Will<b><font color="#0000FF">&lt;/DocumentRationale&gt;</font></b>
+<span id="line317" class="linenumber"> 317 </span>                                <b><font color="#0000FF">&lt;DocumentRequestMessage&gt;</font></b>PJSpecialCase<b><font color="#0000FF">&lt;/DocumentRequestMessage&gt;</font></b>
+<span id="line318" class="linenumber"> 318 </span>                            <b><font color="#0000FF">&lt;/Document&gt;</font></b>
+<span id="line319" class="linenumber"> 319 </span>                        <b><font color="#0000FF">&lt;/Documents&gt;</font></b>
+<span id="line320" class="linenumber"> 320 </span>                    <b><font color="#0000FF">&lt;/SupportingDocuments&gt;</font></b>
+<span id="line321" class="linenumber"> 321 </span>                <b><font color="#0000FF">&lt;/Document&gt;</font></b>
+<span id="line322" class="linenumber"> 322 </span>                <b><font color="#0000FF">&lt;Document&gt;</font></b>
+<span id="line323" class="linenumber"> 323 </span>                    <b><font color="#0000FF">&lt;DocumentOwnerTypes&gt;</font></b>
+<span id="line324" class="linenumber"> 324 </span>                        <b><font color="#0000FF">&lt;DocumentOwnerType&gt;</font></b>Student<b><font color="#0000FF">&lt;/DocumentOwnerType&gt;</font></b>
+<span id="line325" class="linenumber"> 325 </span>                    <b><font color="#0000FF">&lt;/DocumentOwnerTypes&gt;</font></b>
+<span id="line326" class="linenumber"> 326 </span>                    <b><font color="#0000FF">&lt;Processes&gt;</font></b>
+<span id="line327" class="linenumber"> 327 </span>                        <b><font color="#0000FF">&lt;Process&gt;</font></b>
+<span id="line328" class="linenumber"> 328 </span>                            <b><font color="#0000FF">&lt;ProcessInstanceId&gt;</font></b>234<b><font color="#0000FF">&lt;/ProcessInstanceId&gt;</font></b>
+<span id="line329" class="linenumber"> 329 </span>                            <b><font color="#0000FF">&lt;ProcessStatus&gt;</font></b>Completed<b><font color="#0000FF">&lt;/ProcessStatus&gt;</font></b>
+<span id="line330" class="linenumber"> 330 </span>                            <b><font color="#0000FF">&lt;ProcessName&gt;</font></b>Professional Judgement<b><font color="#0000FF">&lt;/ProcessName&gt;</font></b>
+<span id="line331" class="linenumber"> 331 </span>                            <b><font color="#0000FF">&lt;ProcessOpenDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/ProcessOpenDate&gt;</font></b>
+<span id="line332" class="linenumber"> 332 </span>                        <b><font color="#0000FF">&lt;/Process&gt;</font></b>
+<span id="line333" class="linenumber"> 333 </span>                    <b><font color="#0000FF">&lt;/Processes&gt;</font></b>
+<span id="line334" class="linenumber"> 334 </span>                    <b><font color="#0000FF">&lt;DocumentCode&gt;</font></b>237<b><font color="#0000FF">&lt;/DocumentCode&gt;</font></b>
+<span id="line335" class="linenumber"> 335 </span>                    <b><font color="#0000FF">&lt;DocumentName&gt;</font></b>HS-Transcript<b><font color="#0000FF">&lt;/DocumentName&gt;</font></b>
+<span id="line336" class="linenumber"> 336 </span>                    <b><font color="#0000FF">&lt;DocumentRequestDate&gt;</font></b>2014-08-08<b><font color="#0000FF">&lt;/DocumentRequestDate&gt;</font></b>
+<span id="line337" class="linenumber"> 337 </span>                    <b><font color="#0000FF">&lt;DocumentStatus&gt;</font></b>Acceptable<b><font color="#0000FF">&lt;/DocumentStatus&gt;</font></b>
+<span id="line338" class="linenumber"> 338 </span>                    <b><font color="#0000FF">&lt;DocumentStatusDate&gt;</font></b>2014-08-09<b><font color="#0000FF">&lt;/DocumentStatusDate&gt;</font></b>
+<span id="line339" class="linenumber"> 339 </span>                    <b><font color="#0000FF">&lt;DocumentReceiptDate&gt;</font></b>2014-05-30T09:00:00<b><font color="#0000FF">&lt;/DocumentReceiptDate&gt;</font></b>
+<span id="line340" class="linenumber"> 340 </span>                    <b><font color="#0000FF">&lt;AwardYear&gt;</font></b>2012<b><font color="#0000FF">&lt;/AwardYear&gt;</font></b>
+<span id="line341" class="linenumber"> 341 </span>                    <b><font color="#0000FF">&lt;ExternalDocumentID&gt;</font></b>HS-Transcript<b><font color="#0000FF">&lt;/ExternalDocumentID&gt;</font></b>
+<span id="line342" class="linenumber"> 342 </span>                    <b><font color="#0000FF">&lt;DocumentRationale&gt;</font></b>At Will<b><font color="#0000FF">&lt;/DocumentRationale&gt;</font></b>
+<span id="line343" class="linenumber"> 343 </span>                    <b><font color="#0000FF">&lt;DocumentRequestMessage&gt;</font></b>PJSpecialCase<b><font color="#0000FF">&lt;/DocumentRequestMessage&gt;</font></b>
+<span id="line344" class="linenumber"> 344 </span>                <b><font color="#0000FF">&lt;/Document&gt;</font></b>
+<span id="line345" class="linenumber"> 345 </span>            <b><font color="#0000FF">&lt;/Documents&gt;</font></b>
+<span id="line346" class="linenumber"> 346 </span>        <b><font color="#0000FF">&lt;/OneOfDocuments&gt;</font></b>
+<span id="line347" class="linenumber"> 347 </span>    <b><font color="#0000FF">&lt;/RequiredDocuments&gt;</font></b>
+<span id="line348" class="linenumber"> 348 </span><b><font color="#0000FF">&lt;/FasDocumentProcessStatusInformationReply&gt;</font></b></tt></pre></tt></pre></div></div><div class="page-footer">Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.</div></body></html>

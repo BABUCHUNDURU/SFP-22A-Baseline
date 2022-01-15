@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Student Financial Planning : Letter Examples</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Student Financial Planning</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="SFP-Reporting_3051320857.html">SFP Reporting</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Reporting-Subjects_2275470684.html">Reporting Subjects</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Example-Queries_2326721850.html">Example Queries</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Student Financial Planning : Letter Examples
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Hutchinson</span>, last modified by <span class='editor'> Michael Weiss</span> on Oct 26, 2020
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>These are examples of queries that reference views in the <a href="Letter_2310684168.html">Letter</a><span> </span>subject.</p><p>The code convention <span style="color: rgb(0,0,0);"><em>$P{INPUT_PARAMETER}</em><span> </span>is single value input parameter and<span> </span><em>$X{IN, COLUMN_NAME, INPUT_PARAMETER}</em> is the equivalent of a SQL Language &quot;IN ()&quot; statement. Both of these conventions are used specifically in Jasper Server and map to the input criteria defined within a report definition.</span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Letters History Detail Report</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: sql; gutter: true; theme: Confluence" data-theme="Confluence">SELECT (SELECT clcf.FIELD_VALUE FROM FASRPT.COMMON_LETTER_FIELD_VW clcf WHERE clcf.owner_id = cl.common_letter_id and clcf.field_name = &#39;awardYear&#39;) as &quot;customFields.awardYear&quot;
+    , (SELECT clcf.FIELD_VALUE FROM FASRPT.COMMON_LETTER_FIELD_VW clcf WHERE clcf.owner_id = cl.common_letter_id and clcf.field_name = &#39;enrollmentId&#39;) as &quot;customFields.enrollmentId&quot;
+    , (SELECT clcf.FIELD_VALUE FROM FASRPT.COMMON_LETTER_FIELD_VW clcf WHERE clcf.owner_id = cl.common_letter_id and clcf.field_name = &#39;fundCode&#39;) as &quot;customFields.fundCode&quot;
+    , (SELECT clcf.FIELD_VALUE FROM FASRPT.COMMON_LETTER_FIELD_VW clcf WHERE clcf.owner_id = cl.common_letter_id and clcf.field_name = &#39;lateDisbursementIndicator&#39;) as &quot;customFields.lateDisbursementIndicator&quot;
+    , (SELECT clcf.FIELD_VALUE FROM FASRPT.COMMON_LETTER_FIELD_VW clcf WHERE clcf.owner_id = cl.common_letter_id and clcf.field_name = &#39;letterFor&#39;) as &quot;customFields.letterFor&quot;
+    , (SELECT clcf.FIELD_VALUE FROM FASRPT.COMMON_LETTER_FIELD_VW clcf WHERE clcf.owner_id = cl.common_letter_id and clcf.field_name = &#39;pwdIndicator&#39;) as &quot;customFields.pwdIndicator&quot;
+    , cl.school_student_id
+    , cl.letter_code as &quot;letterCode&quot;
+    , cl.event_datetime as &quot;letterCreationDateTime&quot;
+    , cl.description as &quot;letterDescription&quot;
+    , cl.event_datetime as &quot;letterEventDateTime&quot;
+    , cl.letter_id as &quot;letterId&quot;
+    , cl.publish_datetime as &quot;letterPublishDateTime&quot;
+    , cl.message_class as &quot;messageClass&quot;
+    , cl.message_id as &quot;messageId&quot;
+    , cl.report_name as &quot;reportName&quot;
+    , CASE WHEN cl.letter_status = &#39;PENDING_SCHEDULING&#39; THEN &#39;PENDING&#39;
+                WHEN cl.letter_status = &#39;PENDING_GENERATION&#39; THEN &#39;PENDING&#39;
+                WHEN cl.letter_status = &#39;PUBLISHED&#39; THEN &#39;PUBLISHED&#39;
+                WHEN cl.letter_status = &#39;RENDER_CANCELED&#39; THEN &#39;CANCELED&#39;
+                ELSE cl.letter_status 
+      END as &quot;status&quot;
+FROM FASRPT.COMMON_LETTER_VW   cl 
+WHERE  cl.event_datetime BETWEEN $P{Start_Date} AND $P{End_Date}
+AND    cl.letter_status  NOT IN (&#39;OBSOLETE&#39;,&#39;NULL_LETTER_CODE&#39;)</pre>
+</div></div><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Letters History Summary Report</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: sql; gutter: true; theme: Confluence" data-theme="Confluence">-- Letters Category Query
+
+SELECT a.message_class
+     , CASE WHEN a.letter_status = &#39;PENDING_SCHEDULING&#39; THEN &#39;PENDING&#39;
+    		WHEN a.letter_status = &#39;PENDING_GENERATION&#39; THEN &#39;PENDING&#39;
+    		WHEN a.letter_status = &#39;PUBLISHED&#39; THEN &#39;PUBLISHED&#39;
+    		WHEN a.letter_status = &#39;RENDER_CANCELED&#39; THEN &#39;CANCELED&#39;
+    		ELSE a.letter_status
+    	END   status
+     , COUNT(1)    cnt
+FROM FASRPT.COMMON_LETTER_VW  a
+WHERE a.event_datetime  BETWEEN $P{Start_Date} AND $P{End_Date}
+AND   a.letter_status NOT IN (&#39;OBSOLETE&#39;,&#39;NULL_LETTER_CODE&#39;)
+GROUP BY a.message_class
+     , CASE WHEN a.letter_status = &#39;PENDING_SCHEDULING&#39; THEN &#39;PENDING&#39;
+    		WHEN a.letter_status = &#39;PENDING_GENERATION&#39; THEN &#39;PENDING&#39;
+    		WHEN a.letter_status = &#39;PUBLISHED&#39; THEN &#39;PUBLISHED&#39;
+    		WHEN a.letter_status = &#39;RENDER_CANCELED&#39; THEN &#39;CANCELED&#39;
+    		ELSE a.letter_status
+    	END;
+
+-- Letters Query
+
+SELECT to_char(a.event_datetime, &#39;YYYY-mm-dd&#39;) as event_date
+     , a.message_class
+     , CASE WHEN a.letter_status = &#39;PENDING_SCHEDULING&#39; THEN &#39;PENDING&#39;
+    		WHEN a.letter_status = &#39;PENDING_GENERATION&#39; THEN &#39;PENDING&#39;
+    		WHEN a.letter_status = &#39;PUBLISHED&#39; THEN &#39;PUBLISHED&#39;
+    		WHEN a.letter_status = &#39;RENDER_CANCELED&#39; THEN &#39;CANCELED&#39;
+    		ELSE a.letter_status
+    	END   status
+     , COUNT(1)    as cnt
+FROM FASRPT.COMMON_LETTER_VW  a
+WHERE a.event_datetime  BETWEEN $P{Start_Date} AND $P{End_Date}
+AND   a.letter_status NOT IN (&#39;OBSOLETE&#39;,&#39;NULL_LETTER_CODE&#39;)
+GROUP BY to_char(a.event_datetime, &#39;YYYY-mm-dd&#39;)
+     , a.message_class
+     , CASE WHEN a.letter_status = &#39;PENDING_SCHEDULING&#39; THEN &#39;PENDING&#39;
+    		WHEN a.letter_status = &#39;PENDING_GENERATION&#39; THEN &#39;PENDING&#39;
+    		WHEN a.letter_status = &#39;PUBLISHED&#39; THEN &#39;PUBLISHED&#39;
+    		WHEN a.letter_status = &#39;RENDER_CANCELED&#39; THEN &#39;CANCELED&#39;
+    		ELSE a.letter_status
+    	END;</pre>
+</div></div>
+                    </div>
+
+                                        
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Dec 15, 2021 15:11</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

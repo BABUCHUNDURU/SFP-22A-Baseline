@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head><title>SFP Documentation ((Release 22.1.0.0)): Oracle SFP Scripting API</title><meta name="generate-timestamp" content="2021-12-10T14:29:38.705Z"></meta><meta charset="UTF-8"></meta><link rel="stylesheet" type="text/css" href="./stylesheet.css" title="Style"></link><script type="text/javascript" src="./script.js"></script></head><body><h1>Script: nonTermAcyMonths</h1><div class="indent"><div class="script-fields"><div>Description</div><div><div class="markdown"><p>Determine the number of months in a non-term academic year.</p>
+</div></div><div>Return type</div><div><a class="code" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html">Integer</a></div><div>Keywords</div><div><a href="keywords.html#_keyword_acy" class="tag">acy</a><a href="keywords.html#_keyword_months" class="tag">months</a></div><div>Config source</div><div><div>Workbook: <span class="code">PKGSCHEDATTRIB.csv</span></div><div>Field: <span class="code">Non_Term_ACY_Months</code></div></div><div>Example</div><div><pre>return 6;
+</pre></div><div>Snippet for code completion (SDK)</div><div><pre>//file:noinspection UnnecessaryQualifiedReference
+@groovy.transform.BaseScript(com.oracle.sfp.scripting.api.sdk.autocomplete.NonTermAcyMonthsScript)
+package CHANGE_ME
+
+import com.oracle.sfp.scripting.api.*
+import com.oracle.sfp.scripting.api.util.*
+</pre><div class="markdown"><ul>
+<li>Copy and paste these lines to your script and replace &quot;<code>CHANGE_ME</code>&quot; by the actual package name.</li>
+<li>See <a href="sdk/index.html">Developer Tools</a> for more details.</li>
+</ul>
+</div></div></div><h2>Available Bindings</h2><div class="bindings"><div>Name (+aliases)</div><div>Java Class</div><div>Description</div><div><div class="binding">acy</div></div><div><a class="code" href="apidocs/com/oracle/sfp/scripting/api/IAcademicYearScheduleAPI.html">IAcademicYearScheduleAPI</a></div><div><div class="markdown"><p>The academic year of the funding element being evaluated.</p>
+</div></div><div><div class="binding">acyNo</div></div><div><a class="code" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html">Integer</a></div><div><div class="markdown"><p>The number of the academic year of the funding element being evaluated.</p>
+</div></div><div><div class="binding">acyOrder</div></div><div><a class="code" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html">Integer</a></div><div><div class="markdown"><p>The order number of the academic year of the funding element being evaluated, among all non-canceled academic
+years.</p>
+</div></div><div><div class="binding">acys</div></div><div><a class="code" href="apidocs/com/oracle/sfp/scripting/api/IAcademicYearsScheduleAPI.html">IAcademicYearsScheduleAPI</a></div><div><div class="markdown"><p>Provides access to all non-canceled academic years.</p>
+</div></div><div><div class="binding">awy</div></div><div><a class="code" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html">Integer</a></div><div><div class="markdown"><p>The award year of the funding element being evaluated.</p>
+</div></div><div><div class="binding">awyPeriod</div></div><div><a class="code" href="apidocs/com/oracle/sfp/scripting/api/util/IPeriod.html">IPeriod</a></div><div><div class="markdown"><p>The period of the award year of the funding element being evaluated.</p>
+</div></div><div><div class="binding">fundCode</div></div><div><a class="code" href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html">String</a></div><div><div class="markdown"><p>The fund code of the funding element being evaluated.</p>
+</div></div><div><div class="binding">fundType</div></div><div><a class="code" href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html">String</a></div><div><div class="markdown"><p>The fund type of the funding element being evaluated.</p>
+</div></div><div><div class="binding">groovyScriptHelper</div></div><div><a class="code" href="apidocs/com/oracle/sfp/scripting/api/IGroovyScriptHelper.html">IGroovyScriptHelper</a></div><div><div class="markdown"><p>Helper interface with utility methods.</p>
+</div></div><div><div class="binding">isFirstAcy</div></div><div><a class="code" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html">Boolean</a></div><div><div class="markdown"><p>True if the academic year of the funding element being evaluated is the first one among all non-canceled academic
+years.</p>
+</div></div><div><div class="binding">isLastAcy</div></div><div><a class="code" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html">Boolean</a></div><div><div class="markdown"><p>True if the academic year of the funding element being evaluated is the last one among all non-canceled academic
+years.</p>
+</div></div><div><div class="binding">log</div></div><div><a class="code" href="apidocs/com/oracle/sfp/scripting/api/IScriptLoggerAPI.html">IScriptLoggerAPI</a></div><div><div class="markdown"><p>Provides logging capability to scripts.</p>
+</div></div><div><div class="binding">lp</div></div><div><a class="code" href="apidocs/com/oracle/sfp/scripting/api/ISimpleScheduledPeriodAPI.html">ISimpleScheduledPeriodAPI</a></div><div><div class="markdown"><p>The loan period of the funding element being evaluated.</p>
+</div></div><div><div class="binding">lpNo</div></div><div><a class="code" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html">Integer</a></div><div><div class="markdown"><p>The number of the loan period of the funding element being evaluated.</p>
+</div></div><div><div class="binding">pp</div></div><div><a class="code" href="apidocs/com/oracle/sfp/scripting/api/ISimpleScheduledPeriodAPI.html">ISimpleScheduledPeriodAPI</a></div><div><div class="markdown"><p>The payment period of the funding element being evaluated.</p>
+</div></div><div><div class="binding">ppNo</div></div><div><a class="code" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html">Integer</a></div><div><div class="markdown"><p>The number of the payment period of the funding element being evaluated.</p>
+</div></div><div><div class="binding">program</div><div class="binding-alias">(primaryProgram)</div></div><div><a class="code" href="apidocs/com/oracle/sfp/scripting/api/IProgramAPI.html">IProgramAPI</a></div><div><div class="markdown"><p>Information about the student's primary program.</p>
+</div></div><div><div class="binding">scope</div></div><div><a class="code" href="apidocs/com/oracle/sfp/scripting/api/IFundScopeAPI.html">IFundScopeAPI</a></div><div><div class="markdown"><p>Gathers all the scope details of the script being evaluated (acyNo, fundCode,
+fundType, awy, lpNo, ppNo) allowing quick access to financialPlan/disbursements/etc
+subsets directly pertaining to this scope.</p>
+</div></div><div><div class="binding">term</div></div><div><a class="code" href="apidocs/com/oracle/sfp/scripting/api/IAcademicTermPeriodAPI.html">IAcademicTermPeriodAPI</a></div><div><div class="markdown"><p>The term of the funding element being evaluated.</p>
+</div></div><div><div class="binding">termNo</div></div><div><a class="code" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html">Integer</a></div><div><div class="markdown"><p>The number of the term of the funding element being evaluated.</p>
+</div></div></div></div><div class="page-footer">Copyright (c) 2021, Oracle and/or its affiliates. All rights reserved.</div></body></html>

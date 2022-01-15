@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd"><html lang="en-US"><head><title>SFP Messaging API Doc (22.1.0.0)</title><meta name="generate-timestamp" content="2021-12-10T14:30:50.345Z"></meta><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" type="text/css" href="../stylesheet.css" title="Style"></link><script type="text/javascript" src="../script.js"></script></head><body onload="setup();"><div class="page-header">Oracle SFP Messaging API 22.1.0.0</div><h1>FasUnmatchedIsirStudentRecordEvent.xsd</h1><div class="code-block"><pre><tt><span id="line1" class="linenumber">   1 </span><b><font color="#000080">&lt;?xml</font></b> <font color="#009900">version</font><font color="#990000">=</font><font color="#FF0000">"1.0"</font> <font color="#009900">encoding</font><font color="#990000">=</font><font color="#FF0000">"UTF-8"</font><b><font color="#000080">?&gt;</font></b>
+<span id="line2" class="linenumber">   2 </span><i><font color="#9A1900">&lt;!--</font></i>
+<span id="line3" class="linenumber">   3 </span>
+<span id="line4" class="linenumber">   4 </span><i><font color="#9A1900">COPYRIGHT (C) 2013 VOCADO, LLC.  ALL RIGHTS RESERVED.  THIS SOFTWARE CONTAINS</font></i>
+<span id="line5" class="linenumber">   5 </span><i><font color="#9A1900">TRADE SECRETS AND/OR CONFIDENTIAL INFORMATION PROPRIETARY TO VOCADO, LLC</font></i>
+<span id="line6" class="linenumber">   6 </span><i><font color="#9A1900">AND/OR ITS LICENSORS. ACCESS TO AND USE OF THIS INFORMATION IS STRICTLY</font></i>
+<span id="line7" class="linenumber">   7 </span><i><font color="#9A1900">LIMITED AND CONTROLLED BY VOCADO, LLC.  THIS SOFTWARE MAY NOT BE COPIED,</font></i>
+<span id="line8" class="linenumber">   8 </span><i><font color="#9A1900">MODIFIED, DISTRIBUTED, DISPLAYED, DISCLOSED OR USED IN ANY WAY NOT EXPRESSLY</font></i>
+<span id="line9" class="linenumber">   9 </span><i><font color="#9A1900">AUTHORIZED BY VOCADO, LLC IN WRITING.</font></i>
+<span id="line10" class="linenumber">  10 </span>
+<span id="line11" class="linenumber">  11 </span><i><font color="#9A1900">--&gt;</font></i>
+<span id="line12" class="linenumber">  12 </span><b><font color="#0000FF">&lt;xs:schema</font></b> <font color="#009900">xmlns</font><font color="#990000">=</font><font color="#FF0000">"http://www.vocado.com/vm/fas"</font>
+<span id="line13" class="linenumber">  13 </span>           <font color="#009900">xmlns:xs</font><font color="#990000">=</font><font color="#FF0000">"http://www.w3.org/2001/XMLSchema"</font>
+<span id="line14" class="linenumber">  14 </span>           <font color="#009900">xmlns:vc</font><font color="#990000">=</font><font color="#FF0000">"http://www.vocado.com/vm/common"</font>
+<span id="line15" class="linenumber">  15 </span>           <font color="#009900">targetNamespace</font><font color="#990000">=</font><font color="#FF0000">"http://www.vocado.com/vm/fas"</font>
+<span id="line16" class="linenumber">  16 </span>           <font color="#009900">elementFormDefault</font><font color="#990000">=</font><font color="#FF0000">"qualified"</font><b><font color="#0000FF">&gt;</font></b>
+<span id="line17" class="linenumber">  17 </span>
+<span id="line18" class="linenumber">  18 </span>    <b><font color="#0000FF">&lt;xs:include</font></b> <font color="#009900">schemaLocation</font><font color="#990000">=</font><font color="#FF0000">"common/FasCommon.xsd"</font><b><font color="#0000FF">/&gt;</font></b>
+<span id="line19" class="linenumber">  19 </span>    <b><font color="#0000FF">&lt;xs:import</font></b> <font color="#009900">namespace</font><font color="#990000">=</font><font color="#FF0000">"http://www.vocado.com/vm/common"</font> <font color="#009900">schemaLocation</font><font color="#990000">=</font><font color="#FF0000">"common/VocadoCommon.xsd"</font><b><font color="#0000FF">/&gt;</font></b>
+<span id="line20" class="linenumber">  20 </span>
+<span id="line21" class="linenumber">  21 </span>    <b><font color="#0000FF">&lt;xs:element</font></b> <font color="#009900">name</font><font color="#990000">=</font><font color="#FF0000">"FasUnmatchedIsirStudentRecordEvent"</font><b><font color="#0000FF">&gt;</font></b>
+<span id="line22" class="linenumber">  22 </span>        <b><font color="#0000FF">&lt;xs:complexType&gt;</font></b>
+<span id="line23" class="linenumber">  23 </span>            <b><font color="#0000FF">&lt;xs:complexContent&gt;</font></b>
+<span id="line24" class="linenumber">  24 </span>                <b><font color="#0000FF">&lt;xs:extension</font></b> <font color="#009900">base</font><font color="#990000">=</font><font color="#FF0000">"vc:EnvelopeType"</font><b><font color="#0000FF">&gt;</font></b>
+<span id="line25" class="linenumber">  25 </span>                    <b><font color="#0000FF">&lt;xs:sequence&gt;</font></b>
+<span id="line26" class="linenumber">  26 </span>                        <b><font color="#0000FF">&lt;xs:element</font></b> <font color="#009900">name</font><font color="#990000">=</font><font color="#FF0000">"FirstName"</font> <font color="#009900">type</font><font color="#990000">=</font><font color="#FF0000">"xs:string"</font><b><font color="#0000FF">/&gt;</font></b>
+<span id="line27" class="linenumber">  27 </span>                        <b><font color="#0000FF">&lt;xs:element</font></b> <font color="#009900">name</font><font color="#990000">=</font><font color="#FF0000">"LastName"</font> <font color="#009900">type</font><font color="#990000">=</font><font color="#FF0000">"xs:string"</font><b><font color="#0000FF">/&gt;</font></b>
+<span id="line28" class="linenumber">  28 </span>                        <b><font color="#0000FF">&lt;xs:element</font></b> <font color="#009900">name</font><font color="#990000">=</font><font color="#FF0000">"Ssn"</font> <font color="#009900">type</font><font color="#990000">=</font><font color="#FF0000">"SsnType"</font><b><font color="#0000FF">/&gt;</font></b>
+<span id="line29" class="linenumber">  29 </span>                        <b><font color="#0000FF">&lt;xs:element</font></b> <font color="#009900">name</font><font color="#990000">=</font><font color="#FF0000">"Dob"</font> <font color="#009900">type</font><font color="#990000">=</font><font color="#FF0000">"xs:date"</font><b><font color="#0000FF">/&gt;</font></b>
+<span id="line30" class="linenumber">  30 </span>                        <b><font color="#0000FF">&lt;xs:element</font></b> <font color="#009900">name</font><font color="#990000">=</font><font color="#FF0000">"AwardYear"</font> <font color="#009900">type</font><font color="#990000">=</font><font color="#FF0000">"AwardYearType"</font><b><font color="#0000FF">/&gt;</font></b>
+<span id="line31" class="linenumber">  31 </span>                        <b><font color="#0000FF">&lt;xs:element</font></b> <font color="#009900">name</font><font color="#990000">=</font><font color="#FF0000">"IsirFields"</font><b><font color="#0000FF">&gt;</font></b>
+<span id="line32" class="linenumber">  32 </span>                            <b><font color="#0000FF">&lt;xs:complexType&gt;</font></b>
+<span id="line33" class="linenumber">  33 </span>                                <b><font color="#0000FF">&lt;xs:sequence&gt;</font></b>
+<span id="line34" class="linenumber">  34 </span>                                    <b><font color="#0000FF">&lt;xs:element</font></b> <font color="#009900">name</font><font color="#990000">=</font><font color="#FF0000">"IsirField"</font>
+<span id="line35" class="linenumber">  35 </span>                                                <font color="#009900">type</font><font color="#990000">=</font><font color="#FF0000">"IsirFieldType"</font>
+<span id="line36" class="linenumber">  36 </span>                                                <font color="#009900">minOccurs</font><font color="#990000">=</font><font color="#FF0000">"0"</font>
+<span id="line37" class="linenumber">  37 </span>                                                <font color="#009900">maxOccurs</font><font color="#990000">=</font><font color="#FF0000">"unbounded"</font><b><font color="#0000FF">/&gt;</font></b>
+<span id="line38" class="linenumber">  38 </span>                                <b><font color="#0000FF">&lt;/xs:sequence&gt;</font></b>
+<span id="line39" class="linenumber">  39 </span>                            <b><font color="#0000FF">&lt;/xs:complexType&gt;</font></b>
+<span id="line40" class="linenumber">  40 </span>                        <b><font color="#0000FF">&lt;/xs:element&gt;</font></b>
+<span id="line41" class="linenumber">  41 </span>                    <b><font color="#0000FF">&lt;/xs:sequence&gt;</font></b>
+<span id="line42" class="linenumber">  42 </span>                <b><font color="#0000FF">&lt;/xs:extension&gt;</font></b>
+<span id="line43" class="linenumber">  43 </span>            <b><font color="#0000FF">&lt;/xs:complexContent&gt;</font></b>
+<span id="line44" class="linenumber">  44 </span>        <b><font color="#0000FF">&lt;/xs:complexType&gt;</font></b>
+<span id="line45" class="linenumber">  45 </span>    <b><font color="#0000FF">&lt;/xs:element&gt;</font></b>
+<span id="line46" class="linenumber">  46 </span>
+<span id="line47" class="linenumber">  47 </span><b><font color="#0000FF">&lt;/xs:schema&gt;</font></b></tt></pre></tt></pre></div><div class="page-footer">Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.</div></body></html>

@@ -1,0 +1,1 @@
+/opt/jdk1.8.0_241/jre/../bin/javadoc -J-Dhttps.proxyHost=www-proxy.us.oracle.com -J-Dhttps.proxyPort=80 -J-Dhttp.proxyHost=www-proxy.us.oracle.com -J-Dhttp.proxyPort=80 "-J-Dhttp.nonProxyHosts=\"localhost^|127.0.0.1^|*.oraclecorp.com^|*.cdaasX.oraclecloud.com\"" @options

@@ -1,0 +1,32 @@
+-classpath
+'/dev/shm/workspace/vm_release_22.1.0.0/sdk/fas-scripting-api-autocomplete/target/fas-scripting-api-autocomplete-22.1.0.0-SNAPSHOT.jar:/dev/shm/workspace/vm_release_22.1.0.0/api/fas-scripting-util-api/target/fas-scripting-util-api-22.1.0.0-SNAPSHOT.jar:/home/opc/.m2/repository/org/codehaus/groovy/groovy-all/2.4.3/groovy-all-2.4.3.jar:/dev/shm/workspace/vm_release_22.1.0.0/commons/commons-scripting/target/commons-scripting-22.1.0.0-SNAPSHOT.jar:/home/opc/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.9.9/jackson-annotations-2.9.9.jar:/home/opc/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.9.9/jackson-databind-2.9.9.jar:/home/opc/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-joda/2.9.9/jackson-datatype-joda-2.9.9.jar:/home/opc/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.9.9/jackson-core-2.9.9.jar:/home/opc/.m2/repository/io/javaslang/javaslang-jackson/2.0.5/javaslang-jackson-2.0.5.jar:/home/opc/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-yaml/2.9.9/jackson-dataformat-yaml-2.9.9.jar:/home/opc/.m2/repository/org/yaml/snakeyaml/1.23/snakeyaml-1.23.jar:/home/opc/.m2/repository/joda-time/joda-time/2.1/joda-time-2.1.jar:/home/opc/.m2/repository/com/google/guava/guava/25.1-jre/guava-25.1-jre.jar:/home/opc/.m2/repository/org/checkerframework/checker-qual/2.0.0/checker-qual-2.0.0.jar:/home/opc/.m2/repository/com/google/errorprone/error_prone_annotations/2.1.3/error_prone_annotations-2.1.3.jar:/home/opc/.m2/repository/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar:/home/opc/.m2/repository/org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14.jar:/dev/shm/workspace/vm_release_22.1.0.0/api/fas-scripting-api/target/fas-scripting-api-22.1.0.0-SNAPSHOT.jar:/home/opc/.m2/repository/commons-io/commons-io/2.4/commons-io-2.4.jar:/home/opc/.m2/repository/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar:/dev/shm/workspace/vm_release_22.1.0.0/commons/commons-validation/target/commons-validation-22.1.0.0-SNAPSHOT.jar:/home/opc/.m2/repository/org/jetbrains/annotations/17.0.0/annotations-17.0.0.jar:/home/opc/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/home/opc/.m2/repository/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5.jar:/home/opc/.m2/repository/io/javaslang/javaslang/2.0.5/javaslang-2.0.5.jar:/home/opc/.m2/repository/io/javaslang/javaslang-match/2.0.5/javaslang-match-2.0.5.jar:/home/opc/.m2/repository/org/commonmark/commonmark/0.17.1/commonmark-0.17.1.jar:/home/opc/.m2/repository/org/commonmark/commonmark-ext-image-attributes/0.17.1/commonmark-ext-image-attributes-0.17.1.jar:/home/opc/.m2/repository/org/commonmark/commonmark-ext-heading-anchor/0.17.1/commonmark-ext-heading-anchor-0.17.1.jar:/home/opc/.m2/repository/org/springframework/spring-core/4.3.19.RELEASE/spring-core-4.3.19.RELEASE.jar:/home/opc/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:/home/opc/.m2/repository/org/projectlombok/lombok/1.18.16/lombok-1.18.16.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/dev/shm/workspace/vm_release_22.1.0.0/sdk/sfp-script-api-sdk/../../api/fas-scripting-api/src/main/java:/dev/shm/workspace/vm_release_22.1.0.0/sdk/sfp-script-api-sdk/../../api/fas-scripting-util-api/src/main/java'
+-subpackages
+com.oracle.sfp.scripting.api
+-exclude
+com.oracle.sfp.scripting.api.internal:com.oracle.sfp.scripting.api.internal
+-author
+-bottom
+'Copyright (c) 2021, Oracle and/or its affiliates. All rights reserved'
+-charset
+'UTF-8'
+-d
+'/dev/shm/workspace/vm_release_22.1.0.0/sdk/sfp-script-api-sdk/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'SFP Scripting API'
+-link
+'https://docs.oracle.com/javase/8/docs/api'
+-link
+'https://www.joda.org/joda-time/apidocs'
+-linkoffline
+'https://docs.oracle.com/javase/8/docs/api' '/dev/shm/workspace/vm_release_22.1.0.0/sdk/sfp-script-api-sdk/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'SFP Scripting API'

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+COPYRIGHT (C) 2013 VOCADO, LLC.  ALL RIGHTS RESERVED.  THIS SOFTWARE CONTAINS
+TRADE SECRETS AND/OR CONFIDENTIAL INFORMATION PROPRIETARY TO VOCADO, LLC
+AND/OR ITS LICENSORS. ACCESS TO AND USE OF THIS INFORMATION IS STRICTLY
+LIMITED AND CONTROLLED BY VOCADO, LLC.  THIS SOFTWARE MAY NOT BE COPIED,
+MODIFIED, DISTRIBUTED, DISPLAYED, DISCLOSED OR USED IN ANY WAY NOT EXPRESSLY
+AUTHORIZED BY VOCADO, LLC IN WRITING.
+
+-->
+<xs:schema xmlns="http://www.vocado.com/vm/fas"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:vc="http://www.vocado.com/vm/common"
+           targetNamespace="http://www.vocado.com/vm/fas"
+           elementFormDefault="qualified">
+
+    <xs:include schemaLocation="common/FasCommon.xsd"/>
+    <xs:import namespace="http://www.vocado.com/vm/common" schemaLocation="common/VocadoCommon.xsd"/>
+
+    <xs:element name="FasIsirInformationRequest">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:element name="Id" type="vc:NonBlankStringType"/>
+                        <xs:element name="IdType" type="FasIsirInformationRequestIdTypeEnum"/>
+                        <xs:element name="AwardYears" minOccurs="0">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="AwardYear"
+                                                type="AwardYearType"
+                                                minOccurs="0"
+                                                maxOccurs="unbounded"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="IsirsReturned" type="FasIsirInformationRequestIsirsEnum"/>
+                        <xs:element name="IsirFieldsReturned" type="FasIsirInformationRequestIsirFieldNumbers">
+                            <xs:annotation>
+                                <xs:documentation>
+                                    Comma-separated list with the numbers of all ISIR fields to retrieve. It's also
+                                    possible to request all fields by using the wildcard character '*'. Note that
+                                    field numbers might change per award year, according to current the EDE Tech Ref.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="FasIsirInformationRequestIdTypeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Ssn"/>
+            <xs:enumeration value="ExternalStudentId"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="FasIsirInformationRequestIsirsEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Active"/>
+            <xs:enumeration value="All"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="FasIsirInformationRequestIsirFieldNumbers">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="(\*|\d+(,\d+)*)"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="FasIsirInformationReply">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:element name="Isirs">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="Isir"
+                                                type="IsirInformationRecordType"
+                                                minOccurs="0"
+                                                maxOccurs="unbounded"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="IsirInformationRecordType">
+        <xs:sequence>
+            <xs:element name="Ssn" type="SsnType"/>
+            <xs:element name="ExternalStudentId" type="vc:ExternalIdentifierType" minOccurs="0"/>
+            <xs:element name="AwardYear" type="AwardYearType"/>
+            <xs:element name="LoadDate" type="xs:dateTime"/>
+            <xs:element name="CpsTransactionNumber" type="xs:string"/>
+            <xs:element name="ActiveIsir" type="xs:boolean"/>
+            <xs:element name="IsirFields">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="IsirField"
+                                    type="IsirFieldType"
+                                    minOccurs="0"
+                                    maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

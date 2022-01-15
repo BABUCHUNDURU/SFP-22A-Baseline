@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ COPYRIGHT (c) 2014 VOCADO, LLC.  ALL RIGHTS RESERVED.  THIS SOFTWARE CONTAINS
+  ~ TRADE SECRETS AND/OR CONFIDENTIAL INFORMATION PROPRIETARY TO VOCADO, LLC AND/OR
+  ~ ITS LICENSORS. ACCESS TO AND USE OF THIS INFORMATION IS STRICTLY LIMITED AND
+  ~ CONTROLLED BY VOCADO, LLC.  THIS SOFTWARE MAY NOT BE COPIED, MODIFIED, DISTRIBUTED,
+  ~ DISPLAYED, DISCLOSED OR USED IN ANY WAY NOT EXPRESSLY AUTHORIZED BY VOCADO, LLC IN WRITING.
+  -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:vc="http://www.vocado.com/vm/common"
+           xmlns="http://www.vocado.com/vm/fas"
+           targetNamespace="http://www.vocado.com/vm/fas"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+    <xs:include schemaLocation="common/FasCommon.xsd"/>
+    <xs:include schemaLocation="common/FasDisbursementCommon.xsd"/>
+    <xs:include schemaLocation="common/FasStudentAcademicsCommon.xsd"/>
+    <xs:include schemaLocation="common/FasDisbursementAcceptanceInformationCommon.xsd"/>
+    <xs:import namespace="http://www.vocado.com/vm/common" schemaLocation="common/VocadoCommon.xsd"/>
+
+    <xs:annotation>
+        <xs:documentation>
+            These messages pertain to student Disbursement Acceptance
+            The system will send a Disbursement Acceptance Information (Outbound) message when the Disbursement Acceptance
+            Status has been determined for disbursements where either the PWD or Late Disbursement Indicator has been set
+            (after returns and cancellations)
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:element name="FasDisbursementAcceptanceInformationEvent">
+        <xs:annotation>
+            <xs:documentation>
+                This Message is created by the Vocado FAS system to provide the Disbursement Acceptance information.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <!-- Note: this forces XJC to generate a class with the name of the top-level element -->
+                <xs:extension base="FasDisbAcceptInformationType"/>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="FasDisbAcceptInformationType">
+        <xs:complexContent>
+            <xs:extension base="vc:EnvelopeType">
+                <xs:sequence>
+                    <xs:element name="Student" type="FasDisbAcceptStudent"/>
+                    <xs:element name="Program" type="FasDisbAcceptProgram"/>
+                    <xs:element name="Funds">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="Fund" type="FasDisbAcceptFundType" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="FasDisbAcceptFundType">
+        <xs:sequence>
+            <xs:element name="FundType" type="FundTypeEnum">
+                <xs:annotation>
+                    <xs:documentation>The fund type associated to the disbursement</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="FundCode" type="vc:NonBlankStringType">
+                <xs:annotation>
+                    <xs:documentation>The fund code associated to the disbursement</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="FundExtension" type="vc:NonBlankStringType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The fund code extension associated to the disbursement</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="AcademicYears">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="AcademicYear" type="FasDisbAcceptAcademicYearType" minOccurs="1" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="FasDisbAcceptAcademicYearType">
+        <xs:complexContent>
+            <xs:extension base="FasBaseAcademicYearType">
+                <xs:choice minOccurs="1">
+                    <xs:element name="PaymentPeriods" minOccurs="0">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="PaymentPeriod" type="FasDisbAcceptPaymentPeriodType" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="LoanPeriod" type="FasDisbAcceptLoanPeriodType" minOccurs="0"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+
+    <xs:complexType name="FasDisbAcceptLoanPeriodType">
+        <xs:complexContent>
+            <xs:extension base="FasBaseLoanPeriodType">
+                <xs:sequence>
+                    <xs:element name="LoanPaymentPeriods" minOccurs="0">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="LoanPaymentPeriod" type="FasDisbAcceptLoanPaymentPeriodType" maxOccurs="2"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+</xs:schema>

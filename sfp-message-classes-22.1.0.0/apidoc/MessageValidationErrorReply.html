@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd"><html lang="en-US"><head><title>SFP Messaging API Doc (22.1.0.0)</title><meta name="generate-timestamp" content="2021-12-10T14:30:54.419Z"></meta><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" type="text/css" href="./stylesheet.css" title="Style"></link><script type="text/javascript" src="./script.js"></script></head><body onload="setup();"><div class="page-header">Oracle SFP Messaging API 22.1.0.0</div><h1>MessageValidationErrorReply</h1><div><a href="all-labels.html#label-errorhandling" class="tag">errorhandling</a><a href="all-labels.html#label-validation" class="tag">validation</a></div><div class="keyword-list"><div>Message Class</div><div><b>MessageValidationErrorReply</b></div><div>Description</div><div><div class="markdown"><p>This is a special reply message that is returned in the HTTP response
+when a client sends a synchronous message (message class ending with
+the <code>Request</code> suffix) that contains validation errors or cannot be
+processed.</p>
+<p>When a request fails, <code>MessageValidationErrorReply</code> replaces the
+original reply message in order the provide details about the error.</p>
+<p>Notes:</p>
+<ul>
+<li>A message is considered invalid when the request
+<ul>
+<li>does not match the XML schema</li>
+<li>violates one or more business rules</li>
+</ul>
+</li>
+<li>See also <a href="MessageValidationErrorEvent.html">MessageValidationErrorEvent</a>
+for validation errors in inbound events.</li>
+</ul>
+</div></div><div>XML Schema</div><div><div class="markdown"><p><a href="xsd/common/VocadoCommon.xsd.html#line46">common/VocadoCommon.xsd</a></p>
+</div></div><div>XML Namespace</div><div><code>http://www.vocado.com/vm/common</code></div></div><h1>Examples</h1><div class="code-block"><div>Typical error reply</div><button class="collapsible">(show ▼)</button><div class="content"><pre><tt><span id="line1" class="linenumber">   1 </span><b><font color="#000080">&lt;?xml</font></b> <font color="#009900">version</font><font color="#990000">=</font><font color="#FF0000">"1.0"</font> <font color="#009900">encoding</font><font color="#990000">=</font><font color="#FF0000">"UTF-8"</font> <font color="#009900">standalone</font><font color="#990000">=</font><font color="#FF0000">"yes"</font><b><font color="#000080">?&gt;</font></b>
+<span id="line2" class="linenumber">   2 </span><i><font color="#9A1900">&lt;!--</font></i>
+<span id="line3" class="linenumber">   3 </span><i><font color="#9A1900">  ~ Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.</font></i>
+<span id="line4" class="linenumber">   4 </span><i><font color="#9A1900">  --&gt;</font></i>
+<span id="line5" class="linenumber">   5 </span><b><font color="#0000FF">&lt;MessageValidationErrorReply</font></b> <font color="#009900">xmlns</font><font color="#990000">=</font><font color="#FF0000">"http://www.vocado.com/vm/common"</font><b><font color="#0000FF">&gt;</font></b>
+<span id="line6" class="linenumber">   6 </span>    <b><font color="#0000FF">&lt;MessageHeaders&gt;</font></b>
+<span id="line7" class="linenumber">   7 </span>        <b><font color="#0000FF">&lt;MessageId&gt;</font></b>550e8400-e29b-41d4-a716-446655440000<b><font color="#0000FF">&lt;/MessageId&gt;</font></b>
+<span id="line8" class="linenumber">   8 </span>        <b><font color="#0000FF">&lt;CreationDateTime&gt;</font></b>2012-07-16T19:20:30.450+01:00<b><font color="#0000FF">&lt;/CreationDateTime&gt;</font></b>
+<span id="line9" class="linenumber">   9 </span>        <b><font color="#0000FF">&lt;CorrelationId&gt;</font></b>550e8400-e29b-41d4-a716-446655440001<b><font color="#0000FF">&lt;/CorrelationId&gt;</font></b>
+<span id="line10" class="linenumber">  10 </span>    <b><font color="#0000FF">&lt;/MessageHeaders&gt;</font></b>
+<span id="line11" class="linenumber">  11 </span>    <b><font color="#0000FF">&lt;FailedMessageId&gt;</font></b>550e8400-e29b-41d4-a716-446655440001<b><font color="#0000FF">&lt;/FailedMessageId&gt;</font></b>
+<span id="line12" class="linenumber">  12 </span>    <b><font color="#0000FF">&lt;FailedMessageClass&gt;</font></b>FasSafiSyncRequest<b><font color="#0000FF">&lt;/FailedMessageClass&gt;</font></b>
+<span id="line13" class="linenumber">  13 </span>    <b><font color="#0000FF">&lt;FailedMessageCreationDateTime&gt;</font></b>2012-07-16T19:20:30.450+01:00<b><font color="#0000FF">&lt;/FailedMessageCreationDateTime&gt;</font></b>
+<span id="line14" class="linenumber">  14 </span>    <b><font color="#0000FF">&lt;Errors&gt;</font></b>
+<span id="line15" class="linenumber">  15 </span>        <b><font color="#0000FF">&lt;Error&gt;</font></b>
+<span id="line16" class="linenumber">  16 </span>            <b><font color="#0000FF">&lt;Code&gt;</font></b>STUDENT_RECORD_NOT_FOUND<b><font color="#0000FF">&lt;/Code&gt;</font></b>
+<span id="line17" class="linenumber">  17 </span>            <b><font color="#0000FF">&lt;Message&gt;</font></b>Could not find student record with externalStudentId = 123456789<b><font color="#0000FF">&lt;/Message&gt;</font></b>
+<span id="line18" class="linenumber">  18 </span>        <b><font color="#0000FF">&lt;/Error&gt;</font></b>
+<span id="line19" class="linenumber">  19 </span>    <b><font color="#0000FF">&lt;/Errors&gt;</font></b>
+<span id="line20" class="linenumber">  20 </span><b><font color="#0000FF">&lt;/MessageValidationErrorReply&gt;</font></b></tt></pre></tt></pre></div></div><div class="page-footer">Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.</div></body></html>

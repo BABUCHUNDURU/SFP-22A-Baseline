@@ -1,0 +1,284 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head><title>SFP Documentation ((Release 22.1.0.0)): Oracle SFP Scripting API</title><meta name="generate-timestamp" content="2021-12-10T14:29:38.315Z"></meta><meta charset="UTF-8"></meta><link rel="stylesheet" type="text/css" href="../../stylesheet.css" title="Style"></link><script type="text/javascript" src="../../script.js"></script></head><body><div class="markdown"><h1 id="how-to-use-intellij-idea">How to use IntelliJ IDEA</h1>
+<p>This page explains how to use IntelliJ to edit Groovy scripts. This enables
+features such as syntax highlighting and code completion.</p>
+<h2 id="index">Index</h2>
+<ul>
+<li><a href="#before-you-start">Before you start</a></li>
+<li><a href="#how-intellij-projects-should-be-organized">How IntelliJ projects should be organized</a></li>
+<li><a href="#creating-a-new-project">Creating a project</a>
+<ul>
+<li><a href="#how-intellij-projects-should-be-organized">How IntelliJ projects should be organized</a></li>
+<li><a href="#recommended-project-structure">Recommended project structure</a></li>
+<li><a href="#approach-1-new-empty-project">Approach 1: new empty project</a></li>
+<li><a href="#approach-2-new-project-from-existing-files">Approach 2: new project from existing file</a></li>
+</ul>
+</li>
+<li><a href="#add-sfp-sdk-jar-as-a-project-library">Add SFP SDK Jar as a project library</a></li>
+<li><a href="#enable-code-completion-for-a-given-configuration-script">Enable code completion for a given configuration script</a></li>
+</ul>
+<h1 id="before-you-start">Before you start</h1>
+<ol>
+<li>Install <a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a> (<strong>version 2021 or
+newer</strong>)</li>
+<li>Install <a href="https://www.oracle.com/java/technologies/javase-downloads.html">Java JDK</a>
+(version 8 or newer)</li>
+<li>Install <a href="https://groovy-lang.org/">Groovy SDK</a> (version 3 or newer)</li>
+<li>Download the SFP Scripting API documentation for the target SFP version</li>
+</ol>
+<h1 id="creating-a-new-project">Creating a new project</h1>
+<h2 id="how-intellij-projects-should-be-organized">How IntelliJ projects should be organized</h2>
+<p>In order to create and update configuration scripts and make use of code
+completion features, a proper IntelliJ project is required. You can either
+create a new Groovy project from scratch and add your files or simply open an
+existing folder as a project then configure it manually later.</p>
+<p>An IntelliJ project is basically a directory structure that contains your files
+and some additional IDE settings. This directory can be created anywhere.
+However, in order to work correctly, your project should follow some conventions:</p>
+<ol>
+<li>Groovy scripts should start with a <strong>valid package declaration</strong>, such as
+<code>package a.b.c</code>.
+<ul>
+<li>You're free to choose any package hierarchy as long as it's a valid
+Java package.</li>
+<li>Each term in the package name should match the following rules:
+<ul>
+<li>first character: letter, underscore</li>
+<li>remaining characters: letter, underscore, digit</li>
+</ul>
+</li>
+<li>Package declarations should also include a <code>@BaseScript</code> annotation in
+order to tell the IDE how to find symbols. The argument for this
+annotation is different for each type of configuration script. This is
+explained in detail <a href="#enable-code-completion-for-a-given-configuration-script">here</a>.</li>
+</ul>
+</li>
+<li>Package declarations should <strong>match the directory tree</strong> where their
+respective .groovy files are located. This follows standard Java conventions.
+<ul>
+<li>For example, if a script named <code>Eligible.groovy</code> declares
+<code>package nfr.baseline</code> then its file should be created under a
+subdirectory tree as follows:
+<pre><code>nfr
+ └── baseline
+     └── Eligible.groovy     
+</code></pre>
+</li>
+</ul>
+</li>
+<li>At least one <strong>Sources Root</strong> folder should be configured in the project.
+A <em>Sources Root</em> is a folder marked as the root for packages.
+<ul>
+<li><code>src</code> is the default <em>Sources Root</em> when creating a Groovy project from
+scratch and using defaults.</li>
+<li>For example, if you create a project under directory <code>/projects/myconfigs</code>
+and use <code>src</code> as Sources Root, then the directory tree would be similar to:
+<pre><code>/projects/myconfigs/
+     └── src            (marked as &quot;Sources Root&quot;)
+         └── nfr
+             └── baseline
+                 └── Eligible.groovy     
+</code></pre>
+</li>
+<li>Even though not recommended, additional folders can be marked as
+<em>Sources Roots</em> by right-clicking on any folder and selecting the
+respective option.</li>
+</ul>
+</li>
+</ol>
+<h2 id="recommended-project-structure">Recommended project structure</h2>
+<p>Here's a typical project. In this example, the project was created under
+<code>/projects/myconfigs</code> with <code>src</code> marked as Sources Root.</p>
+<pre><code>/projects/myconfigs/
+   └── src   (marked as &quot;Sources Root&quot;)
+       └── nfr
+           ├── baseline
+           │   ├── DisbursementDate.groovy
+           │   ├── Eligible.groovy
+           │   ├── SpreadAmount.groovy
+           │   └── TermPeriods.groovy
+           └── commonline
+               ├── Eligibility_A.groovy
+               ├── Eligibility_B.groovy
+               └── Eligibility_C.groovy   
+</code></pre>
+<p>Following this structure, then <code>DisbursementDate.groovy</code> should start with
+<code>package nfr.baseline</code> in order to match the Sources Root. A similar rule
+applies to all other files. Packages can be structured in any way as long as it
+makes sense for script developers.</p>
+<p>This format works well with any <em>Version Control System</em> since tags and
+branches can be used to keep track of scripts for each target SFP release.</p>
+<h2 id="approach-1-new-empty-project">Approach 1: new empty project</h2>
+<ol>
+<li>
+<p>Open IntelliJ and click <code>New Project</code>. Alternatively, if the welcome page
+is not visible, select <code>File</code> &gt; <code>New</code> &gt; <code>Project...</code></p>
+<p><a href="images/intellij-new-project-0.png" title="open image"><img src="images/intellij-new-project-0.png" alt="new project" width="96" /></a></p>
+</li>
+<li>
+<p>Select <code>Groovy</code></p>
+</li>
+<li>
+<p>Ensure <code>Project JDK</code> points to a valid JDK (configure one if needed)</p>
+</li>
+<li>
+<p>Ensure <code>Groovy library</code> points to a valid Groovy SDK (configure one if needed)</p>
+<p><a href="images/intellij-new-project-1.png" title="open image"><img src="images/intellij-new-project-1.png" alt="new project" width="96" /></a></p>
+</li>
+<li>
+<p>Click <code>Next</code></p>
+</li>
+<li>
+<p>Enter <code>Project name</code> and <code>Project location</code></p>
+<p><a href="images/intellij-new-project-2.png" title="open image"><img src="images/intellij-new-project-2.png" alt="new project" width="96" /></a></p>
+</li>
+<li>
+<p>Click <code>Finish</code></p>
+</li>
+<li>
+<p><a href="#add-sfp-sdk-jar-as-a-project-library">Add SFP SDK Jar as a project library</a></p>
+</li>
+</ol>
+<h2 id="approach-2-new-project-from-existing-files">Approach 2: new project from existing files</h2>
+<ol>
+<li>
+<p>Open IntelliJ and click <code>Open</code>. Alternatively, if the welcome page is not
+visible, select <code>File</code> &gt; <code>Open...</code></p>
+<p><a href="images/intellij-new-project-0.png" title="open image"><img src="images/intellij-new-project-0.png" alt="new project" width="96" /></a></p>
+</li>
+<li>
+<p>Select the base folder that will be the root of your project and
+click <code>Ok</code>. This will define a new project at the selected location.
+However, additional settings should be applied manually.</p>
+</li>
+<li>
+<p>Right-click on the subdirectory that will be the base for packages and
+select <code>Mark Directory as</code> &gt; <code>Sources Root</code>. This should follow the
+conventions explained <a href="#how-intellij-projects-should-be-organized">here</a>.</p>
+<div class="warning">
+<p><strong>Important:</strong></p>
+<ul>
+<li>
+<p>IntelliJ will try to detect folder to mark as Sources Root. Sometimes
+this results in wrong folders being selected.</p>
+</li>
+<li>
+<p>If unsure, you can view / remove folders marked as Sources Root by
+right-clicking on the project root and selecting <code>Open Module Settings</code> &gt;
+<code>Project Settings</code> &gt; <code>Modules</code>.</p>
+</li>
+<li>
+<p>Ideally, only one Sources Root should be defined.</p>
+<p><a href="images/remove-sources-root.png" title="open image"><img src="images/remove-sources-root.png" alt="alt text" width="96" /></a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Right-click on the project root and select <code>Open Module Settings</code></p>
+<p><a href="images/open-module-settings.png" title="open image"><img src="images/open-module-settings.png" alt="alt text" width="96" /></a></p>
+</li>
+<li>
+<p>Ensure a JDK is properly detected by the IDE</p>
+<ul>
+<li>Select <code>Platform Settings</code> &gt; <code>SDKs</code></li>
+<li>If no SDK is defined, then click on <code>+</code> and select the folder where the
+JDK was installed</li>
+</ul>
+<p><a href="images/platform_settings_jdk.png" title="open image"><img src="images/platform_settings_jdk.png" alt="alt text" width="96" /></a></p>
+</li>
+<li>
+<p>Ensure the project points to the correct JDK</p>
+<ul>
+<li>Select <code>Project Settings</code> &gt; <code>Settings</code></li>
+<li>Select the appropriate value in <code>Project SDK</code> drop-down</li>
+<li>Select the appropriate value in <code>Project language level</code> drop-down (should
+match the version of the JDK)</li>
+</ul>
+<p><a href="images/project_settings_project.png" title="open image"><img src="images/project_settings_project.png" alt="alt text" width="96" /></a></p>
+</li>
+<li>
+<p><a href="#add-sfp-sdk-jar-as-a-project-library">Add SFP SDK Jar as a project library</a></p>
+</li>
+</ol>
+<h1 id="add-sfp-sdk-jar-as-a-project-library">Add SFP SDK Jar as a project library</h1>
+<div class="warning">
+<p><strong>Reminder</strong>:</p>
+<ul>
+<li>Whenever working with a new SFP SDK version, make sure to remove the previous
+library JAR from the list since this will cause inconsistencies.</li>
+</ul>
+</div>
+<p>These steps add the provided SFP SDK jar to the classpath of the project.</p>
+<ol>
+<li>
+<p>Before you proceed, ensure you have the contents of the SFP Scripting API
+distribution file unzipped to a folder in your machine. This folder should
+not be deleted later since IntelliJ will look for certain files there.</p>
+</li>
+<li>
+<p>In IntelliJ, right-click on the project root and select <code>Open Module Settings</code></p>
+<p><a href="images/open-module-settings.png" title="open image"><img src="images/open-module-settings.png" alt="alt text" width="96" /></a></p>
+</li>
+<li>
+<p>In the dialog, select <code>Project Settings</code> &gt; <code>Libraries</code></p>
+</li>
+<li>
+<p>Create library that links to SFP SDK:</p>
+<ul>
+<li>
+<p>Click on <code>+</code> and select <code>Java</code></p>
+<p><a href="images/intellij-add-library-1.png" title="open image"><img src="images/intellij-add-library-1.png" alt="alt text" width="96" /></a></p>
+</li>
+<li>
+<p>Navigate to the <code>api/sdk</code> folder (from SDK API)</p>
+</li>
+<li>
+<p>Select <a href="../sfp-scripting-api-sdk-autocomplete-22.1.0.0.jar">sfp-scripting-api-sdk-autocomplete-22.1.0.0.jar</a></p>
+<p><a href="images/intellij-add-library-2.png" title="open image"><img src="images/intellij-add-library-2.png" alt="alt text" width="96" /></a></p>
+</li>
+<li>
+<p>Click <code>OK</code> to confirm</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Configure javadoc</p>
+<ul>
+<li>
+<p>In right-hand side panel, click on <code>+</code></p>
+<p><a href="images/intellij-add-library-3.png" title="open image"><img src="images/intellij-add-library-3.png" alt="alt text" width="96" /></a></p>
+</li>
+<li>
+<p>Select the <code>api/apidocs</code> folder from the SDK API</p>
+<p><a href="images/intellij-add-library-4.png" title="open image"><img src="images/intellij-add-library-4.png" alt="alt text" width="96" /></a></p>
+</li>
+<li>
+<p>Click <code>OK</code> to confirm</p>
+<p><a href="images/intellij-add-library-5.png" title="open image"><img src="images/intellij-add-library-5.png" alt="alt text" width="96" /></a></p>
+</li>
+</ul>
+</li>
+<li>
+<p>Click <code>OK</code> confirm all changes</p>
+</li>
+</ol>
+<h1 id="enable-code-completion-for-a-given-configuration-script">Enable code completion for a given configuration script</h1>
+<div class="info">
+<p><strong>Notes</strong>:</p>
+<ul>
+<li>This process should be done only once for each script.</li>
+<li>The package declaration is automatically ignored by SFP when evaluating
+configuration scripts.</li>
+</ul>
+</div>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Open the documentation page for the given configuration script. Each type of
+configuration script is documented as a separate HTML page. For example,
+for <code>nfrEligibility</code> you should open <a href="../../script-nfrEligibility.html">this page</a>.</li>
+<li>Copy the content indicated in <strong>&quot;Snippet for code completion&quot;</strong> and paste
+it at the top of your <code>.groovy</code> file.</li>
+<li>Replace the default package name <code>CHANGE_ME</code> by your actual package name.
+Make sure to follow the <a href="#how-intellij-projects-should-be-organized">conventions</a>.</li>
+</ol>
+</div><div class="page-footer">Copyright (c) 2021, Oracle and/or its affiliates. All rights reserved.</div></body></html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>VM : MPG Multipart Sample Client Code</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">VM</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="MPG-Public-API-for-developers_4785109.html">MPG Public API for developers</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="8553956.html">MPG Public API  - Addendum: Multipart Support</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            VM : MPG Multipart Sample Client Code
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+    
+            Created by <span class='author'> Unknown User (victor)</span>, last modified on Nov 17, 2012
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p>This page contains some sample code snippets for publishing and pulling messages using the MPG's multipart support.</p><h2 id="MPGMultipartSampleClientCode-Java">Java</h2><p>All the examples below assume the use of the Apache <a href="http://hc.apache.org/httpcomponents-client-ga/" class="external-link" rel="nofollow">HttpClient</a> and <a href="http://commons.apache.org/io/" class="external-link" rel="nofollow">commons-io</a> libraries.</p><h3 id="MPGMultipartSampleClientCode-Publish">Publish</h3><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="brush: java; gutter: false; theme: Confluence" style="font-size:12px;">public static void main(String[] args) throws IOException {
+    DefaultHttpClient httpclient = new DefaultHttpClient();
+    String realm = &quot;Vocado Message Gateway&quot;;
+    httpclient.getCredentialsProvider().setCredentials(
+            new AuthScope(&quot;localhost&quot;, 8080, realm),
+            new UsernamePasswordCredentials(&quot;admin&quot;, &quot;admin&quot;));
+    try {
+        HttpPost httppost = new HttpPost(&quot;http://localhost:8080/mpg/channels/out.ev/publish&quot;);
+        httppost.setHeader(&quot;Accept&quot;, &quot;multipart/parallel&quot;);
+
+        StringBody body = new StringBody(&quot;&lt;VocadoXML&gt;&lt;/VocadoXML&gt;&quot;, &quot;application/vocado-xml+message&quot;, null);
+
+        MultipartParallelEntity reqEntity = new MultipartParallelEntity();
+        FormBodyPart part = new FormBodyPart(&quot;&quot;, body);
+        part.getHeader().removeFields(MIME.CONTENT_DISPOSITION);
+        part.addField(&quot;Vocado-Message-Id&quot;, UUID.randomUUID().toString());
+        part.addField(&quot;Vocado-Message-Class&quot;, &quot;TestEvent&quot;);
+        reqEntity.addPart(part);
+        httppost.setEntity(reqEntity);
+
+        System.out.println(&quot;executing request &quot; + httppost.getRequestLine());
+        HttpResponse response = httpclient.execute(httppost);
+        HttpEntity resEntity = response.getEntity();
+
+        System.out.println(&quot;----------------------------------------&quot;);
+        System.out.println(response.getStatusLine());
+        if (resEntity != null) {
+            System.out.println(&quot;Response content length: &quot; + resEntity.getContentLength());
+        }
+        EntityUtils.consume(resEntity);
+    } finally {
+        try { httpclient.getConnectionManager().shutdown(); } catch (Exception ignore) {}
+    }
+}
+
+private static class MultipartParallelEntity extends MultipartEntity {
+    @Override
+    protected String generateContentType(String boundary, Charset charset) {
+        StringBuilder strb = new StringBuilder();
+        strb.append(&quot;multipart/parallel; boundary=&quot;);
+        strb.append(boundary);
+        if (charset != null) {
+            strb.append(&quot;; charset=&quot;);
+            strb.append(charset.name());
+        }
+        return strb.toString();
+    }
+}</pre>
+</div></div><h3 id="MPGMultipartSampleClientCode-Pull">Pull</h3><div class="code panel pdl" style="border-width: 1px;"><div class="codeContent panelContent pdl">
+<pre class="brush: java; gutter: false; theme: Confluence" style="font-size:12px;">public static void main(String[] args) throws IOException {
+    DefaultHttpClient httpclient = new DefaultHttpClient();
+    String realm = &quot;Vocado Message Gateway&quot;;
+    httpclient.getCredentialsProvider().setCredentials(
+            new AuthScope(&quot;localhost&quot;, 8080, realm),
+            new UsernamePasswordCredentials(&quot;admin&quot;, &quot;admin&quot;));
+    try {
+        HttpPost httppost = new HttpPost(&quot;http://localhost:8080/mpg/channels/out.ev/consume?max=100&amp;timeout=5000&amp;minWait=1000&quot;);
+        httppost.addHeader(&quot;Accept&quot;, &quot;multipart/parallel&quot;);
+        httppost.addHeader(&quot;Vocado-Pull-Id&quot;, UUID.randomUUID().toString());
+
+        System.out.println(&quot;executing request &quot; + httppost.getRequestLine());
+        HttpResponse response = httpclient.execute(httppost);
+        HttpEntity resEntity = response.getEntity();
+
+        System.out.println(&quot;----------------------------------------&quot;);
+        System.out.println(response.getStatusLine());
+        if (resEntity != null) {
+            System.out.println(&quot;Response content length: &quot; + resEntity.getContentLength());
+            System.out.println(&quot;Content:\n&quot; + readToString(resEntity.getContent()));
+        }
+        EntityUtils.consume(resEntity);
+    } finally {
+        try { httpclient.getConnectionManager().shutdown(); } catch (Exception ignore) {}
+    }
+}
+
+private static String readToString(InputStream stream) throws IOException {
+    StringWriter writer = new StringWriter();
+    IOUtils.copy(stream, writer);
+    return writer.toString();
+}</pre>
+</div></div>
+                    </div>
+
+                    
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Jun 07, 2019 03:39</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

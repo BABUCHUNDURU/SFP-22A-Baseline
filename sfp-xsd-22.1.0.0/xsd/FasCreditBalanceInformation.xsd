@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+COPYRIGHT (C) 2014 VOCADO, LLC.  ALL RIGHTS RESERVED.  THIS SOFTWARE CONTAINS
+TRADE SECRETS AND/OR CONFIDENTIAL INFORMATION PROPRIETARY TO VOCADO, LLC
+AND/OR ITS LICENSORS. ACCESS TO AND USE OF THIS INFORMATION IS STRICTLY
+LIMITED AND CONTROLLED BY VOCADO, LLC.  THIS SOFTWARE MAY NOT BE COPIED,
+MODIFIED, DISTRIBUTED, DISPLAYED, DISCLOSED OR USED IN ANY WAY NOT EXPRESSLY
+AUTHORIZED BY VOCADO, LLC IN WRITING.
+
+-->
+
+<xs:schema xmlns="http://www.vocado.com/vm/fas"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:vc="http://www.vocado.com/vm/common"
+           targetNamespace="http://www.vocado.com/vm/fas"
+           elementFormDefault="qualified">
+
+    <xs:include schemaLocation="common/FasCommon.xsd"/>
+    <xs:import namespace="http://www.vocado.com/vm/common" schemaLocation="common/VocadoCommon.xsd"/>
+
+    <xs:element name="FasCreditBalanceInformationEvent">
+        <xs:annotation>
+            <xs:documentation>
+                This Message is created by the Vocado FAS system to provide all relevant information
+                as a result of the a credit balance being created and associated to a disbursement
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="FasCreditBalanceInformationType"/>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="FasCreditBalanceInformationType">
+        <xs:complexContent>
+            <xs:extension base="vc:EnvelopeType">
+                <xs:sequence>
+                    <xs:element name="Student">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="ExternalStudentId" type="vc:ExternalIdentifierType"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="Program">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="ProgramCode" type="ProgramCodeType" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="Payment">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="PaymentId" type="vc:ExternalIdentifierType" />
+                                <xs:element name="ReturnId" type="vc:ExternalIdentifierType" minOccurs="0"/>
+                                <xs:element name="CreditBalance">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="CreditBalanceId" type="vc:ExternalIdentifierType" />
+                                            <xs:element name="CreditBalanceAmount" type="vc:NonNegativeDecimalType" />
+                                            <xs:element name="DateCreditBalanceOccurred" type="xs:date" />
+                                            <xs:element name="AuthorizationtoHoldIndicator" type="xs:boolean" />
+                                            <xs:element name="CreditBalanceRecipient">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Recipient" type="CreditBalanceRecipientTypeEnum" />
+                                                        <xs:element name="RecipientFirstName" type="vc:NonBlankStringType" minOccurs="0"/>
+                                                        <xs:element name="RecipientLastName" type="vc:NonBlankStringType" minOccurs="0"/>
+                                                        <xs:element name="ParentSsn" type="SsnType" minOccurs="0"/>
+                                                        <xs:element name="RecipientAddress" type="AddressType" minOccurs="0"/>
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:simpleType name="CreditBalanceRecipientTypeEnum">
+        <xs:annotation>
+            <xs:documentation>
+                The set of enumerations defined for a Credit Balance Recipient
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Student"/>
+            <xs:enumeration value="Parent"/>
+            <xs:enumeration value="Return to Lender"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

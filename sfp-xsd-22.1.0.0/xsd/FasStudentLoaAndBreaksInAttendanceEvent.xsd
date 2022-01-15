@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+COPYRIGHT (C) 2014 VOCADO, LLC.  ALL RIGHTS RESERVED.  THIS SOFTWARE CONTAINS
+TRADE SECRETS AND/OR CONFIDENTIAL INFORMATION PROPRIETARY TO VOCADO, LLC
+AND/OR ITS LICENSORS. ACCESS TO AND USE OF THIS INFORMATION IS STRICTLY
+LIMITED AND CONTROLLED BY VOCADO, LLC.  THIS SOFTWARE MAY NOT BE COPIED,
+MODIFIED, DISTRIBUTED, DISPLAYED, DISCLOSED OR USED IN ANY WAY NOT EXPRESSLY
+AUTHORIZED BY VOCADO, LLC IN WRITING.
+
+-->
+<xs:schema xmlns="http://www.vocado.com/vm/fas"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:vc="http://www.vocado.com/vm/common"
+           xmlns:fas="http://www.vocado.com/vm/fas"
+           targetNamespace="http://www.vocado.com/vm/fas"
+           elementFormDefault="qualified">
+
+    <xs:include schemaLocation="common/FasCommon.xsd"/>
+    <xs:import namespace="http://www.vocado.com/vm/common" schemaLocation="common/VocadoCommon.xsd"/>
+
+    <xs:element name="FasStudentLoaAndBreaksInAttendanceEvent">
+        <xs:annotation>
+            <xs:documentation>
+                This message is used to notify Vocado-M when a leave of absence has been approved for a student or when a break has been identified.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:element name="Student">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="ExternalStudentId" type="vc:ExternalIdentifierType"  minOccurs="0"/>
+                                    <xs:element name="EnrollmentId" type="vc:PositiveIntType" minOccurs="0"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="Program" minOccurs="0">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="ProgramCode" type="vc:NonBlankStringType" minOccurs="0"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="LoaOrBreaks">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="LoaOrBreak"  minOccurs="0" maxOccurs="unbounded">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="BreakIdentifier" type="vc:NonBlankStringType"/>
+                                                <xs:element name="BreakType" type="fas:LoaBreakTypeEnum"/>
+                                                <xs:element name="BreakStatus" type="fas:LoaBreakStatusEnum"/>
+                                                <xs:element name="BreakStartDate" type="xs:date"/>
+                                                <xs:element name="BreakEndDate" type="xs:date"/>
+                                                <xs:element name="TotalDaysOnBreak" type="vc:PositiveIntType"/>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                            </xs:complexType>
+                            <xs:unique name="UBreakIdentifier">
+                                <xs:selector xpath="fas:LoaOrBreak"/>
+                                <xs:field xpath="fas:BreakIdentifier"/>
+                            </xs:unique>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="LoaBreakTypeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="LOA"/>
+            <xs:enumeration value="Inclement Weather Conditions"/>
+            <xs:enumeration value="Administrative Exceptions"/>
+            <xs:enumeration value="Institutionally Scheduled Breaks"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="LoaBreakStatusEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Approved"/>
+            <xs:enumeration value="Canceled"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

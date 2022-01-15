@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ COPYRIGHT (c) 2017 VOCADO, LLC.  ALL RIGHTS RESERVED.  THIS SOFTWARE CONTAINS
+  ~ TRADE SECRETS AND/OR CONFIDENTIAL INFORMATION PROPRIETARY TO VOCADO, LLC AND/OR
+  ~ ITS LICENSORS. ACCESS TO AND USE OF THIS INFORMATION IS STRICTLY LIMITED AND
+  ~ CONTROLLED BY VOCADO, LLC.  THIS SOFTWARE MAY NOT BE COPIED, MODIFIED, DISTRIBUTED,
+  ~ DISPLAYED, DISCLOSED OR USED IN ANY WAY NOT EXPRESSLY AUTHORIZED BY VOCADO, LLC IN WRITING.
+  -->
+<xs:schema xmlns="http://www.vocado.com/vm/fas"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:vc="http://www.vocado.com/vm/common"
+           targetNamespace="http://www.vocado.com/vm/fas"
+           elementFormDefault="qualified">
+
+    <xs:include schemaLocation="common/FasCommon.xsd"/>
+    <xs:import namespace="http://www.vocado.com/vm/common" schemaLocation="common/VocadoCommon.xsd"/>
+
+    <xs:element name="FasHistoricalFundInformationEvent">
+        <xs:annotation>
+            <xs:documentation>
+                This inbound event message describes Historical Fund information of a student created by an outside
+                system.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:element name="ExternalStudentId" type="vc:ExternalIdentifierType"/>
+                        <xs:element name="HistoricFundAwards" minOccurs="0">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="HistoricFundAward" type="HistoricFundAwardType" maxOccurs="unbounded"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="HistoricFundAwardType">
+        <xs:sequence>
+            <xs:element name="FinancialAwardType" type="vc:NonBlankStringType"/>
+            <xs:element name="FinancialAwardYear" type="AwardYearType"/>
+            <xs:element name="FinancialAwardAmount" type="vc:NonNegativeDecimalType"/>
+            <xs:element name="EnrollmentDate" type="xs:date"/>
+            <xs:element name="HistoricFundDisbursements">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="HistoricFundDisbursement" type="HistoricFundDisbursementType" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="HistoricFundDisbursementType">
+        <xs:sequence>
+            <xs:element name="DisbursementNumber" type="vc:PositiveIntType"/>
+            <xs:element name="DisbursementAmount" type="vc:NonNegativeDecimalType"/>
+            <xs:element name="DisbursementDate" type="xs:date"/>
+            <xs:element name="DisbursementReleaseIndicator" type="xs:boolean"/>
+            <xs:element name="DisbursementSequenceNumber" type="vc:PositiveIntType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

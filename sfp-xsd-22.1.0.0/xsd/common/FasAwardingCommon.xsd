@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ COPYRIGHT (c) 2018 VOCADO, LLC.  ALL RIGHTS RESERVED.  THIS SOFTWARE CONTAINS
+  ~ TRADE SECRETS AND/OR CONFIDENTIAL INFORMATION PROPRIETARY TO VOCADO, LLC AND/OR
+  ~ ITS LICENSORS. ACCESS TO AND USE OF THIS INFORMATION IS STRICTLY LIMITED AND
+  ~ CONTROLLED BY VOCADO, LLC.  THIS SOFTWARE MAY NOT BE COPIED, MODIFIED, DISTRIBUTED,
+  ~ DISPLAYED, DISCLOSED OR USED IN ANY WAY NOT EXPRESSLY AUTHORIZED BY VOCADO, LLC IN WRITING.
+  -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.vocado.com/vm/fas"
+           xmlns:vc="http://www.vocado.com/vm/common"
+           targetNamespace="http://www.vocado.com/vm/fas"
+           elementFormDefault="qualified">
+    <xs:include schemaLocation="FasCommon.xsd"/>
+
+    <xs:import namespace="http://www.vocado.com/vm/common" schemaLocation="VocadoCommon.xsd"/>
+
+    <xs:complexType name="AwardingProcessInformation">
+        <xs:sequence>
+            <xs:element name="InstanceId" type="vc:PositiveIntType"/>
+            <xs:element name="Status" type="ProcessStatusEnum"/>
+            <xs:element name="Name">
+                <xs:simpleType>
+                    <xs:restriction base="ProcessNameEnum">
+                        <xs:enumeration value="Awarding"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="OpenDate" type="xs:date"/>
+            <xs:element name="CloseDate" type="xs:date" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="FasStudentAwardInfoGrantEligibilityCriteriaType">
+        <xs:sequence>
+            <xs:element name="ScheduledAward" type="vc:NonNegativeIntType"/>
+            <xs:element name="PercentOfLeuRemaining" type="xs:decimal"/>
+            <xs:element name="PercentOfAwardYearEligibilityRemaining" type="vc:PellLeuPercentageType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="FasStudentAwardInfoDloanEligibilityCriteriaType">
+        <xs:sequence>
+            <xs:element name="GradeLevel" type="vc:PositiveIntType" minOccurs="0"/>
+            <xs:element name="GradeLevelLoanLimit" type="vc:NonNegativeIntType" minOccurs="0"/>
+            <xs:element name="StudentNeed" type="vc:NonNegativeIntType" minOccurs="0"/>
+            <xs:element name="ProratedLoanLimit" type="vc:NonNegativeIntType" minOccurs="0"/>
+            <xs:element name="UndergraduateAggregateSubRemainingEligibility" type="vc:NonNegativeIntType"
+                        minOccurs="0"/>
+            <xs:element name="UndergraduateAggregateSubUnsubRemainingEligibility" type="vc:NonNegativeIntType"
+                        minOccurs="0"/>
+            <xs:element name="UndergraduateGradeLevelLoanLimit" type="vc:NonNegativeIntType" minOccurs="0"/>
+            <xs:element name="GraduateGradeLevelLoanLimit" type="vc:NonNegativeIntType" minOccurs="0"/>
+            <xs:element name="GraduateAggregateSubUnsubRemainingEligibility" type="vc:NonNegativeIntType"
+                        minOccurs="0"/>
+            <xs:element name="RemainingOverlappingLoanLimit" type="vc:NonNegativeIntType" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="FundAcceptanceStatusEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Pending Acceptance"/>
+            <xs:enumeration value="Pending Additional Acceptance"/>
+            <xs:enumeration value="Accepted"/>
+            <xs:enumeration value="Fund Not Accepted"/>
+            <xs:enumeration value="Fund Not Accepted by Due Date"/>
+            <xs:enumeration value="Fund Limited by Previous Acceptance"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="FasStudentAwardInformationNfrFundCommonFieldsType">
+        <xs:sequence>
+            <xs:element name="FundName" type="vc:NonBlankStringType"/>
+            <xs:element name="FundCode" type="vc:NonBlankStringType"/>
+            <xs:element name="FundExtension" type="vc:NonBlankStringType" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="FasStudentAwardInformationTitleIVFundCommonFieldsType">
+        <xs:sequence>
+            <xs:element name="FundName" type="vc:NonBlankStringType"/>
+            <xs:element name="FundCode" type="vc:NonBlankStringType"/>
+            <xs:element name="FundExtension" type="vc:NonBlankStringType" minOccurs="0"/>
+            <xs:element name="ApplicationId" type="vc:PositiveIntType" minOccurs="0"/>
+            <xs:element name="AwardAmount" type="vc:NonNegativeMoneyType"/>
+            <xs:element name="FundAcceptanceRequiredIndicator" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="FundAcceptanceDueDate" type="xs:date" minOccurs="0"/>
+            <xs:element name="FundAcceptedDate" type="xs:date" minOccurs="0"/>
+            <xs:element name="FundAcceptedAmount" type="vc:NonNegativeIntType" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="FasStudentAwardInformationTitleIVDirectLoanFundFieldsType">
+        <xs:complexContent>
+            <xs:restriction base="FasStudentAwardInformationTitleIVFundCommonFieldsType">
+                <xs:sequence>
+                    <xs:element name="FundName" type="vc:NonBlankStringType"/>
+                    <xs:element name="FundCode" type="vc:NonBlankStringType"/>
+                    <xs:element name="FundExtension" type="vc:NonBlankStringType" minOccurs="0"/>
+                    <xs:element name="ApplicationId" type="vc:PositiveIntType" minOccurs="0"/>
+                    <xs:element name="AwardAmount" type="vc:NonNegativeMoneyType"/>
+                    <xs:element name="FundAcceptanceRequiredIndicator" type="xs:boolean"/>
+                    <xs:element name="FundAcceptanceDueDate" type="xs:date" minOccurs="0"/>
+                    <xs:element name="FundAcceptedDate" type="xs:date" minOccurs="0"/>
+                    <xs:element name="FundAcceptedAmount" type="vc:NonNegativeIntType" minOccurs="0"/>
+                </xs:sequence>
+            </xs:restriction>
+        </xs:complexContent>
+    </xs:complexType>
+
+</xs:schema>

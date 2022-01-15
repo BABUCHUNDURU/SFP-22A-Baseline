@@ -1,0 +1,20 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head><title>SFP Documentation ((Release 22.1.0.0)): Oracle SFP Scripting API</title><meta name="generate-timestamp" content="2021-12-10T14:29:38.742Z"></meta><meta charset="UTF-8"></meta><link rel="stylesheet" type="text/css" href="./stylesheet.css" title="Style"></link><script type="text/javascript" src="./script.js"></script></head><body><h1>Script: professionalJudgementRequiredDocuments</h1><div class="indent"><div class="script-fields"><div>Description</div><div><div class="markdown"><p>Determines the documents that must be requested for the professional judgement process.</p>
+</div></div><div>Return type</div><div><a class="code" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Void.html">Void</a></div><div>Keywords</div><div><a href="keywords.html#_keyword_professional-judgement" class="tag">professional-judgement</a><a href="keywords.html#_keyword_documents" class="tag">documents</a></div><div>Config source</div><div><div>Workbook: <span class="code">PJ.csv</span></div><div>Field: <span class="code">Required_Document</code></div></div><div>Example</div><div><pre>return true;
+</pre></div><div>Snippet for code completion (SDK)</div><div><pre>//file:noinspection UnnecessaryQualifiedReference
+@groovy.transform.BaseScript(com.oracle.sfp.scripting.api.sdk.autocomplete.ProfessionalJudgementRequiredDocumentsScript)
+package CHANGE_ME
+
+import com.oracle.sfp.scripting.api.*
+import com.oracle.sfp.scripting.api.util.*
+</pre><div class="markdown"><ul>
+<li>Copy and paste these lines to your script and replace &quot;<code>CHANGE_ME</code>&quot; by the actual package name.</li>
+<li>See <a href="sdk/index.html">Developer Tools</a> for more details.</li>
+</ul>
+</div></div></div><h2>Available Bindings</h2><div class="bindings"><div>Name (+aliases)</div><div>Java Class</div><div>Description</div><div><div class="binding">currentIsir</div></div><div><a class="code" href="apidocs/com/oracle/sfp/scripting/api/IIsirRecordAPI.html">IIsirRecordAPI</a></div><div><div class="markdown"><p>The ISIR associated to the professional judgement process.</p>
+</div></div><div><div class="binding">documentRequest</div><div class="binding-alias">(documentRequired)</div></div><div><a class="code" href="apidocs/com/oracle/sfp/scripting/api/IIsirRequiredDocsAPI.html">IIsirRequiredDocsAPI</a></div><div><div class="markdown"><p>Binding that shall be populated by the script with the requested documents.</p>
+</div></div><div><div class="binding">enrollment</div></div><div><a class="code" href="apidocs/com/oracle/sfp/scripting/api/IEnrollmentAPI.html">IEnrollmentAPI</a></div><div><div class="markdown"><p>Information for the enrollment this script is being evaluated for.</p>
+</div></div><div><div class="binding">enrollments</div></div><div><a class="code" href="apidocs/com/oracle/sfp/scripting/api/IEnrollmentsAPI.html">IEnrollmentsAPI</a></div><div><div class="markdown"><p>Enrollments information.</p>
+</div></div><div><div class="binding">helper</div><div class="binding-alias">(groovyScriptHelper)</div></div><div><a class="code" href="apidocs/com/oracle/sfp/scripting/api/IGroovyScriptHelper.html">IGroovyScriptHelper</a></div><div><div class="markdown"><p>Helper interface with utility methods.</p>
+</div></div><div><div class="binding">log</div></div><div><a class="code" href="apidocs/com/oracle/sfp/scripting/api/IScriptLoggerAPI.html">IScriptLoggerAPI</a></div><div><div class="markdown"><p>Provides logging capability to scripts.</p>
+</div></div><div><div class="binding">student</div><div class="binding-alias">(fasStudent)</div></div><div><a class="code" href="apidocs/com/oracle/sfp/scripting/api/IFasStudentAPI.html">IFasStudentAPI</a></div><div><div class="markdown"><p>Student information.</p>
+</div></div></div></div><div class="page-footer">Copyright (c) 2021, Oracle and/or its affiliates. All rights reserved.</div></body></html>

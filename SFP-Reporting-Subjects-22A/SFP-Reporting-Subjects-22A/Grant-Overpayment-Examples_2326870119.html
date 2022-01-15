@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Student Financial Planning : Grant Overpayment Examples</title>
+        <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+    <body class="theme-default aui-theme-default">
+        <div id="page">
+            <div id="main" class="aui-page-panel">
+                <div id="main-header">
+                    <div id="breadcrumb-section">
+                        <ol id="breadcrumbs">
+                            <li class="first">
+                                <span><a href="index.html">Student Financial Planning</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="SFP-Reporting_3051320857.html">SFP Reporting</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Reporting-Subjects_2275470684.html">Reporting Subjects</a></span>
+                            </li>
+                                                    <li>
+                                <span><a href="Example-Queries_2326721850.html">Example Queries</a></span>
+                            </li>
+                                                </ol>
+                    </div>
+                    <h1 id="title-heading" class="pagetitle">
+                                                <span id="title-text">
+                            Student Financial Planning : Grant Overpayment Examples
+                        </span>
+                    </h1>
+                </div>
+
+                <div id="content" class="view">
+                    <div class="page-metadata">
+                        
+        
+    
+        
+    
+        
+        
+            Created by <span class='author'> Stephen Hutchinson</span>, last modified on Oct 26, 2020
+                        </div>
+                    <div id="main-content" class="wiki-content group">
+                    <p style="">These are examples of queries that reference views in the <a href="Grant-Overpayment_2310684162.html">Grant Overpayment</a><span> </span>subject.</p><p style="">The code convention <span style="color: rgb(0,0,0);"><em>$P{INPUT_PARAMETER}</em><span> </span>is single value input parameter and<span> </span><em>$X{IN, COLUMN_NAME, INPUT_PARAMETER}</em> is the equivalent of a SQL Language &quot;IN ()&quot; statement. Both of these conventions are used specifically in Jasper Server and map to the input criteria defined within a report definition.</span></p><div class="code panel pdl" style="border-width: 1px;"><div class="codeHeader panelHeader pdl" style="border-bottom-width: 1px;"><b>Grant Overpayment Report</b></div><div class="codeContent panelContent pdl">
+<pre class="syntaxhighlighter-pre" data-syntaxhighlighter-params="brush: sql; gutter: true; theme: Confluence" data-theme="Confluence">SELECT a1.school_student_id
+    -- , a.enrollment_id
+     , a.fund_code
+     , c.amount_to_return    as initial_amount
+     , a.amount              as current_amount
+     , CASE WHEN x.applied_amount IS NULL 
+            THEN 0
+            ELSE x.applied_amount
+       END           as applied_amount    
+     , (c.amount_to_return - a.amount)  total_amount   
+     , a.gop_indicator            as status
+     , a.date_of_determination
+     , a.payment_due_date
+     , CASE WHEN a.gop_indicator = &#39;RESOLVED&#39; OR a.payment_due_date &gt;= sysdate 
+            THEN 0 
+            ELSE (sysdate - cast(a.payment_due_date as date)) 
+       END                                       as days_overdue       
+     , a.sent_date
+     , a.reported_date
+     , a.resolution_datetime  
+FROM FASRPT.GOP_VW   a
+     JOIN FASRPT.STUDENT_ENROLLMENT_VW  a1 ON a.enrollment_id = a1.enrollment_id
+     JOIN FASRPT.R2T4_CALC_VW b ON a.r2t4_calculation_id = b.r2t4_calculation_id
+     JOIN FASRPT.R2T4_CALC_STEP_10_OVERPAY_VW c ON  b.r2t4_calc_step_10_id = c.r2t4_calc_step_10_id
+                                                AND a.fund_code = c.fund_code
+     LEFT JOIN (SELECT d.enrollment_id, d.fund_code, SUM(d.incremental_amount)  as applied_amount
+                FROM FASRPT.CREDIT_BALANCE_ONLY_VW  d
+                WHERE d.applied_to_gop = &#39;True&#39;
+                AND   d.credit_balance_rank = 1
+                GROUP BY d.enrollment_id, d.fund_code
+               ) x  ON  a.enrollment_id = x.enrollment_id
+                    AND a.fund_code = x.fund_code
+WHERE a.date_of_determination BETWEEN $P{Start_Date} AND $P{End_Date}
+AND $X{IN, a.gop_indicator, GOP_Status}</pre>
+</div></div>
+                    </div>
+
+                                        
+                 
+                </div>             </div> 
+            <div id="footer" role="contentinfo">
+                <section class="footer-body">
+                    <p>Document generated by Confluence on Dec 15, 2021 15:11</p>
+                    <div id="footer-logo"><a href="http://www.atlassian.com/">Atlassian</a></div>
+                </section>
+            </div>
+        </div>     </body>
+</html>

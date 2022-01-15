@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+COPYRIGHT (C) 2016 VOCADO, LLC.  ALL RIGHTS RESERVED.  THIS SOFTWARE CONTAINS
+TRADE SECRETS AND/OR CONFIDENTIAL INFORMATION PROPRIETARY TO VOCADO, LLC
+AND/OR ITS LICENSORS. ACCESS TO AND USE OF THIS INFORMATION IS STRICTLY
+LIMITED AND CONTROLLED BY VOCADO, LLC.  THIS SOFTWARE MAY NOT BE COPIED,
+MODIFIED, DISTRIBUTED, DISPLAYED, DISCLOSED OR USED IN ANY WAY NOT EXPRESSLY
+AUTHORIZED BY VOCADO, LLC IN WRITING.
+
+-->
+<xs:schema xmlns="http://www.vocado.com/vm/fas"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:vc="http://www.vocado.com/vm/common"
+           targetNamespace="http://www.vocado.com/vm/fas"
+           elementFormDefault="qualified">
+
+    <xs:include schemaLocation="common/FasCommon.xsd"/>
+    <xs:import namespace="http://www.vocado.com/vm/common" schemaLocation="common/VocadoCommon.xsd"/>
+
+    <xs:element name="FasReturnToTitleIvDataNeededOutboundEvent">
+        <xs:annotation>
+            <xs:documentation>
+                Once the system has determined that a R2T4 is required, the trigger time frame has elapsed, and there is
+                no pending FA processes or it has been 30 days from the DOD, the system will send an outbound message to
+                notify the school that a R2T4 will be calculated and they need to send the data that should be used
+                during this calculation.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:element name="Student">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="ExternalStudentId" type="vc:ExternalIdentifierType"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="Program">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="ProgramCode" type="ProgramCodeType">
+                                        <xs:annotation>
+                                            <xs:documentation>The Program Code. Must be a valid concatenation of program
+                                                and concentration. E.g. MBA
+                                            </xs:documentation>
+                                        </xs:annotation>
+                                    </xs:element>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="TermPeriod" minOccurs="0">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="Description" type="xs:string" minOccurs="0"/>
+                                    <xs:element name="StartDate" type="xs:date"/>
+                                    <xs:element name="EndDate" type="xs:date"/>
+                                    <xs:element name="StudentsTermStatus" type="StudentsTermStatusEnum"/>
+                                    <xs:element name="StudentsTermStatusSubType" type="StudentEnrollmentStatusSubTypeEnum" minOccurs="0"/>
+                                    <xs:element name="StudentsTermStatusEffectiveDate" type="xs:date"/>
+                                    <xs:element name="OfficialLastDateOfAttendance" type="xs:date"/>
+                                    <xs:element name="DateOfDetermination" type="xs:date"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

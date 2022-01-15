@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+COPYRIGHT (C) 2013 VOCADO, LLC.  ALL RIGHTS RESERVED.  THIS SOFTWARE CONTAINS
+TRADE SECRETS AND/OR CONFIDENTIAL INFORMATION PROPRIETARY TO VOCADO, LLC
+AND/OR ITS LICENSORS. ACCESS TO AND USE OF THIS INFORMATION IS STRICTLY
+LIMITED AND CONTROLLED BY VOCADO, LLC.  THIS SOFTWARE MAY NOT BE COPIED,
+MODIFIED, DISTRIBUTED, DISPLAYED, DISCLOSED OR USED IN ANY WAY NOT EXPRESSLY
+AUTHORIZED BY VOCADO, LLC IN WRITING.
+
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.vocado.com/vm/fas"
+           xmlns:fas="http://www.vocado.com/vm/fas"
+           xmlns:vc="http://www.vocado.com/vm/common"
+           targetNamespace="http://www.vocado.com/vm/fas"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+    <xs:include schemaLocation="common/FasCommon.xsd"/>
+    <xs:include schemaLocation="common/FasStudentAcademicsCommon.xsd"/>
+    <xs:import namespace="http://www.vocado.com/vm/common" schemaLocation="common/VocadoCommon.xsd"/>
+
+    <xs:element name="FasSafiSyncEvent">
+        <xs:annotation>
+            <xs:documentation>Synchronisation event for Student Academic and Finance Information. This Message is
+                created by external systems when some Academic or Financial Information that the FAS system depends
+                upon, changes. The purpose is to keep the FAS system's version of the student's Academic and Financial
+                Information in synchronisation with the external system of record
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:element name="Student" type="SafiStudent"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="FasSafiSyncSummaryRequest">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:element name="ExternalStudentId" type="vc:ExternalIdentifierType"/>
+                        <xs:element name="DateRange" minOccurs="0">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="StartDate" type="xs:date">
+                                        <xs:annotation>
+                                            <xs:documentation>
+                                                The Start Date. Inclusive value.
+                                            </xs:documentation>
+                                        </xs:annotation>
+                                    </xs:element>
+                                    <xs:element name="EndDate" type="xs:date">
+                                        <xs:annotation>
+                                            <xs:documentation>
+                                                The End Date. Inclusive value.
+                                            </xs:documentation>
+                                        </xs:annotation>
+                                    </xs:element>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="FasSafiSyncSummaryReply">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:element name="SafiSummaries">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="SafiSummary" minOccurs="0" maxOccurs="unbounded">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="MessageId" type="vc:UuidType">
+                                                    <xs:annotation>
+                                                        <xs:documentation>
+                                                            This element contains the message id provided on the
+                                                            original SAFI message.
+                                                        </xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:element>
+                                                <xs:element name="SafiVersion" type="xs:int">
+                                                    <xs:annotation>
+                                                        <xs:documentation>
+                                                            This element contains the version of the SAFI associated to
+                                                            the given student within Vocado.
+                                                        </xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:element>
+                                                <xs:element name="CreationDateTime" type="xs:dateTime">
+                                                    <xs:annotation>
+                                                        <xs:documentation>
+                                                            This element contains the creation date time provided on the
+                                                            original SAFI message. It is not necessarily the date time
+                                                            the system stored the message.
+                                                        </xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:element>
+                                                <xs:element name="ProgramCode" type="ProgramCodeType"/>
+                                                <xs:element name="EnrollmentStatus" type="StudentEnrollmentStatusEnum"/>
+                                                <xs:element name="EnrollmentStatusSubType" type="StudentEnrollmentStatusSubTypeEnum" minOccurs="0"/>
+                                                <xs:element name="EnrollmentStatusEffectiveDate" type="xs:date"/>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="FasSafiSyncRequest">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:element name="ExternalStudentId" type="vc:ExternalIdentifierType"/>
+                        <!-- TBD -->
+                        <xs:choice>
+                            <xs:element name="MessageId" type="vc:UuidType"/>
+                            <xs:element name="SafiVersion" type="xs:int"/>
+                        </xs:choice>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="FasSafiSyncReply">
+        <xs:annotation>
+            <xs:documentation>Returns SAFI specified by a previous FasSafiSyncRequest</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:element name="Student" type="SafiStudent" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="SafiStudent">
+        <xs:sequence>
+
+            <xs:element name="ExternalStudentId" type="vc:ExternalIdentifierType">
+                <xs:annotation>
+                    <xs:documentation>The external student ID from the system of record. Should
+                        not be updated once established by the SIS. Eg 12312
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+
+            <xs:element name="Programs">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Program" maxOccurs="unbounded" type="SafiProgramType">
+                            <xs:key name="MeasurementUnitKey">
+                                <xs:selector xpath="fas:Ayd"/>
+                                <xs:field xpath="fas:AcademicYearMeasurementUnit"/>
+                            </xs:key>
+                            <xs:keyref name="ProgramMeasurementUnitRef" refer="MeasurementUnitKey">
+                                <xs:selector xpath="fas:ProgramMeasurementUnit"/>
+                                <xs:field xpath="."/>
+                            </xs:keyref>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+                <xs:unique name="USafiExternalProgramId">
+                    <xs:selector xpath="fas:Program"/>
+                    <xs:field xpath="fas:ExternalProgramId"/>
+                </xs:unique>
+            </xs:element>
+
+            <xs:element name="Charges" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Charge" type="FasBaseChargeType" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:element name="UnspecifiedProgram" type="SafiUnspecifiedProgramType" minOccurs="0"/>
+
+            <xs:element name="ClientMessages" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="ClientMessage" type="fas:ClientMessageType" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:element name="StudentResources" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="StudentResource" type="SafiStudentResourceType" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SafiUnspecifiedProgramType">
+        <xs:sequence>
+            <xs:element name="Courses">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Course" type="SafiCourseType" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SafiProgramType">
+        <xs:complexContent>
+            <xs:extension base="FasBaseProgramType">
+                <xs:sequence>
+
+                    <xs:element name="Refunds" minOccurs="0">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="Refund" type="FasBaseRefundRefType" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                        <xs:unique name="USafiRefundReturnId">
+                            <xs:selector xpath="fas:Refund"/>
+                            <xs:field xpath="fas:ReturnId"/>
+                        </xs:unique>
+                    </xs:element>
+
+                    <xs:choice>
+                        <xs:element name="Term" type="SafiProgramTermType" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Program terms</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="BbayTerm" type="SafiProgramBbayTermType" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Program BBAY terms</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:choice>
+
+                    <xs:element name="Courses">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="Course" type="SafiCourseType" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+
+                    <xs:element name="Charges" minOccurs="0">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="Charge" type="FasBaseChargeType" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+
+                    <xs:element name="StudentResources" minOccurs="0">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="StudentResource" type="SafiStudentResourceType"
+                                            maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="SafiCourseType">
+        <xs:complexContent>
+            <xs:extension base="FasBaseCourseType">
+                <xs:sequence>
+
+                    <xs:element name="Schedule">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="ScheduledInstruction" maxOccurs="unbounded">
+                                    <xs:annotation>
+                                        <xs:documentation>One or more scheduled instructions</xs:documentation>
+                                    </xs:annotation>
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="Start">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Date" type="xs:date">
+                                                            <xs:annotation>
+                                                                <xs:documentation>The start date of the instruction
+                                                                </xs:documentation>
+                                                            </xs:annotation>
+                                                        </xs:element>
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="End">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Date" type="xs:date">
+                                                            <xs:annotation>
+                                                                <xs:documentation>The end date of the instruction
+                                                                </xs:documentation>
+                                                            </xs:annotation>
+                                                        </xs:element>
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+
+                    <xs:element name="StudentResources" minOccurs="0">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="StudentResource" type="SafiStudentResourceType" minOccurs="0"
+                                            maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+
+                    <xs:element name="Charges" minOccurs="0">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="Charge" type="FasBaseChargeType" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="SafiProgramTermType">
+        <xs:sequence>
+
+            <xs:element name="TermType" type="TermTypeEnum"></xs:element>
+
+            <xs:element name="AcademicYears">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="AcademicYear" type="SafiProgramTermAcademicYearType" minOccurs="1"
+                                    maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+                <xs:unique name="UAcademicYearsNumber">
+                    <xs:selector xpath="fas:AcademicYear"/>
+                    <xs:field xpath="fas:AcademicYearNumber"/>
+                </xs:unique>
+            </xs:element>
+            <xs:element name="SummerTerm" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="TermPeriods">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="TermPeriod" type="SafiProgramTermAcademicYearTermType" minOccurs="1"
+                                                maxOccurs="unbounded"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SafiProgramBbayTermType">
+        <xs:sequence>
+
+            <xs:element name="TermType" type="TermTypeEnum"/>
+            <xs:element name="TermsPerAcY">
+                <xs:simpleType>
+                    <xs:restriction base="xs:int">
+                        <xs:minInclusive value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+
+            <xs:element name="TermPeriods">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="TermPeriod" type="SafiProgramTermAcademicYearTermType" minOccurs="1"
+                                    maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SafiProgramTermAcademicYearType">
+        <xs:sequence>
+            <xs:element name="AcademicYearNumber">
+                <xs:simpleType>
+                    <xs:restriction base="xs:int">
+                        <xs:minInclusive value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="StartDate" type="xs:date"/>
+            <xs:element name="EndDate" type="xs:date"/>
+            <xs:element name="TermPeriods">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="TermPeriod" type="SafiProgramTermAcademicYearTermType" minOccurs="1"
+                                    maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SafiProgramTermAcademicYearTermType">
+        <xs:sequence>
+            <xs:element name="Description" type="xs:string" minOccurs="0"/>
+            <xs:element name="StartDate" type="xs:date"/>
+            <xs:element name="EndDate" type="xs:date"/>
+            <xs:element name="StudentsTermStatus" type="StudentsTermStatusEnum" minOccurs="0"/>
+            <xs:element name="StudentsTermStatusSubType" type="StudentEnrollmentStatusSubTypeEnum" minOccurs="0" />
+            <xs:element name="StudentsTermStatusEffectiveDate" type="xs:date" minOccurs="0"/>
+            <xs:element name="OfficialLastDateOfAttendance" type="xs:date" minOccurs="0"/>
+            <xs:element name="DateOfDetermination" type="xs:date" minOccurs="0"/>
+            <xs:element name="ReturnToTitleIvSafiIndicator" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="Charges" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Charge" type="FasBaseChargeType" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SafiStudentResourceType">
+        <xs:complexContent>
+            <xs:extension base="fas:FasBaseStudentResourceType"/>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

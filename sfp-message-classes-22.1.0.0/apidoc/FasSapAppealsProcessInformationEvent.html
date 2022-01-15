@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd"><html lang="en-US"><head><title>SFP Messaging API Doc (22.1.0.0)</title><meta name="generate-timestamp" content="2021-12-10T14:30:53.720Z"></meta><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta><link rel="stylesheet" type="text/css" href="./stylesheet.css" title="Style"></link><script type="text/javascript" src="./script.js"></script></head><body onload="setup();"><div class="page-header">Oracle SFP Messaging API 22.1.0.0</div><h1>FasSapAppealsProcessInformationEvent (Outbound)</h1><div><a href="all-labels.html#label-sapappeals" class="tag">sapappeals</a><a href="all-labels.html#label-sap" class="tag">sap</a><a href="all-labels.html#label-outbound" class="tag">outbound</a></div><div class="keyword-list"><div>Message Class</div><div><b>FasSapAppealsProcessInformationEvent</b></div><div>Description</div><div><div class="markdown"><p>SAP appeals process information.</p>
+<p>Required documents are listed under the <code>&lt;DocumentRequests&gt;</code> tag:</p>
+<ul>
+<li><code>&lt;Document&gt;</code> indicates a required document.</li>
+<li><code>&lt;OneOf&gt;</code> contains a list of <Document> choices. Only one document
+in the list is required.</li>
+</ul>
+<p>This allows several possible combinations:</p>
+<p><strong>Request A and B</strong></p>
+<pre><code>&lt;DocumentRequests&gt;
+    &lt;Document&gt;&lt;!-- DOCUMENT A --&gt;&lt;/Document&gt;
+    &lt;Document&gt;&lt;!-- DOCUMENT B --&gt;&lt;/Document&gt;
+&lt;/Document&gt;
+</code></pre>
+<p><strong>Request A or B</strong></p>
+<pre><code>&lt;DocumentRequests&gt;
+    &lt;OneOf&gt;
+        &lt;Document&gt;&lt;!-- DOCUMENT A --&gt;&lt;/Document&gt;
+        &lt;Document&gt;&lt;!-- DOCUMENT B --&gt;&lt;/Document&gt;
+    &lt;/OneOf&gt;
+&lt;/Document&gt;
+</code></pre>
+<p><strong>Request A and B and (C or D)</strong></p>
+<pre><code>&lt;DocumentRequests&gt;
+    &lt;Document&gt;&lt;!-- DOCUMENT A --&gt;&lt;/Document&gt;
+    &lt;Document&gt;&lt;!-- DOCUMENT B --&gt;&lt;/Document&gt;
+    &lt;OneOf&gt;
+        &lt;Document&gt;&lt;!-- DOCUMENT C --&gt;&lt;/Document&gt;
+        &lt;Document&gt;&lt;!-- DOCUMENT D --&gt;&lt;/Document&gt;
+    &lt;/OneOf&gt;
+&lt;/Document&gt;
+</code></pre>
+</div></div><div>XML Schema</div><div><div class="markdown"><p><a href="xsd/FasSapAppealsProcessInformation.xsd.html#line33">FasSapAppealsProcessInformation.xsd</a></p>
+</div></div><div>XML Namespace</div><div><code>http://www.vocado.com/vm/fas</code></div><div>HTTP Endpoint</div><div><code>/channels/out.ev/consume</code></div><div>Message Exchange Pattern</div><div><div class="markdown"><p><strong>Outbound event message</strong> (from SFP to client).</p>
+<p>SFP publishes an outbound message that can be consumed by a client system. Please see <em>MPG documentation</em> for additional details on how messages are consumed.</p>
+</div></div><div>Trigger Action</div><div><div class="markdown"><ul>
+<li>SAP Appeals process begins (SAP Appeals process = Started) due to
+the receipt of a document requesting SAP appeal</li>
+<li>SAP Appeals process is pending (SAP Appeals process = Pending) due
+to additional documents requested for SAP appeals</li>
+<li>Required document for the SAP Appeals process is received and is
+accepted or rejected</li>
+<li>Additional supporting documents are requested within the SAP
+Appeals process</li>
+<li>SAP appeals decision has been made (SAP Appeals process = Completed)</li>
+</ul>
+</div></div></div><h1>Examples</h1><div class="code-block"><div>Typical message</div><button class="collapsible">(show ▼)</button><div class="content"><pre><tt><span id="line1" class="linenumber">   1 </span><i><font color="#9A1900">&lt;!--</font></i>
+<span id="line2" class="linenumber">   2 </span><i><font color="#9A1900">  ~ Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.</font></i>
+<span id="line3" class="linenumber">   3 </span><i><font color="#9A1900">  --&gt;</font></i>
+<span id="line4" class="linenumber">   4 </span>
+<span id="line5" class="linenumber">   5 </span><b><font color="#0000FF">&lt;FasSapAppealsProcessInformationEvent</font></b> <font color="#009900">xmlns:vc</font><font color="#990000">=</font><font color="#FF0000">"http://www.vocado.com/vm/common"</font> <font color="#009900">xmlns</font><font color="#990000">=</font><font color="#FF0000">"http://www.vocado.com/vm/fas"</font><b><font color="#0000FF">&gt;</font></b>
+<span id="line6" class="linenumber">   6 </span>    <b><font color="#0000FF">&lt;vc:MessageHeaders&gt;</font></b>
+<span id="line7" class="linenumber">   7 </span>        <b><font color="#0000FF">&lt;vc:MessageId&gt;</font></b>eee40dfc-f6fd-4c17-ac03-db25e780fbfb<b><font color="#0000FF">&lt;/vc:MessageId&gt;</font></b>
+<span id="line8" class="linenumber">   8 </span>        <b><font color="#0000FF">&lt;vc:CreationDateTime&gt;</font></b>2020-11-09T17:28:13.622-05:00<b><font color="#0000FF">&lt;/vc:CreationDateTime&gt;</font></b>
+<span id="line9" class="linenumber">   9 </span>    <b><font color="#0000FF">&lt;/vc:MessageHeaders&gt;</font></b>
+<span id="line10" class="linenumber">  10 </span>    <b><font color="#0000FF">&lt;Student&gt;</font></b>
+<span id="line11" class="linenumber">  11 </span>        <b><font color="#0000FF">&lt;ExternalStudentId&gt;</font></b>98462812874<b><font color="#0000FF">&lt;/ExternalStudentId&gt;</font></b>
+<span id="line12" class="linenumber">  12 </span>    <b><font color="#0000FF">&lt;/Student&gt;</font></b>
+<span id="line13" class="linenumber">  13 </span>    <b><font color="#0000FF">&lt;Process&gt;</font></b>
+<span id="line14" class="linenumber">  14 </span>        <b><font color="#0000FF">&lt;InstanceId&gt;</font></b>58<b><font color="#0000FF">&lt;/InstanceId&gt;</font></b>
+<span id="line15" class="linenumber">  15 </span>        <b><font color="#0000FF">&lt;Status&gt;</font></b>Started<b><font color="#0000FF">&lt;/Status&gt;</font></b>
+<span id="line16" class="linenumber">  16 </span>        <b><font color="#0000FF">&lt;Name&gt;</font></b>SAP Appeals<b><font color="#0000FF">&lt;/Name&gt;</font></b>
+<span id="line17" class="linenumber">  17 </span>        <b><font color="#0000FF">&lt;OpenDate&gt;</font></b>2020-11-09-05:00<b><font color="#0000FF">&lt;/OpenDate&gt;</font></b>
+<span id="line18" class="linenumber">  18 </span>    <b><font color="#0000FF">&lt;/Process&gt;</font></b>
+<span id="line19" class="linenumber">  19 </span>    <b><font color="#0000FF">&lt;ProgramDetails&gt;</font></b>
+<span id="line20" class="linenumber">  20 </span>        <b><font color="#0000FF">&lt;Code&gt;</font></b>JTA1<b><font color="#0000FF">&lt;/Code&gt;</font></b>
+<span id="line21" class="linenumber">  21 </span>        <b><font color="#0000FF">&lt;Description&gt;</font></b>Jedi Training Academy<b><font color="#0000FF">&lt;/Description&gt;</font></b>
+<span id="line22" class="linenumber">  22 </span>        <b><font color="#0000FF">&lt;RequiredGpa&gt;</font></b>3.0<b><font color="#0000FF">&lt;/RequiredGpa&gt;</font></b>
+<span id="line23" class="linenumber">  23 </span>    <b><font color="#0000FF">&lt;/ProgramDetails&gt;</font></b>
+<span id="line24" class="linenumber">  24 </span>    <b><font color="#0000FF">&lt;AcademicYearDates&gt;</font></b>
+<span id="line25" class="linenumber">  25 </span>        <b><font color="#0000FF">&lt;Number&gt;</font></b>1<b><font color="#0000FF">&lt;/Number&gt;</font></b>
+<span id="line26" class="linenumber">  26 </span>        <b><font color="#0000FF">&lt;StartDate&gt;</font></b>2018-08-09<b><font color="#0000FF">&lt;/StartDate&gt;</font></b>
+<span id="line27" class="linenumber">  27 </span>        <b><font color="#0000FF">&lt;EndDate&gt;</font></b>2019-05-08<b><font color="#0000FF">&lt;/EndDate&gt;</font></b>
+<span id="line28" class="linenumber">  28 </span>        <b><font color="#0000FF">&lt;PaymentPeriodDates&gt;</font></b>
+<span id="line29" class="linenumber">  29 </span>            <b><font color="#0000FF">&lt;Number&gt;</font></b>2<b><font color="#0000FF">&lt;/Number&gt;</font></b>
+<span id="line30" class="linenumber">  30 </span>            <b><font color="#0000FF">&lt;StartDate&gt;</font></b>2019-01-17<b><font color="#0000FF">&lt;/StartDate&gt;</font></b>
+<span id="line31" class="linenumber">  31 </span>            <b><font color="#0000FF">&lt;EndDate&gt;</font></b>2019-05-08<b><font color="#0000FF">&lt;/EndDate&gt;</font></b>
+<span id="line32" class="linenumber">  32 </span>            <b><font color="#0000FF">&lt;SapData&gt;</font></b>
+<span id="line33" class="linenumber">  33 </span>                <b><font color="#0000FF">&lt;SapStatus&gt;</font></b>FD - Financial Aid Disqualification<b><font color="#0000FF">&lt;/SapStatus&gt;</font></b>
+<span id="line34" class="linenumber">  34 </span>                <b><font color="#0000FF">&lt;MaxTimeFrameStatus&gt;</font></b>Pass<b><font color="#0000FF">&lt;/MaxTimeFrameStatus&gt;</font></b>
+<span id="line35" class="linenumber">  35 </span>                <b><font color="#0000FF">&lt;MaxTimeFrameValue&gt;</font></b>0.375<b><font color="#0000FF">&lt;/MaxTimeFrameValue&gt;</font></b>
+<span id="line36" class="linenumber">  36 </span>                <b><font color="#0000FF">&lt;PaceOfCompletionStatus&gt;</font></b>Pass<b><font color="#0000FF">&lt;/PaceOfCompletionStatus&gt;</font></b>
+<span id="line37" class="linenumber">  37 </span>                <b><font color="#0000FF">&lt;PaceOfCompletionValue&gt;</font></b>1.0<b><font color="#0000FF">&lt;/PaceOfCompletionValue&gt;</font></b>
+<span id="line38" class="linenumber">  38 </span>                <b><font color="#0000FF">&lt;GpaStatus&gt;</font></b>Fail<b><font color="#0000FF">&lt;/GpaStatus&gt;</font></b>
+<span id="line39" class="linenumber">  39 </span>                <b><font color="#0000FF">&lt;ProgramGpaAtSapEvaluationDate&gt;</font></b>2.0<b><font color="#0000FF">&lt;/ProgramGpaAtSapEvaluationDate&gt;</font></b>
+<span id="line40" class="linenumber">  40 </span>                <b><font color="#0000FF">&lt;SapEvaluationDate&gt;</font></b>2020-11-09-05:00<b><font color="#0000FF">&lt;/SapEvaluationDate&gt;</font></b>
+<span id="line41" class="linenumber">  41 </span>                <b><font color="#0000FF">&lt;SapAppeals&gt;</font></b>
+<span id="line42" class="linenumber">  42 </span>                    <b><font color="#0000FF">&lt;NumberOfApprovedAppealsOnFile&gt;</font></b>0<b><font color="#0000FF">&lt;/NumberOfApprovedAppealsOnFile&gt;</font></b>
+<span id="line43" class="linenumber">  43 </span>                    <b><font color="#0000FF">&lt;MaximumNumberOfAppealsAllowed&gt;</font></b>2<b><font color="#0000FF">&lt;/MaximumNumberOfAppealsAllowed&gt;</font></b>
+<span id="line44" class="linenumber">  44 </span>                <b><font color="#0000FF">&lt;/SapAppeals&gt;</font></b>
+<span id="line45" class="linenumber">  45 </span>            <b><font color="#0000FF">&lt;/SapData&gt;</font></b>
+<span id="line46" class="linenumber">  46 </span>        <b><font color="#0000FF">&lt;/PaymentPeriodDates&gt;</font></b>
+<span id="line47" class="linenumber">  47 </span>    <b><font color="#0000FF">&lt;/AcademicYearDates&gt;</font></b>
+<span id="line48" class="linenumber">  48 </span><b><font color="#0000FF">&lt;/FasSapAppealsProcessInformationEvent&gt;</font></b></tt></pre></tt></pre></div></div><div class="page-footer">Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.</div></body></html>

@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+COPYRIGHT (C) 2015 VOCADO, LLC.  ALL RIGHTS RESERVED.  THIS SOFTWARE CONTAINS
+TRADE SECRETS AND/OR CONFIDENTIAL INFORMATION PROPRIETARY TO VOCADO, LLC
+AND/OR ITS LICENSORS. ACCESS TO AND USE OF THIS INFORMATION IS STRICTLY
+LIMITED AND CONTROLLED BY VOCADO, LLC.  THIS SOFTWARE MAY NOT BE COPIED,
+MODIFIED, DISTRIBUTED, DISPLAYED, DISCLOSED OR USED IN ANY WAY NOT EXPRESSLY
+AUTHORIZED BY VOCADO, LLC IN WRITING.
+
+-->
+<xs:schema xmlns="http://www.vocado.com/vm/fas"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:vc="http://www.vocado.com/vm/common"
+           xmlns:fas="http://www.vocado.com/vm/fas"
+           targetNamespace="http://www.vocado.com/vm/fas"
+           elementFormDefault="qualified">
+
+    <xs:include schemaLocation="common/FasCommon.xsd"/>
+    <xs:import namespace="http://www.vocado.com/vm/common" schemaLocation="common/VocadoCommon.xsd"/>
+
+    <xs:element name="FasSapAcademicInformationEvent">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:group ref="SapInfoElemGroup"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="FasSapAcademicInformationRequest">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:element name="ExternalStudentId" type="vc:ExternalIdentifierType"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="FasSapAcademicInformationReply">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:group ref="SapInfoElemGroupMultiplePrograms"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <!-- This group is for Primary program for SAP outbound which will always be SAP fro current primary program -->
+    <xs:group name="SapInfoElemGroup">
+        <xs:sequence>
+            <xs:element name="Student">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="ExternalStudentId" type="vc:ExternalIdentifierType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="ProgramDetails" type="SapInfoProgramDetailsType"/>
+            <xs:element name="AcademicYearDatesList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="AcademicYearDates" type="SapInfoAcademicYearDatesType" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+                <xs:unique name="USapInfoAcademicYearDatesNumber">
+                    <xs:selector xpath=".//fas:AcademicYearDates"/>
+                    <xs:field xpath="fas:Number"/>
+                </xs:unique>
+            </xs:element>
+        </xs:sequence>
+    </xs:group>
+
+    <!-- This group is to support multiple programs, all the programs student enrolled so far along with SAP, only for webService Reply only-->
+    <xs:group name="SapInfoElemGroupMultiplePrograms">
+        <xs:sequence>
+            <xs:element name="Student">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="ExternalStudentId" type="vc:ExternalIdentifierType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="ProgramsDetails">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="ProgramDetail" type="SapInfoProgramDetailType" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:group>
+    <!--This type is for the existing FasSapAcademicInformationEvent which is existing functionality -->
+    <xs:complexType name="SapInfoProgramDetailsType">
+        <xs:sequence>
+            <xs:element name="Code" type="vc:NonBlankStringType">
+                <xs:annotation>
+                    <xs:documentation>Code that identifies the program</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Description" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Description of the program</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="RequiredGpa">
+                <xs:annotation>
+                    <xs:documentation>Minimum required GPA</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:double">
+                        <xs:minInclusive value="0"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <!--This type is for the new type FasSapAcademicInformationReply, which is new functionality to support multiple programs -->
+    <xs:complexType name="SapInfoProgramDetailType">
+        <xs:sequence>
+            <xs:element name="Code" type="vc:NonBlankStringType">
+                <xs:annotation>
+                    <xs:documentation>Code that identifies the program</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Description" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Description of the program</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="RequiredGpa">
+                <xs:annotation>
+                    <xs:documentation>Minimum required GPA</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:double">
+                        <xs:minInclusive value="0"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="AcademicYearDatesList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="AcademicYearDates" type="SapInfoAcademicYearDatesType" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+                <xs:unique name="USapInfoAcademicYearDatesNumberMultiple">
+                    <xs:selector xpath=".//fas:AcademicYearDates"/>
+                    <xs:field xpath="fas:Number"/>
+                </xs:unique>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="SapInfoAcademicYearDatesType">
+        <xs:sequence>
+            <xs:element name="Number" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>The Academic Year Number</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="StartDate" type="xs:date">
+                <xs:annotation>
+                    <xs:documentation>The Academic Year start date</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="PeriodOfEnrollmentStartDate" type="xs:date" minOccurs="0"/>
+            <xs:element name="EndDate" type="xs:date">
+                <xs:annotation>
+                    <xs:documentation>The Academic Year end date</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="PeriodOfEnrollmentEndDate" type="xs:date" minOccurs="0"/>
+            <xs:element name="PaymentPeriodDatesList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="PaymentPeriodDates" type="SapInfoPaymentPeriodDatesType" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+                <xs:unique name="USapInfoPaymentPeriodDatesNumber">
+                    <xs:selector xpath=".//fas:PaymentPeriodDates"/>
+                    <xs:field xpath="fas:Number"/>
+                </xs:unique>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SapInfoPaymentPeriodDatesType">
+        <xs:sequence>
+            <xs:element name="Number" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>The Payment Period number
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="StartDate" type="xs:date">
+                <xs:annotation>
+                    <xs:documentation>The Payment Period start nate
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="EndDate" type="xs:date">
+                <xs:annotation>
+                    <xs:documentation>The Payment Period Start date
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="SapData">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="SapStatus" type="SapStatusEnum"/>
+                        <xs:element name="MaxTimeFrameStatus" type="SapComponentStatusEnum"/>
+                        <xs:element name="MaxTimeFrameValue">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:double">
+                                    <xs:minInclusive value="0"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="PaceOfCompletionStatus" type="SapComponentStatusEnum"/>
+                        <xs:element name="PaceOfCompletionValue">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:double">
+                                    <xs:minInclusive value="0"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="PaceOfCompletionDisabled" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="GpaStatus" type="SapComponentStatusEnum"/>
+                        <xs:element name="ProgramGpaAtSapEvaluationDate">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:double">
+                                    <xs:minInclusive value="0"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="SapEvaluationDate" type="xs:date"/>
+                        <xs:element name="SapAppeals" minOccurs="0">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="AppealStatus" type="SapAppealStatusEnum" minOccurs="0">
+                                        <xs:annotation>
+                                            <xs:documentation>Status of the student's appeal
+                                            </xs:documentation>
+                                        </xs:annotation>
+                                    </xs:element>
+                                    <xs:element name="NumberOfApprovedAppealsOnFile" type="xs:int" minOccurs="0">
+                                        <xs:annotation>
+                                            <xs:documentation>Number of approved appeals on file
+                                            </xs:documentation>
+                                        </xs:annotation>
+                                    </xs:element>
+                                    <xs:element name="MaximumNumberOfAppealsAllowed" type="xs:int" minOccurs="0">
+                                        <xs:annotation>
+                                            <xs:documentation>Maximum number of appeals allowed
+                                            </xs:documentation>
+                                        </xs:annotation>
+                                    </xs:element>
+                                    <xs:element name="SapAppealsDate" type="xs:date" minOccurs="0">
+                                        <xs:annotation>
+                                            <xs:documentation>SAP appeals date
+                                            </xs:documentation>
+                                        </xs:annotation>
+                                    </xs:element>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

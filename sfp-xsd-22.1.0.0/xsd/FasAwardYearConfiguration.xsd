@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ COPYRIGHT (C) 2017 VOCADO, LLC.  ALL RIGHTS RESERVED.  THIS SOFTWARE CONTAINS
+  ~ TRADE SECRETS AND/OR CONFIDENTIAL INFORMATION PROPRIETARY TO VOCADO, LLC
+  ~ AND/OR ITS LICENSORS. ACCESS TO AND USE OF THIS INFORMATION IS STRICTLY
+  ~ LIMITED AND CONTROLLED BY VOCADO, LLC.  THIS SOFTWARE MAY NOT BE COPIED,
+  ~ MODIFIED, DISTRIBUTED, DISPLAYED, DISCLOSED OR USED IN ANY WAY NOT EXPRESSLY
+  ~ AUTHORIZED BY VOCADO, LLC IN WRITING.
+  -->
+
+<xs:schema xmlns="http://www.vocado.com/vm/fas"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:vc="http://www.vocado.com/vm/common"
+           targetNamespace="http://www.vocado.com/vm/fas"
+           elementFormDefault="qualified">
+
+    <xs:include schemaLocation="common/FasCommon.xsd"/>
+    <xs:import namespace="http://www.vocado.com/vm/common" schemaLocation="common/VocadoCommon.xsd"/>
+
+
+    <xs:element name="FasAwardYearConfigurationRequest">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:element name="AwardYear" type="AwardYearType" minOccurs="0"/>
+                        <xs:element name="IncludeFundInformation" type="xs:boolean" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="FasAwardYearConfigurationReply">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:element name="AwardYearConfigurations">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="AwardYearConfiguration" type="AwardYearFundConfigurationType"
+                                                maxOccurs="unbounded"/>
+                                </xs:sequence>
+
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="AwardYearFundConfigurationType">
+        <xs:sequence>
+            <xs:element name="AwardYear" type="AwardYearType"/>
+            <xs:element name="FafsaCompletionStartDate" type="xs:date"/>
+            <xs:element name="FafsaCompletionEndDate" type="xs:date"/>
+            <xs:element name="AwardYearFunds" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="AwardYearFund" type="AwardYearFundType" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="AwardYearFundType">
+        <xs:sequence>
+            <xs:element name="FundCode" type="xs:string"/>
+            <xs:element name="FundCloseOutDate" type="xs:date" minOccurs="0"/>
+        </xs:sequence>
+
+    </xs:complexType>
+</xs:schema>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+COPYRIGHT (C) 2017 VOCADO, LLC.  ALL RIGHTS RESERVED.  THIS SOFTWARE CONTAINS
+TRADE SECRETS AND/OR CONFIDENTIAL INFORMATION PROPRIETARY TO VOCADO, LLC
+AND/OR ITS LICENSORS. ACCESS TO AND USE OF THIS INFORMATION IS STRICTLY
+LIMITED AND CONTROLLED BY VOCADO, LLC.  THIS SOFTWARE MAY NOT BE COPIED,
+MODIFIED, DISTRIBUTED, DISPLAYED, DISCLOSED OR USED IN ANY WAY NOT EXPRESSLY
+AUTHORIZED BY VOCADO, LLC IN WRITING.
+
+-->
+<xs:schema xmlns="http://www.vocado.com/vm/fas"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:vc="http://www.vocado.com/vm/common"
+           targetNamespace="http://www.vocado.com/vm/fas"
+           elementFormDefault="qualified">
+
+    <xs:include schemaLocation="common/FasCommon.xsd"/>
+    <xs:import namespace="http://www.vocado.com/vm/common" schemaLocation="common/VocadoCommon.xsd"/>
+
+    <xs:element name="FasDocumentCodeInformationReply">
+        <xs:annotation>
+            <xs:documentation>
+                This message can be used to retrieve Document code definition data from the FAS system.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <!-- Note: this forces XJC to generate a class with the name of the top-level element -->
+                <xs:extension base="FasDocumentCodeInformation"/>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="FasDocumentCodeInformationRequest">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:element name="DocumentCode" type="vc:NonBlankStringType" minOccurs="0"/>
+                        <xs:element name="AwardYear" type="AwardYearType" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="FasDocumentCodeInformation">
+        <xs:complexContent>
+            <xs:extension base="vc:EnvelopeType">
+                <xs:sequence>
+                    <xs:element name="DocumentCodes">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="DocumentCode" type="FasDocCodeDocumentCodeType"
+                                            maxOccurs="unbounded"/>
+                            </xs:sequence>
+
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="FasDocCodeDocumentCodeType">
+        <xs:sequence>
+            <xs:element name="AwardYear" type="AwardYearType" minOccurs="0"/>
+            <xs:element name="CanRequestAtWill" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="Category">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Name" type="xs:string" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="DocumentAcceptanceRule" type="xs:string" minOccurs="0"/>
+            <xs:element name="DocumentCancellationRule" type="xs:string" minOccurs="0"/>
+            <xs:element name="DocumentCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="DocumentFieldMetadataDefnList" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="DocumentFieldMetadataDefn" type="FasDocCodeDocumentFieldMetadata"
+                                    minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="DocumentName" type="xs:string"/>
+            <xs:element name="DocumentOwnerRule" type="xs:string" minOccurs="0"/>
+            <xs:element name="DocumentRequestMessage" type="xs:string" minOccurs="0"/>
+            <xs:element name="IsLifetimeDocument" type="xs:boolean"/>
+            <xs:element name="IsNfrDocument" type="xs:boolean"/>
+            <xs:element name="OverdueDocumentMessage" type="xs:string" minOccurs="0"/>
+            <xs:element name="ReminderIntervalDays" type="xs:int" minOccurs="0"/>
+            <xs:element name="RequestCancelMessage" type="xs:string" minOccurs="0"/>
+            <xs:element name="RequiresAdditionalApproval" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="RequiresApproval" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="RequiresUnsolicitedManualReview" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="SecurityLevel" type="FasDocCodeSimpleSecurityLevelEnum" minOccurs="0"/>
+            <xs:element name="HideInSelfServiceUi" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="SubTypeDocumentFieldMetaDataDefn" type="FasDocCodeDocumentFieldMetadata" minOccurs="0"/>
+            <xs:element name="VerificationReportingDocument" type="FasDocCodeSimpleVerificationReportingDocumentEnum"
+                        minOccurs="0"/>
+            <xs:element name="NoDocImage" type="xs:boolean" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FasDocCodeDocumentFieldMetadata">
+        <xs:sequence>
+            <xs:element name="AcceptanceCriteria" type="xs:string"/>
+            <xs:element name="DisplayOrder" type="xs:int"/>
+            <xs:element name="EffectiveEndDateFlag" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="EffectiveStartDateFlag" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="IsRequired" type="xs:boolean"/>
+            <xs:element name="Metadata" type="FasDocCodeMetadataType"/>
+            <xs:element name="MetadataFieldLabel" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="FasDocCodeMetadataType">
+        <xs:sequence>
+            <xs:element name="DataType" type="FasDocCodeSimpleDataTypeEnum"/>
+            <xs:element name="DisplayOrder" type="xs:int" minOccurs="0"/>
+            <xs:element name="FieldAvailableOptions" type="xs:string" minOccurs="0"/>
+            <xs:element name="FieldDescription" type="xs:string" minOccurs="0"/>
+            <xs:element name="MetadataFieldCode" type="xs:string"/>
+            <xs:element name="MetadataFieldName" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="FasDocCodeSimpleDataTypeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="BOOLEAN"/>
+            <xs:enumeration value="INTEGER"/>
+            <xs:enumeration value="DOUBLE"/>
+            <xs:enumeration value="STRING"/>
+            <xs:enumeration value="ENUMERATION"/>
+            <xs:enumeration value="DATE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="FasDocCodeSimpleSecurityLevelEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="LOW"/>
+            <xs:enumeration value="MEDIUM"/>
+            <xs:enumeration value="HIGH"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="FasDocCodeSimpleVerificationReportingDocumentEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="STATEMENT_OF_EDUCATIONAL_PURPOSE_NOTARY"/>
+            <xs:enumeration value="STUDENT_IDENTIFICATION_DOCUMENT"/>
+            <xs:enumeration value="HIGH_SCHOOL_COMPLETION"/>
+            <xs:enumeration value="STATEMENT_OF_EDUCATIONAL_PURPOSE_CAMPUS"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

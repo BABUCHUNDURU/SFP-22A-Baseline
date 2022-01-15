@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+  -->
+<xs:schema xmlns="http://www.vocado.com/vm/fas"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:vc="http://www.vocado.com/vm/common"
+           targetNamespace="http://www.vocado.com/vm/fas"
+           elementFormDefault="qualified">
+
+    <xs:include schemaLocation="common/FasCommon.xsd"/>
+    <xs:import namespace="http://www.vocado.com/vm/common" schemaLocation="common/VocadoCommon.xsd"/>
+
+    <xs:element name="FasDocumentProcessStatusInformationEvent">
+        <xs:annotation>
+            <xs:documentation>
+                This message should be used to notify students/advisors of actions they must take to receive
+                financial aid and provide them with informative messages as to their financial aid status.
+                The system generates this message in response to an event.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <!-- Note: this forces XJC to generate a class with the name of the top-level element -->
+                <xs:extension base="BaseFasDocumentProcessStatusInformationType"/>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="FasDocumentProcessStatusInformationReply">
+        <xs:annotation>
+            <xs:documentation>
+                This message should be used to notify students of actions they must take to receive
+                financial aid and provide them with informative messages as to their financial aid status.
+                The system sends it in response to a FasDocumentProcessStatusInformationRequest message.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <!-- Note: this forces XJC to generate a class with the name of the top-level element -->
+                <xs:extension base="BaseFasDocumentProcessStatusInformationType"/>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="FasDocumentProcessStatusInformationRequest">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="vc:EnvelopeType">
+                    <xs:sequence>
+                        <xs:element name="ExternalStudentId" type="vc:ExternalIdentifierType"/>
+                        <xs:element name="ProcessInstanceId" type="vc:NonBlankStringType" minOccurs="0"/>
+                        <xs:element name="ProcessStatus" type="ProcessStatusEnum" minOccurs="0"/>
+                        <xs:element name="DocumentStatus" type="DocumentStatusEnum" minOccurs="0"/>
+                        <xs:element name="StudentRequestFlag" type="xs:boolean" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="BaseFasDocumentProcessStatusInformationType" abstract="true">
+        <xs:complexContent>
+            <xs:extension base="vc:EnvelopeType">
+                <xs:sequence>
+                    <!--Student information -->
+                    <xs:element name="Student">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="ExternalStudentId" type="vc:ExternalIdentifierType"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                    <!--Required Documents Information -->
+                    <xs:element name="RequiredDocuments" minOccurs="0">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="Documents" minOccurs="0" maxOccurs="unbounded">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="Document" type="DocumentProcessStatusInformation_DocumentType"
+                                                        maxOccurs="unbounded"/>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="OneOfDocuments" minOccurs="0"
+                                            type="DocumentProcessStatusInformation_OneOfDocumentsType" maxOccurs="unbounded" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!-- Helper types -->
+
+    <xs:complexType name="DocumentProcessStatusInformation_DocumentType">
+        <xs:sequence>
+            <xs:element name="DocumentOwnerTypes" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="DocumentOwnerType"
+                                    type="DocumentOwnerTypeEnum" minOccurs="0"
+                                    maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="Processes">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Process"
+                                    type="ProcessInformationType"
+                                    minOccurs="0"
+                                    maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="DocumentCode" type="vc:NonBlankStringType"/>
+            <xs:element name="DocumentName" type="vc:NonBlankStringType"/>
+            <xs:element name="DocumentRequestDate" type="xs:date" minOccurs="0"/>
+            <xs:element name="DocumentStatus" type="DocumentStatusEnum"/>
+            <xs:element name="DocumentStatusDate" type="xs:date"/>
+            <xs:element name="DocumentReceiptDate" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="AwardYear" type="xs:string" minOccurs="0"/>
+            <xs:element name="ExternalDocumentID" type="xs:string" minOccurs="0"/>
+            <xs:element name="DocumentRationale" type="DocumentRationaleEnum" minOccurs="0"/>
+            <xs:element name="DaysSinceOriginalDocumentRequest" type="xs:nonNegativeInteger" minOccurs="0"/>
+            <xs:element name="DocumentRequestMessage" type="xs:string"/>
+            <xs:element name="DocumentReviewComments" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="DocumentReviewComment"
+                                    type="DocumentReviewCommentType"
+                                    minOccurs="0"
+                                    maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="SupportingDocuments" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Documents" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="Document" type="DocumentProcessStatusInformation_DocumentType" minOccurs="0"
+                                                maxOccurs="unbounded"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="OneOfDocuments" minOccurs="0" type="DocumentProcessStatusInformation_OneOfDocumentsType"
+                                                maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="DocumentProcessStatusInformation_OneOfDocumentsType">
+        <xs:sequence>
+            <xs:element name="Documents" type="DocumentProcessStatusInformation_DocumentsType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="DocumentProcessStatusInformation_DocumentsType">
+        <xs:sequence>
+            <xs:element name="Document" type="DocumentProcessStatusInformation_DocumentType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="DocumentReviewCommentType">
+        <xs:sequence>
+            <xs:element name="ReviewComment" type="xs:string"/>
+            <xs:element name="ReviewCommentDateTime" type="xs:dateTime"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
